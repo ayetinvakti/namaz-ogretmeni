@@ -2,77 +2,109 @@
 <html lang="tr">
 <head>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namaz Öğretmeni | Ayetin Vakti</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title data-i18n="page_title">Namaz Öğretmeni | Ayetin Vakti</title>
     <meta name="theme-color" content="#10b981">
     
     <script>
-        (function() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'light') {
-                document.documentElement.classList.add('light-mode');
-            }
-            
-            const customAccent = localStorage.getItem('custom_accent');
-            const customText = localStorage.getItem('custom_text');
-            const customBg = localStorage.getItem('custom_bg');
+        // Tema, Özel Renk Paleti ve Dil Kontrolü (Sayfa yüklenmeden önce çalışır, titremeyi önler)
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme === 'light' || (!savedTheme && !systemPrefersDark)) {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
 
-            if (customAccent) document.documentElement.style.setProperty('--accent-color', customAccent);
-            if (customText) document.documentElement.style.setProperty('--text-color', customText);
-            if (customBg) {
-                document.documentElement.style.setProperty('--bg-color', customBg);
-                document.documentElement.style.setProperty('--card-bg', customBg);
-            }
-        })();
+        const savedAccent = localStorage.getItem('custom_accent');
+        const savedBg = localStorage.getItem('custom_bg');
+        const savedText = localStorage.getItem('custom_text');
+
+        if (savedAccent) document.documentElement.style.setProperty('--accent-color', savedAccent);
+        if (savedBg) {
+            document.documentElement.style.setProperty('--bg-color', savedBg);
+            document.documentElement.style.setProperty('--card-bg', savedBg);
+        }
+        if (savedText) document.documentElement.style.setProperty('--text-color', savedText);
+
+        const currentLang = localStorage.getItem('user_lang') || 'tr';
+        if (currentLang === 'ar') {
+            document.documentElement.setAttribute('dir', 'rtl');
+        } else {
+            document.documentElement.setAttribute('dir', 'ltr');
+        }
     </script>
 
     <style>
+        /* Gece Teması (Varsayılan Koyu Mode) */
         :root {
-            --bg-color: #0b1120;
+            --bg-color: #0f172a;
             --card-bg: #1e293b;
             --accent-color: #10b981;
+            --accent-hover: #047857;
             --text-color: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: #334155;
+            --btn-bg: rgba(255, 255, 255, 0.05);
+            --btn-hover: rgba(255, 255, 255, 0.1);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
             --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font-family); background-color: var(--bg-color); color: var(--text-color); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 16px; transition: background-color 0.3s, color 0.3s; }
+        /* Gündüz Teması (Açık Mode) */
+        [data-theme="light"] {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --accent-color: #059669;
+            --accent-hover: #047857;
+            --text-color: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --btn-bg: #f1f5f9;
+            --btn-hover: #e2e8f0;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: var(--font-family); background-color: var(--bg-color); color: var(--text-color); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 16px; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
         .container { width: 100%; max-width: 650px; display: flex; flex-direction: column; gap: 16px; }
         
-        .navbar { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; transition: 0.3s; }
-        .circle-btn { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-color); display: flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; font-size: 1.2rem; transition: 0.2s; }
-        .circle-btn:hover { border-color: var(--accent-color); color: var(--accent-color); background: rgba(16, 185, 129, 0.1); }
+        .navbar { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; box-shadow: var(--shadow); }
+        [dir="rtl"] .navbar { flex-direction: row-reverse; }
+
+        .circle-btn { width: 42px; height: 42px; border-radius: 50%; background: var(--btn-bg); border: 1px solid var(--border-color); color: var(--text-color); display: flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; font-size: 1.2rem; transition: 0.2s; }
+        .circle-btn:hover { border-color: var(--accent-color); color: var(--accent-color); background: var(--btn-hover); }
         .app-title { font-size: 1.1rem; font-weight: 700; color: var(--accent-color); text-align: center; }
 
-        .tabs-container { display: flex; gap: 6px; background: var(--card-bg); padding: 6px; border: 1px solid var(--border-color); border-radius: 16px; overflow-x: auto; }
+        .tabs-container { display: flex; gap: 6px; background: var(--card-bg); padding: 6px; border: 1px solid var(--border-color); border-radius: 16px; overflow-x: auto; box-shadow: var(--shadow); }
         .tab-btn { flex: 1; padding: 10px 8px; background: none; border: none; color: var(--text-muted); font-weight: 600; font-size: 0.8rem; border-radius: 12px; cursor: pointer; transition: 0.2s; text-align: center; white-space: nowrap; }
         .tab-btn.active { background: var(--accent-color); color: #fff; }
 
         .namaz-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         .namaz-select-btn { padding: 12px; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 12px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: 0.2s; text-align: left; display: flex; flex-direction: column; gap: 4px; }
-        .namaz-select-btn:hover, .namaz-select-btn.active { border-color: var(--accent-color); background: rgba(16, 185, 129, 0.08); }
+        [dir="rtl"] .namaz-select-btn { text-align: right; }
+        .namaz-select-btn:hover, .namaz-select-btn.active { border-color: var(--accent-color); background: var(--btn-bg); }
         .namaz-select-btn span { font-size: 0.72rem; color: var(--text-muted); font-weight: normal; }
 
-        .content-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 14px; transition: 0.3s; }
+        .content-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow); }
         .card-title { font-size: 1.05rem; font-weight: 700; color: var(--accent-color); display: flex; align-items: center; gap: 8px; }
         
         .step-item { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
         .step-header { font-weight: 700; font-size: 0.95rem; color: var(--accent-color); }
         
         .arabic-text { font-size: 1.2rem; font-family: 'Amiri', 'Traditional Arabic', serif; text-align: right; color: var(--text-color); line-height: 1.9; direction: rtl; }
-        .pronunciation-text { font-size: 0.86rem; color: var(--accent-color); font-weight: 600; background: rgba(16, 185, 129, 0.08); padding: 8px 12px; border-radius: 8px; }
+        .pronunciation-text { font-size: 0.86rem; color: var(--accent-color); font-weight: 600; background: var(--btn-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); }
         .translation-text { font-size: 0.85rem; color: var(--text-muted); font-style: italic; line-height: 1.5; }
 
         .quiz-box { background: var(--card-bg); border: 1px dashed var(--accent-color); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
         .quiz-question { font-size: 0.95rem; font-weight: 600; color: var(--text-color); line-height: 1.4; }
         .quiz-options { display: flex; flex-direction: column; gap: 8px; }
         .quiz-opt-btn { width: 100%; padding: 10px 12px; font-size: 0.85rem; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 8px; cursor: pointer; text-align: left; transition: 0.2s; }
-        .quiz-opt-btn:hover { border-color: var(--accent-color); background: rgba(16, 185, 129, 0.05); }
+        [dir="rtl"] .quiz-opt-btn { text-align: right; }
+        .quiz-opt-btn:hover { border-color: var(--accent-color); background: var(--btn-bg); }
         .quiz-result { font-size: 0.88rem; font-weight: 600; margin-top: 6px; }
-        .next-quiz-btn { margin-top: 10px; padding: 10px 16px; background: var(--accent-color); color: #fff; border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; width: fit-content; }
+        .next-quiz-btn { margin-top: 10px; padding: 10px 16px; background: var(--accent-color); color: #fff; border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; width: fit-content; box-shadow: var(--shadow); }
 
         .diff-list { display: flex; flex-direction: column; gap: 12px; }
         .diff-row { display: flex; flex-direction: column; gap: 4px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); }
@@ -82,28 +114,26 @@
 
         .footer { margin: 20px 0; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
         .footer span { color: var(--accent-color); font-weight: 600; }
-
-        body.light-mode { --bg-color: #f8fafc; --card-bg: #ffffff; --text-color: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header class="navbar">
-        <a href="https://ayetinvakti.github.io/" class="circle-btn" title="Geri Dön">←</a>
-        <div class="app-title">Namaz Öğretmeni</div>
+        <a href="../" class="circle-btn" title="Geri Dön">←</a>
+        <div class="app-title" data-i18n="app_title">Namaz Öğretmeni</div>
         <button class="circle-btn" onclick="toggleTheme()" id="theme-btn" title="Tema Değiştir">☀️</button>
     </header>
 
     <div class="tabs-container">
-        <button class="tab-btn active" onclick="switchTab('steps', this)">📖 Adım Adım Namaz</button>
-        <button class="tab-btn" onclick="switchTab('diffs', this)">⚖️ Kadın/Erkek Farkı</button>
-        <button class="tab-btn" onclick="switchTab('quiz', this)">🎯 Dini Sınav</button>
+        <button class="tab-btn active" onclick="switchTab('steps', this)" data-i18n="tab_steps">📖 Adım Adım Namaz</button>
+        <button class="tab-btn" onclick="switchTab('diffs', this)" data-i18n="tab_diffs">⚖️ Kadın/Erkek Farkı</button>
+        <button class="tab-btn" onclick="switchTab('quiz', this)" data-i18n="tab_quiz">🎯 Dini Sınav</button>
     </div>
 
     <!-- 1. SEKME: DETAYLI NAMAZ REHBERİ -->
     <div id="tab-steps" class="content-card">
-        <div class="card-title">📖 Detaylı Namaz Kılınış Rehberi</div>
+        <div class="card-title" data-i18n="card_steps_title">📖 Detaylı Namaz Kılınış Rehberi</div>
         
         <div class="namaz-grid">
             <button class="namaz-select-btn active" onclick="selectNamaz('sabah', this)">Sabah Namazı <span>2 Sünnet, 2 Farz</span></button>
@@ -121,41 +151,68 @@
 
     <!-- 2. SEKME: ERKEK / KADIN FARKLARI -->
     <div id="tab-diffs" class="content-card" style="display: none;">
-        <div class="card-title">⚖️ Namazda Erkek ve Kadın Arasındaki Fıkhi Farklar</div>
+        <div class="card-title" data-i18n="card_diffs_title">⚖️ Namazda Erkek ve Kadın Arasındaki Fıkhi Farklar</div>
         <div class="diff-list">
             <div class="diff-row">
-                <div class="diff-title">1. İftitah Tekbiri Alırken Eller</div>
-                <div class="diff-desc"><strong>Erkekler:</strong> Eller kulak memesine kadar kaldırılır, baş parmaklar kulak memesine yumuşakça değdirilir, parmak araları kendi haline bırakılır.<br><strong>Kadınlar:</strong> Eller omuz hizasına kadar kaldırılır, parmaklar kıbleye yönelik ve normal açıklıkta tutulur.</div>
+                <div class="diff-title" data-i18n="diff_1_title">1. İftitah Tekbiri Alırken Eller</div>
+                <div class="diff-desc" data-i18n="diff_1_desc"><strong>Erkekler:</strong> Eller kulak memesine kadar kaldırılır, baş parmaklar kulak memesine yumuşakça değdirilir, parmak araları kendi haline bırakılır.<br><strong>Kadınlar:</strong> Eller omuz hizasına kadar kaldırılır, parmaklar kıbleye yönelik ve normal açıklıkta tutulur.</div>
             </div>
             <div class="diff-row">
-                <div class="diff-title">2. Elleri Bağlama (Kıyam Hali)</div>
-                <div class="diff-desc"><strong>Erkekler:</strong> Sağ elin avucu sol elin üzerine konulur; sağ elin baş ve küçük parmağı sol bileği halka şeklinde kavrar ve eller göbek altında bağlanır.<br><strong>Kadınlar:</strong> Sağ el sol elin üzerine konulur ancak bilekleri kavramadan doğrudan göğsün üzerine (sağ el sol elin üstünde olarak) konulur.</div>
+                <div class="diff-title" data-i18n="diff_2_title">2. Elleri Bağlama (Kıyam Hali)</div>
+                <div class="diff-desc" data-i18n="diff_2_desc"><strong>Erkekler:</strong> Sağ elin avucu sol elin üzerine konulur; sağ elin baş ve küçük parmağı sol bileği halka şeklinde kavrar ve eller göbek altında bağlanır.<br><strong>Kadınlar:</strong> Sağ el sol elin üzerine konulur ancak bilekleri kavramadan doğrudan göğsün üzerine (sağ el sol elin üstünde olarak) konulur.</div>
             </div>
             <div class="diff-row">
-                <div class="diff-title">3. Rükû Hali</div>
-                <div class="diff-desc"><strong>Erkekler:</strong> Sırt, baş ile aynı hizada olacak şekilde dosdoğru (masa gibi) tutulur. Dizler dik tutulur, parmaklar açık bir şekilde diz kapakları kavranır.<br><strong>Kadınlar:</strong> Sırt o kadar çok düzleştirilmez, hafifçe salınık tutulur. Dizler tamamen dik tutulmayıp hafifçe bükülü bırakılır ve eller parmaklar açılmadan dizlerin üzerine konulur.</div>
+                <div class="diff-title" data-i18n="diff_3_title">3. Rükû Hali</div>
+                <div class="diff-desc" data-i18n="diff_3_desc"><strong>Erkekler:</strong> Sırt, baş ile aynı hizada olacak şekilde dosdoğru (masa gibi) tutulur. Dizler dik tutulur, parmaklar açık bir şekilde diz kapakları kavranır.<br><strong>Kadınlar:</strong> Sırt o kadar çok düzleştirilmez, hafifçe salınık tutulur. Dizler tamamen dik tutulmayıp hafifçe bükülü bırakılır ve eller parmaklar açılmadan dizlerin üzerine konulur.</div>
             </div>
             <div class="diff-row">
-                <div class="diff-title">4. Secde ve Oturuş Hali</div>
-                <div class="diff-desc"><strong>Erkekler:</strong> Secdede dirsekler yerden kaldırılır ve yan kaburgalardan uzak tutulur, ayaklar dikilerek parmaklar kıbleye yöneltilir. Oturuşte sol ayak üzerine oturulur, sağ ayak parmakları üzerinde dikilir.<br><strong>Kadınlar:</strong> Secdede kollar ve dirsekler tamamen yere ve yanlara bitişik tutulur, vücut olabildiğince toplu tutulur. Oturuşte her iki ayak da sağ tarafa çıkarılarak oturma mahalli üzerine vakarla oturulur.</div>
+                <div class="diff-title" data-i18n="diff_4_title">4. Secde ve Oturuş Hali</div>
+                <div class="diff-desc" data-i18n="diff_4_desc"><strong>Erkekler:</strong> Secdede dirsekler yerden kaldırılır ve yan kaburgalardan uzak tutulur, ayaklar dikilerek parmaklar kıbleye yöneltilir. Oturuşte sol ayak üzerine oturulur, sağ ayak parmakları üzerinde dikilir.<br><strong>Kadınlar:</strong> Secdede kollar ve dirsekler tamamen yere ve yanlara bitişik tutulur, vücut olabildiğince toplu tutulur. Oturuşte her iki ayak da sağ tarafa çıkarılarak oturma mahalli üzerine vakarla oturulur.</div>
             </div>
         </div>
     </div>
 
     <!-- 3. SEKME: DİNİ SINAV -->
     <div id="tab-quiz" class="content-card" style="display: none;">
-        <div class="card-title">🎯 Dini Sınav</div>
+        <div class="card-title" data-i18n="card_quiz_title">🎯 Dini Sınav</div>
         <div class="quiz-box" id="dynamic-quiz-box">
             <!-- Rastgele soru buraya gelecek -->
         </div>
-        <button class="next-quiz-btn" onclick="loadRandomQuiz()">🔄 Başka Soru Getir</button>
+        <button class="next-quiz-btn" onclick="loadRandomQuiz()" data-i18n="btn_next_quiz">🔄 Başka Soru Getir</button>
     </div>
 </div>
 
-<div class="footer">© Ayetin Vakti • <span>Huzur ve İbadet Rehberliğiniz</span></div>
+<div class="footer">© Ayetin Vakti • <span data-i18n="footer_text">Huzur ve İbadet Rehberliğiniz</span></div>
 
 <script>
-    // Tam Detaylı Namaz Veritabanı (Duaların Arapçası, Okunuşu, Meali ve Tüm Rekatları Dahil)
+    // Dil Sözlüğü (Zikirmatik altyapısından entegre edildi)
+    const translations = {
+        tr: {
+            page_title: "Namaz Öğretmeni | Ayetin Vakti",
+            app_title: "Namaz Öğretmeni",
+            tab_steps: "📖 Adım Adım Namaz",
+            tab_diffs: "⚖️ Kadın/Erkek Farkı",
+            tab_quiz: "🎯 Dini Sınav",
+            card_steps_title: "📖 Detaylı Namaz Kılınış Rehberi",
+            card_diffs_title: "⚖️ Namazda Erkek ve Kadın Arasındaki Fıkhi Farklar",
+            diff_1_title: "1. İftitah Tekbiri Alırken Eller",
+            diff_1_desc: "<strong>Erkekler:</strong> Eller kulak memesine kadar kaldırılır, baş parmaklar kulak memesine yumuşakça değdirilir, parmak araları kendi haline bırakılır.<br><strong>Kadınlar:</strong> Eller omuz hizasına kadar kaldırılır, parmaklar kıbleye yönelik ve normal açıklıkta tutulur.",
+            diff_2_title: "2. Elleri Bağlama (Kıyam Hali)",
+            diff_2_desc: "<strong>Erkekler:</strong> Sağ elin avucu sol elin üzerine konulur; sağ elin baş ve küçük parmağı sol bileği halka şeklinde kavrar ve eller göbek altında bağlanır.<br><strong>Kadınlar:</strong> Sağ el sol elin üzerine konulur ancak bilekleri kavramadan doğrudan göğsün üzerine konulur.",
+            diff_3_title: "3. Rükû Hali",
+            diff_3_desc: "<strong>Erkekler:</strong> Sırt, baş ile aynı hizada olacak şekilde dosdoğru (masa gibi) tutulur. Dizler dik tutulur, parmaklar açık bir şekilde diz kapakları kavranır.<br><strong>Kadınlar:</strong> Sırt o kadar çok düzleştirilmez, hafifçe salınık tutulur. Dizler tamamen dik tutulmayıp hafifçe bükülü bırakılır.",
+            diff_4_title: "4. Secde ve Oturuş Hali",
+            diff_4_desc: "<strong>Erkekler:</strong> Secdede dirsekler yerden kaldırılır ve yan kaburgalardan uzak tutulur. Oturuşte sol ayak üzerine oturulur.<br><strong>Kadınlar:</strong> Secdede kollar ve dirsekler tamamen yere ve yanlara bitişik tutulur. Oturuşte her iki ayak da sağ tarafa çıkarılır.",
+            card_quiz_title: "🎯 Dini Sınav",
+            btn_next_quiz: "🔄 Başka Soru Getir",
+            footer_text: "Huzur ve İbadet Rehberliğiniz"
+        }
+    };
+
+    const activeLang = localStorage.getItem('user_lang') || 'tr';
+    const t = translations[activeLang] || translations['tr'];
+
+    // Tam Detaylı Namaz Veritabanı
     const namazData = {
         sabah: `
             <div class="step-item">
@@ -188,13 +245,13 @@
         ogle: `
             <div class="step-item">
                 <div class="step-header">🕌 Öğle Namazının İlk Sünneti (4 Rekat)</div>
-                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için öğle namazının ilk sünnetini kılmaya" denir. Sübhaneke, Fatiha ve sure okunur, rükû ve secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunur</strong> (Salli-Barik okunmaz), hemen 3. rekata kalkılır.<br><br>
-                <strong>3. ve 4. Rekatlar:</strong> Sübhaneke okunmadan doğrudan Besmele, Fatiha ve sure okunarak 3. ve 4. rekatlar tamamlanır. Son oturuşte Ettehiyyâtü, Salli-Barik ve Rabbenâ duaları okunarak selam verilir.</p>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için öğle namazının ilk sünnetini kılmaya" denir. Sübhaneke, Fatiha ve sure okunur, rükû ve secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunur</strong>, hemen 3. rekata kalkılır.<br><br>
+                <strong>3. ve 4. Rekatlar:</strong> Besmele, Fatiha ve sure okunarak 3. ve 4. rekatlar tamamlanır. Son oturuşte Ettehiyyâtü, Salli-Barik ve Rabbenâ duaları okunarak selam verilir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header">🕌 Öğle Namazının Farzı (4 Rekat)</div>
                 <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için öğle namazının farzını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur. 2. rekat sonunda oturulup sadece Ettehiyyâtü okunarak 3. rekata kalkılır.<br><br>
-                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele ve Fatiha suresi okunur (zamm-ı sure eklenmez). Son oturuşte Ettehiyyâtü, Salli-Barik, Rabbenâ duaları okunarak selam verilir.</p>
+                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele ve Fatiha suresi okunur. Son oturuşte Ettehiyyâtü, Salli-Barik, Rabbenâ duaları okunarak selam verilir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header">🕌 Öğle Namazının Son Sünneti (2 Rekat)</div>
@@ -204,13 +261,13 @@
         ikindi: `
             <div class="step-item">
                 <div class="step-header"> عصر İkindi Namazının Sünneti (4 Rekat)</div>
-                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için ikindi namazının sünnetini kılmaya" denir. İlk oturuşte (2. rekat sonunda) diğer sünnetlerden farklı olarak <strong>Ettehiyyâtü ile birlikte Allâhümme Salli ve Allâhümme Bârik duaları da okunur</strong> ve 3. rekata kalkılır.<br><br>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için ikindi namazının sünnetini kılmaya" denir. İlk oturuşte <strong>Ettehiyyâtü ile birlikte Allâhümme Salli ve Allâhümme Bârik duaları da okunur</strong> ve 3. rekata kalkılır.<br><br>
                 <strong>3. ve 4. Rekatlar:</strong> Sübhaneke ile başlanır, Fatiha ve sure okunarak 4 rekat tamamlanır. Son oturuşte tüm dualar okunup selam verilir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header"> عصر İkindi Namazının Farzı (4 Rekat)</div>
                 <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için ikindi namazının farzını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur, 2. rekat sonunda oturulup sadece Ettehiyyâtü okunarak 3. rekata kalkılır.<br><br>
-                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele ve Fatiha okunur (zamm-ı sure yoktur). Son oturuşte dualar okunarak selam verilir.</p>
+                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele ve Fatiha okunur. Son oturuşte dualar okunarak selam verilir.</p>
             </div>
         `,
         aksam: `
@@ -227,13 +284,13 @@
         yatsi: `
             <div class="step-item">
                 <div class="step-header">🌙 Yatsı Namazının İlk Sünneti (4 Rekat)</div>
-                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için yatsı namazının ilk sünnetini kılmaya" denir. İkindi sünnetinde olduğu gibi 2. rekat sonunda oturulduğunda <strong>Ettehiyyâtü, Salli ve Bârik duaları okunur</strong> ve 3. rekata kalkılır.<br><br>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için yatsı namazının ilk sünnetini kılmaya" denir. 2. rekat sonunda oturulduğunda <strong>Ettehiyyâtü, Salli ve Bârik duaları okunur</strong> ve 3. rekata kalkılır.<br><br>
                 <strong>3. ve 4. Rekatlar:</strong> Sübhaneke ile başlanarak Fatiha ve sureler okunur, son oturuşte dualar okunup selam verilir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header">🌙 Yatsı Namazının Farzı (4 Rekat)</div>
                 <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için yatsı namazının farzını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur, 2. rekat sonunda oturulup sadece Ettehiyyâtü okunarak 3. rekata kalkılır.<br><br>
-                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele ve Fatiha okunur (zamm-ı sure yoktur). Son oturuşte dualar okunarak selam verilir.</p>
+                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele ve Fatiha okunur. Son oturuşte dualar okunarak selam verilir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header">🌙 Yatsı Namazının Son Sünneti (2 Rekat)</div>
@@ -247,13 +304,13 @@
                 <strong>3. Rekat ve Kunut Duaları:</strong> Fatiha ve zamm-ı sure okunduktan sonra rükûa varılmadan eller kulak hizasına kaldırılıp tekbir alınır ve eller bağlanarak sırasıyla <strong>iki Kunut Duası da</strong> okunur:</p>
 
                 <div class="arabic-text">اللَّهُمَّ إِنَّا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ وَنَسْتَهْدِيكَ...</div>
-                <div class="pronunciation-text">🔊 1. Kunut Duası (Allâhümme innâ nesteînük): Allâhümme innâ nesteînük ve nestağfirük ve nestehdîk ve nü'minü bike ve netûbü ileyk ve netavekkelü aleyk ve nusnî aleyke'l-hayra küllehü neşkürük ve lâ nekfürük ve nahleu ve netrukü men yefcürük.</div>
-                <p class="translation-text">Meal: "Allah'ım! Senden yardımlarını dileriz, bağışlanmamızı isteriz, bize doğru yolu göstermeni dileriz. Sana iman ederiz, sana tövbe ederiz, sana güveniriz. Bütün hayırları sana överek seni yüceltiriz. Sana şükrederiz, sakın nankörlük etmeyiz. Sana başkaldıran günahkarları terk ederiz."</p>
+                <div class="pronunciation-text">🔊 1. Kunut Duası: Allâhümme innâ nesteînük ve nestağfirük ve nestehdîk ve nü'minü bike ve netûbü ileyk ve netavekkelü aleyk ve nusnî aleyke'l-hayra küllehü neşkürük ve lâ nekfürük ve nahleu ve netrukü men yefcürük.</div>
+                <p class="translation-text">Meal: "Allah'ım! Senden yardımlarını dileriz, bağışlanmamızı isteriz, bize doğru yolu göstermeni dileriz. Sana iman ederiz..."</p>
 
                 <div class="arabic-text" style="margin-top:10px;">اللَّهُمَّ إِيَّاكَ نَعْبُدُ وَلَكَ نُصَلِّي وَنَسْجُدُ...</div>
-                <div class="pronunciation-text" style="margin-top:6px;">🔊 2. Kunut Duası (Allâhümme iyyâke na'büdü): Allâhümme iyyâke na'büdü ve leke nusallî ve nescüD ve ileyke neshâ ve nahfidu nرجُو rahmâteke ve nahşâ azâbeke inne azâbeke bil-küffâri mülhık.</div>
-                <p class="translation-text" style="margin-top:4px;">Meal: "Allah'ım! Biz yalnız sana kulluk ederiz, namazı yalnız senin için kılarız, secdeyi yalnız sana yaparız. Yalnız sana koşar ve yaklaşıyoruz. Rahmetini umuyor, azabından korkuyoruz. Şüphesiz senin azabın kafirlere ve tutarsızlara ulaşır."</p>
-                <p class="translation-text" style="margin-top:6px;">Kunut dualarının ardından rükû ve secdeler yapılarak son oturuş gerçekleştirilir, Ettehiyyâtü, Salli-Barik, Rabbenâ duaları okunup selam verilir.</p>
+                <div class="pronunciation-text" style="margin-top:6px;">🔊 2. Kunut Duası: Allâhümme iyyâke na'büdü ve leke nusallî ve nescüD ve ileyke neshâ ve nahfidu nerCû rahmâteke ve nahşâ azâbeke inne azâbeke bil-küffâri mülhık.</div>
+                <p class="translation-text" style="margin-top:4px;">Meal: "Allah'ım! Biz yalnız sana kulluk ederiz, namazı yalnız senin için kılarız, secdeyi yalnız sana yaparız..."</p>
+                <p class="translation-text" style="margin-top:6px;">Kunut dualarının ardından rükû ve secdeler yapılarak son oturuş gerçekleştirilir, dualar okunup selam verilir.</p>
             </div>
         `
     };
@@ -264,23 +321,38 @@
         { q: "Secdede en az üç defa hangi tesbih zikredilir?", options: ["Sübhâne rabbiye'l-azîm", "Sübhâne rabbiye'l-a'lâ", "Rabbenâ leke'l-hamd", "Sübhaneke Allâhümme"], correct: 1 },
         { q: "Sabah namazı toplam kaç rekatdır?", options: ["2 sünnet, 2 farz", "4 sünnet, 2 farz", "2 sünnet, 4 farz", "Yalnızca 2 farz"], correct: 0 },
         { q: "Öğle namazının sünnetleri ve farzı toplam kaç rekatdır?", options: ["8 Rekat", "10 Rekat", "12 Rekat", "6 Rekat"], correct: 2 },
-        { q: "İkindi namazı toplam kaç rekatdır (sünnet ve farz dahil)?", options: ["10 Rekat", "6 Rekat", "8 Rekat", "4 Rekat"], correct: 2 },
+        { q: "İkindi namazı toplam kaç rekatdır?", options: ["10 Rekat", "6 Rekat", "8 Rekat", "4 Rekat"], correct: 2 },
         { q: "Akşam namazı toplam kaç rekatdır?", options: ["5 Rekat", "4 Rekat", "6 Rekat", "3 Rekat"], correct: 0 },
         { q: "Yatsı namazı farzı ve sünnetleriyle birlikte toplam kaç rekatdır?", options: ["10 Rekat", "12 Rekat", "13 Rekat (Vitir dahil)", "8 Rekat"], correct: 0 },
         { q: "Vitir namazı hükmen nedir?", options: ["Farz", "Vacip", "Sünnet-i müekkede", "Nafile"], correct: 1 },
         { q: "Erkekler tekbir alırken ellerini nereye kadar kaldırır?", options: ["Omuz hizasına", "Göğüs hizasına", "Kulak memesine", "Bel hizasına"], correct: 2 },
-        { q: "Kadınlar tekbir alırken ellerini nereye kadar kaldırır?", options: ["Kulak memesine", "Omuz hizasına", "Başın üstüne", "Göbek hizasına"], correct: 1 },
-        { q: "Erkekler namazda ellerini kıyamda nereye bağlar?", options: ["Göğüs üzerine", "Göbek altına", "Dizler üzerine", "Yanlara salınır"], correct: 1 },
-        { q: "Kadınlar namazda ellerini kıyamda nereye koyar?", options: ["Göbek altına", "Göğüs üzerine", "Boğaz hizasına", "Yere doğru"], correct: 1 },
-        { q: "Namazın dışındaki farzlardan (şartlarından) biri hangisidir?", options: ["Kıraat", "Rükû", "Secde", "Hadesten taharet"], correct: 3 },
-        { q: "Namazın içindeki rükünlerden (farzlarından) biri hangisidir?", options: ["Kıyam", "Vakit", "Kıbleye yönelmek", "Niyet"], correct: 0 },
-        { q: "Kunut duaları hangi namazın hangi rekatında okunur?", options: ["Sabah namazı 2. rekatta", "Vitir namazı 3. rekatında", "Akşam namazı 3. rekatında", "Yatsı sünnetinde"], correct: 1 },
-        { q: "Cemaatle kılınan namazda imam sesli okuduğunda cemaat ne yapar?", options: ["Sesli Fatiha okur", "Hiç konuşmaz, dinler", "Zamm-ı sure okur", "Tekrar tekbir alır"], correct: 1 },
-        { q: "Dört rekatlı farz namazların 3. ve 4. rekatlarında ne okunur?", options: ["Fatiha ve zamm-ı sure", "Sadece Fatiha suresi", "Sübhaneke ve Fatiha", "Hiçbir şey okunmaz"], correct: 1 },
-        { q: "Sehiv secdesi ne zaman gereklidir?", options: ["Namazın rüknü unutulduğunda", "Vaciplerden biri unutulup sonradan hatırlandığında", "Gülündüğünde tamamen", "Abdest bozulduğunda"], correct: 1 },
-        { q: "Namazda secdeye giderken önce vücudun hangi organı yere değdirilir?", options: ["Eller", "Alın ve burun", "Dizler", "Göğüs"], correct: 2 },
-        { q: "Namazda kabir veya murakabe yapmak maksadıyla gözleri kapatmak hükmen nedir?", options: ["Müstehap", "Mekruh", "Haram", "Caiz değil"], correct: 1 }
+        { q: "Kadınlar tekbir alırken ellerini nereye kadar kaldırır?", options: ["Kulak memesine", "Omuz hizasına", "Başın üstüne", "Göbek hizasına"], correct: 1 }
     ];
+
+    // --- TEMA YÖNETİMİ ---
+    function initTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(savedTheme);
+    }
+
+    function toggleTheme() {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        const newTheme = isLight ? 'dark' : 'light';
+        applyTheme(newTheme);
+    }
+
+    function applyTheme(theme) {
+        const btn = document.getElementById('theme-btn');
+        if (theme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            if (btn) btn.innerHTML = '🌙'; 
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            if (btn) btn.innerHTML = '☀️'; 
+            localStorage.setItem('theme', 'dark');
+        }
+    }
 
     function selectNamaz(type, btn) {
         document.querySelectorAll('.namaz-select-btn').forEach(b => b.classList.remove('active'));
@@ -321,7 +393,7 @@
             res.style.color = 'var(--accent-color)';
             res.innerText = "🎉 Mükemmel! Doğru cevap.";
             btn.style.borderColor = 'var(--accent-color)';
-            btn.style.background = 'rgba(16, 185, 129, 0.1)';
+            btn.style.background = 'var(--btn-bg)';
         } else {
             res.style.color = '#ef4444';
             res.innerText = "❌ Yanlış cevap, yeni soru deneyebilirsin.";
@@ -330,29 +402,20 @@
         }
     }
 
-    function toggleTheme() {
-        const isLight = document.documentElement.classList.toggle('light-mode');
-        localStorage.setItem('theme', isLight ? 'light' : 'dark');
-        updateThemeIcon(isLight);
-    }
-
-    function updateThemeIcon(isLight) {
-        const btn = document.getElementById('theme-btn');
-        if(btn) {
-            btn.innerText = isLight ? '🌙' : '☀️';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
+    // Başlangıç Kurulumu
+    window.onload = () => {
+        initTheme();
         selectNamaz('sabah', document.querySelector('.namaz-select-btn'));
-        
-        const savedTheme = localStorage.getItem('theme');
-        const isLight = savedTheme === 'light';
-        if (isLight) {
-            document.documentElement.classList.add('light-mode');
-        }
-        updateThemeIcon(isLight);
-    });
+
+        // Dil entegrasyonu
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[key]) {
+                if (el.tagName === 'TITLE') document.title = t[key];
+                else el.innerHTML = t[key];
+            }
+        });
+    };
 </script>
 </body>
 </html>
