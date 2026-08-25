@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namaz Öğretmeni | Ayetin Vakti</title>
+    <meta name="theme-color" content="#10b981">
+    
+    <!-- Sayfa yüklenmeden önce kayıtlı tema ve özel renkleri uygulayan script -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+            
+            const customAccent = localStorage.getItem('custom_accent');
+            const customText = localStorage.getItem('custom_text');
+            const customBg = localStorage.getItem('custom_bg');
+
+            if (customAccent) document.documentElement.style.setProperty('--accent-color', customAccent);
+            if (customText) document.documentElement.style.setProperty('--text-color', customText);
+            if (customBg) {
+                document.documentElement.style.setProperty('--bg-color', customBg);
+                document.documentElement.style.setProperty('--card-bg', customBg);
+            }
+        })();
+    </script>
+
+    <style>
+        :root {
+            --bg-color: #0b1120;
+            --card-bg: #1e293b;
+            --accent-color: #10b981;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-family); background-color: var(--bg-color); color: var(--text-color); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 16px; transition: background-color 0.3s, color 0.3s; }
+        .container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 16px; }
+        
+        /* Görseldeki Üst Bar Tasarımı */
+        .navbar { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; transition: 0.3s; }
+        .circle-btn { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-color); display: flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; font-size: 1.2rem; transition: 0.2s; }
+        .circle-btn:hover { border-color: var(--accent-color); color: var(--accent-color); background: rgba(16, 185, 129, 0.1); }
+        .app-title { font-size: 1.1rem; font-weight: 700; color: var(--accent-color); text-align: center; }
+
+        /* Sekmeler (Tab Menü) */
+        .tabs-container { display: flex; gap: 8px; background: var(--card-bg); padding: 6px; border: 1px solid var(--border-color); border-radius: 16px; }
+        .tab-btn { flex: 1; padding: 10px; background: none; border: none; color: var(--text-muted); font-weight: 600; font-size: 0.85rem; border-radius: 12px; cursor: pointer; transition: 0.2s; text-align: center; }
+        .tab-btn.active { background: var(--accent-color); color: #fff; }
+
+        /* İçerik Kartları */
+        .content-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 14px; transition: 0.3s; }
+        .card-title { font-size: 1.05rem; font-weight: 700; color: var(--accent-color); display: flex; align-items: center; gap: 8px; }
+        
+        /* Adım Öğeleri */
+        .step-item { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+        .step-header { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 0.95rem; color: var(--accent-color); }
+        .arabic-text { font-size: 1.3rem; font-family: 'Amiri', 'Traditional Arabic', serif; text-align: right; color: var(--text-color); line-height: 1.8; direction: rtl; }
+        .translation-text { font-size: 0.9rem; color: var(--text-muted); font-style: italic; line-height: 1.5; }
+        .tip-box { background: rgba(16, 185, 129, 0.08); border-left: 3px solid var(--accent-color); padding: 10px; font-size: 0.85rem; border-radius: 0 8px 8px 0; color: var(--text-color); }
+
+        /* Erkek / Kadın Farkları Listesi */
+        .diff-list { display: flex; flex-direction: column; gap: 10px; }
+        .diff-row { display: flex; flex-direction: column; gap: 4px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        .diff-row:last-child { border-bottom: none; }
+        .diff-title { font-weight: 600; font-size: 0.9rem; color: var(--text-color); }
+        .diff-desc { font-size: 0.85rem; color: var(--text-muted); }
+
+        .footer { margin: 20px 0; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
+        .footer span { color: var(--accent-color); font-weight: 600; }
+
+        /* Light Mode Destekleri */
+        body.light-mode { --bg-color: #f8fafc; --card-bg: #ffffff; --text-color: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Üst Bar (Görseldeki Tasarım) -->
+    <header class="navbar">
+        <a href="https://ayetinvakti.github.io/" class="circle-btn" title="Geri Dön">←</a>
+        <div class="app-title">Namaz Öğretmeni</div>
+        <button class="circle-btn" onclick="toggleTheme()" id="theme-btn" title="Tema Değiştir">☀️</button>
+    </header>
+
+    <!-- Sekme Geçişleri -->
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('steps', this)">Adım Adım Namaz</button>
+        <button class="tab-btn" onclick="switchTab('diffs', this)">Erkek / Kadın Farkı</button>
+    </div>
+
+    <!-- 1. SEKME: ADIM ADIM REHBER -->
+    <div id="tab-steps" class="content-card">
+        <div class="card-title">📖 Namazın Kılınış Adımları</div>
+        
+        <div class="step-item">
+            <div class="step-header"><span>1. Niyet ve İftitah Tekbiri</span><span>01</span></div>
+            <p class="translation-text">Kılınacak namaz için kalben niyet edilir (örn. "Niyet ettim Allah rızası için sabah namazının sünnetini kılmaya"). Ardından eller kulak hizasına kaldırılarak "Allâhu Ekber" denir ve namaza başlanır.</p>
+            <div class="tip-box">💡 İpucu: Erkekler ellerini baş parmakları kulak memesine değecek şekilde kaldırır; kadınlar ise omuz hizasında kaldırır.</div>
+        </div>
+
+        <div class="step-item">
+            <div class="step-header"><span>2. Kıyam (Ayakta Duruş) ve Sübhaneke</span><span>02</span></div>
+            <div class="arabic-text">سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ وَلَا إِلَهَ غَيْرُكَ</div>
+            <p class="translation-text">"Allah'ım! Sen eksik sıfatlardan uzak ve yücesin. Seni her an hamd ile överim. Senin adın mübarektir. Senin şanın yücedir. Senden başka ilah yoktur."</p>
+            <p class="translation-text">Devamında Euzü-Besmele çekilerek Fatiha Suresi ve ardından kısa bir zamm-ı sure okunur.</p>
+        </div>
+
+        <div class="step-item">
+            <div class="step-header"><span>3. Rükû (Eğilme)</span><span>03</span></div>
+            <div class="arabic-text">سُبْحَانَ رَبِّيَ الْعَظِيمِ</div>
+            <p class="translation-text">"Yüce Rabbim noksanlıklardan uzaktır." (En az 3 defa söylenir)</p>
+            <div class="tip-box">💡 Rükûda sırt dosdoğru bir masa gibi düz tutulur, gözler ayak parmaklarına bakar.</div>
+        </div>
+
+        <div class="step-item">
+            <div class="step-header"><span>4. Secde (Kapanma)</span><span>04</span></div>
+            <div class="arabic-text">سُبْحَانَ رَبِّيَ الْأَعْلَى</div>
+            <p class="translation-text">"Çok Yüce Rabbim noksanlıklardan uzaktır." (En az 3 defa söylenir)</p>
+            <div class="tip-box">💡 Secdeye önce dizler, sonra eller, en son alın ve burun konur. Ayaklar ve parmaklar kıbleye dönük olmalıdır.</div>
+        </div>
+    </div>
+
+    <!-- 2. SEKME: ERKEK / KADIN FARKLARI -->
+    <div id="tab-diffs" class="content-card" style="display: none;">
+        <div class="card-title">⚖️ Namazda Erkek ve Kadın Arasındaki Farklar</div>
+        <div class="diff-list">
+            <div class="diff-row">
+                <div class="diff-title">1. Tekbir Alırken Eller</div>
+                <div class="diff-desc"><strong>Erkekler:</strong> Eller kulak memesine kadar kaldırılır.<br><strong>Kadınlar:</strong> Eller omuz hizasına kadar kaldırılır.</div>
+            </div>
+            <div class="diff-row">
+                <div class="diff-title">2. Elleri Bağlama (Kıyam)</div>
+                <div class="diff-desc"><strong>Erkekler:</strong> Sağ el sol elin üzerine konulur ve göbek altından bağlanır.<br><strong>Kadınlar:</strong> Sağ el sol elin üzerine konulur ve göğsün üzerine konulur.</div>
+            </div>
+            <div class="diff-row">
+                <div class="diff-title">3. Rükû Hali</div>
+                <div class="diff-desc"><strong>Erkekler:</strong> Sırt düz, dizler dik tutulur, parmaklar açık şekilde dizler kavranır.<br><strong>Kadınlar:</strong> Dizler hafif bükülü tutulur, parmaklar kapalı şekilde dizler üzerine konulur, sırt çok fazla düzleştirilmez.</div>
+            </div>
+            <div class="diff-row">
+                <div class="diff-title">4. Secde Hali</div>
+                <div class="diff-desc"><strong>Erkekler:</strong> Dirsekler yerden yüksek tutulur ve yanlardan uzak tutulur, kollar uyluklara değdirilmez.<br><strong>Kadınlar:</strong> Kollar ve dirsekler tamamen yere bitişik tutulur, vücut olabildiğince kapanık şekilde secde edilir.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">© Ayetin Vakti • <span>Huzur ve İbadet Rehberliğiniz</span></div>
+
+<script>
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        document.getElementById('tab-steps').style.display = tabId === 'steps' ? 'flex' : 'none';
+        document.getElementById('tab-diffs').style.display = tabId === 'diffs' ? 'flex' : 'none';
+    }
+
+    function toggleTheme() {
+        const isLight = document.documentElement.classList.toggle('light-mode');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        document.getElementById('theme-btn').innerText = isLight ? '🌙' : '☀️';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.getElementById('theme-btn').innerText = '🌙';
+        }
+    });
+</script>
+</body>
+</html>
