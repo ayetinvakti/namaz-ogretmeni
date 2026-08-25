@@ -65,7 +65,6 @@
         .arabic-text { font-size: 1.25rem; font-family: 'Amiri', 'Traditional Arabic', serif; text-align: right; color: var(--text-color); line-height: 1.9; direction: rtl; }
         .pronunciation-text { font-size: 0.88rem; color: var(--accent-color); font-weight: 600; background: rgba(16, 185, 129, 0.08); padding: 8px 12px; border-radius: 8px; }
         .translation-text { font-size: 0.88rem; color: var(--text-muted); font-style: italic; line-height: 1.5; }
-        .tip-box { background: rgba(16, 185, 129, 0.08); border-left: 3px solid var(--accent-color); padding: 10px; font-size: 0.85rem; border-radius: 0 8px 8px 0; color: var(--text-color); }
 
         .quiz-box { background: var(--card-bg); border: 1px dashed var(--accent-color); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
         .quiz-question { font-size: 0.95rem; font-weight: 600; color: var(--text-color); line-height: 1.4; }
@@ -99,7 +98,7 @@
     <div class="tabs-container">
         <button class="tab-btn active" onclick="switchTab('steps', this)">📖 Adım Adım Namaz</button>
         <button class="tab-btn" onclick="switchTab('diffs', this)">⚖️ Kadın/Erkek Farkı</button>
-        <button class="tab-btn" onclick="switchTab('quiz', this)">🎯 Dini Sınav</button>
+        <button class="tab-btn" onclick="switchTab('quiz', this)">🎯 50'lik Dev Sınav</button>
     </div>
 
     <!-- 1. SEKME: DETAYLI NAMAZ REHBERİ -->
@@ -138,12 +137,12 @@
             </div>
             <div class="diff-row">
                 <div class="diff-title">4. Secde ve Oturuş Hali</div>
-                <div class="diff-desc"><strong>Erkekler:</strong> Secdede dirsekler yerden kaldırılır ve yan kaburgalardan uzak tutulur, ayaklar dikilerek parmaklar kıbleye yöneltilir. Oturuşte sol ayak üzerine oturulur, sağ ayak parmakları üzerinde dikilir.<br><strong>Kadınlar:</strong> Secdede kollar ve dirsekler tamamen yere ve yanlara bitişik tutulur, vücut olabildiğince toplu tutulur. Oturuşte her iki ayak da sağ tarafa çıkarılarak kalça üzerine (yere) oturulur.</div>
+                <div class="diff-desc"><strong>Erkekler:</strong> Secdede dirsekler yerden kaldırılır ve yan kaburgalardan uzak tutulur, ayaklar dikilerek parmaklar kıbleye yöneltilir. Oturuşte sol ayak üzerine oturulur, sağ ayak parmakları üzerinde dikilir.<br><strong>Kadınlar:</strong> Secdede kollar ve dirsekler tamamen yere ve yanlara bitişik tutulur, vücut olabildiğince toplu tutulur. Oturuşte her iki ayak da sağ tarafa çıkarılarak oturma mahalli üzerine vakarla oturulur.</div>
             </div>
         </div>
     </div>
 
-    <!-- 3. SEKME: DİNİ SINAV -->
+    <!-- 3. SEKME: 50'LİK DEV RASTGELE SINAV -->
     <div id="tab-quiz" class="content-card" style="display: none;">
         <div class="card-title">🎯 50 Soruluk Kapsamlı Namaz Sınavı</div>
         <div class="quiz-box" id="dynamic-quiz-box">
@@ -168,13 +167,13 @@
                 <div class="arabic-text">سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ وَلَا إِلَهَ غَيْرُكَ</div>
                 <div class="pronunciation-text">🔊 Okunuş: Sübhâneke Allâhümme ve bi-hamdik ve tebârake'smük ve teâlâ ceddük ve lâ ilâhe ğayrük.</div>
                 <p class="translation-text">"Allah'ım! Sen eksik sıfatlardan uzak ve yücesin. Seni her an hamd ile överim. Senin adın mübarektir. Senin şanın yücedir. Senden başka ilah yoktur."</p>
-                <p class="translation-text" style="margin-top:6px;">Ardından gizlice <strong>"Euzü billahi mineşşeytanirracim, Bismillahirrahmanirrahim"</strong> denir.</p>
+                <p class="translation-text" style="margin-top:6px;">Ardından sesli olmaksızın, içten (hafî olarak) <strong>"Euzü billahi mineşşeytanirracim, Bismillahirrahmanirrahim"</strong> denir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header">3. Adım: Fatiha Suresi ve Zamm-ı Sure (Kur'an Okuma)</div>
-                <div class="arabic-text">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ... (Fatiha okunur, ardından "Âmîn" denir ve kısa bir sure eklenir)</div>
+                <div class="arabic-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</div>
                 <div class="pronunciation-text">🔊 Okunuş: Bismillâhi'r-rahmâni'r-rahîm. Elhamdü lillâhi rabbi'l-âlemîn...</div>
-                <p class="translation-text">Fatiha'dan sonra en az üç kısa ayet veya bir sure (örneğin İhlas Suresi) okunur.</p>
+                <p class="translation-text">Besmele-i şerife çekilerek Fatiha suresi okunur, ardından "Âmîn" denir ve kısa bir sure (zamm-ı sure) eklenir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header">4. Adım: Rükû ve Secdeler</div>
@@ -187,8 +186,8 @@
         `,
         ogle: `
             <div class="step-item">
-                <div class="step-header">Öğle Namazının Kılınışı (Toplam 10 Rekat)</div>
-                <p class="translation-text"><strong>1. İlk Sünnet (4 Rekat):</strong> Sabah namazının sünneti gibi kılınır ancak 2. rekat sonunda oturulup sadece Ettehiyyâtü okunarak kalkılır, 3. ve 4. rekatlarda Fatiha ve sure okunup son oturuşta tüm dualar okunarak selam verilir.<br><br>
+                <div class="step-header">Öğle Namazının Kılınışı (Toplam 12 Rekat)</div>
+                <p class="translation-text"><strong>1. İlk Sünnet (4 Rekat):</strong> Sabah namazının sünneti gibi kılınır ancak 2. rekat sonunda oturulup Ettehiyyâtü, Salli ve Bârik duaları okunur, ardından 3. rekat için ayağa kalkılır. 3. ve 4. rekatlarda Fatiha ve sure okunup son oturuşta tüm dualar tamamlanarak selam verilir.<br><br>
                 <strong>2. Farz (4 Rekat):</strong> İkamet getirilir. İlk iki rekatta Fatiha ve sure okunur. 3. ve 4. rekatlarda ise sadece Fatiha okunur, zamm-ı sure eklenmez.<br><br>
                 <strong>3. Son Sünnet (2 Rekat):</strong> Sabah namazının sünneti gibi aynen kılınarak namaz tamamlanır.</p>
             </div>
@@ -196,7 +195,7 @@
         ikindi: `
             <div class="step-item">
                 <div class="step-header">İkindi Namazının Kılınışı (Toplam 8 Rekat)</div>
-                <p class="translation-text"><strong>1. Sünnet (4 Rekat):</strong> Öğle namazının ilk sünneti gibi 4 rekat olarak kılınır.<br><br>
+                <p class="translation-text"><strong>1. Sünnet (4 Rekat):</strong> 4 rekatlık ikindi sünnetinin ilk oturuşunda Ettehiyyâtü ile birlikte <strong>Allâhümme Salli ve Allâhümme Bârik</strong> duaları okunur, ardından 3. rekat için kalkılarak kalan rekatlar tamamlanır.<br><br>
                 <strong>2. Farz (4 Rekat):</strong> Öğle namazının farzı gibi 4 rekat olarak kılınır (İlk iki rekatta Fatiha+sure, son iki rekatta sadece Fatiha okunur).</p>
             </div>
         `,
@@ -209,8 +208,8 @@
         `,
         yatsi: `
             <div class="step-item">
-                <div class="step-header">Yatsı Namazının Kılınışı (Toplam 10 Rekat + 3 Vitir)</div>
-                <p class="translation-text"><strong>1. İlk Sünnet (4 Rekat):</strong> 4 rekat sünnet kılınır.<br>
+                <div class="step-header">Yatsı Namazının Kılınışı (Toplam 10 Rekat)</div>
+                <p class="translation-text"><strong>1. İlk Sünnet (4 Rekat):</strong> 4 rekatlık yatsı sünnetinin ilk oturuşunda Ettehiyyâtü ile beraber <strong>Allâhümme Salli ve Allâhümme Bârik</strong> duaları okunur.<br>
                 <strong>2. Farz (4 Rekat):</strong> 4 rekat farz kılınır (İlk iki rekatta sure var, son iki rekatta sadece Fatiha var).<br>
                 <strong>3. Son Sünnet (2 Rekat):</strong> 2 rekat son sünnet kılınır.</p>
             </div>
@@ -230,10 +229,10 @@
         { q: "Rükûda en az üç defa hangi tesbih zikredilir?", options: ["Sübhâne rabbiye'l-azîm", "Sübhâne rabbiye'l-a'lâ", "Semiallahü limen hamideh", "Ettehiyyâtü lillâhi"], correct: 0 },
         { q: "Secdede en az üç defa hangi tesbih zikredilir?", options: ["Sübhâne rabbiye'l-azîm", "Sübhâne rabbiye'l-a'lâ", "Rabbenâ leke'l-hamd", "Sübhaneke Allâhümme"], correct: 1 },
         { q: "Sabah namazı toplam kaç rekatdır?", options: ["2 sünnet, 2 farz", "4 sünnet, 2 farz", "2 sünnet, 4 farz", "Yalnızca 2 farz"], correct: 0 },
-        { q: "Öğle namazının sünnetleri ve farzı toplam kaç rekatdır?", options: ["8 Rekat", "10 Rekat", "12 Rekat", "6 Rekat"], correct: 1 },
-        { q: "İkindi namazı toplam kaç rekatdır?", options: ["10 Rekat", "6 Rekat", "8 Rekat", "4 Rekat"], correct: 2 },
+        { q: "Öğle namazının sünnetleri ve farzı toplam kaç rekatdır?", options: ["8 Rekat", "10 Rekat", "12 Rekat", "6 Rekat"], correct: 2 },
+        { q: "İkindi namazı toplam kaç rekatdır (sünnet ve farz dahil)?", options: ["10 Rekat", "6 Rekat", "8 Rekat", "4 Rekat"], correct: 2 },
         { q: "Akşam namazı toplam kaç rekatdır?", options: ["5 Rekat", "4 Rekat", "6 Rekat", "3 Rekat"], correct: 0 },
-        { q: "Yatsı namazı farzı ve sünnetleriyle birlikte toplam kaç rekatdır?", options: ["10 Rekat", "12 Rekat", "13 Rekat (Vitir dahil)", "8 Rekat"], correct: 2 },
+        { q: "Yatsı namazı farzı ve sünnetleriyle birlikte toplam kaç rekatdır?", options: ["10 Rekat", "12 Rekat", "13 Rekat (Vitir dahil)", "8 Rekat"], correct: 0 },
         { q: "Vitir namazı hükmen nedir?", options: ["Farz", "Vacip", "Sünnet-i müekkede", "Nafile"], correct: 1 },
         { q: "Erkekler tekbir alırken ellerini nereye kadar kaldırır?", options: ["Omuz hizasına", "Göğüs hizasına", "Kulak memesine", "Bel hizasına"], correct: 2 },
         { q: "Kadınlar tekbir alırken ellerini nereye kadar kaldırır?", options: ["Kulak memesine", "Omuz hizasına", "Başın üstüne", "Göbek hizasına"], correct: 1 },
@@ -246,12 +245,7 @@
         { q: "Dört rekatlı farz namazların 3. ve 4. rekatlarında ne okunur?", options: ["Fatiha ve zamm-ı sure", "Sadece Fatiha suresi", "Sübhaneke ve Fatiha", "Hiçbir şey okunmaz"], correct: 1 },
         { q: "Sehiv secdesi ne zaman gereklidir?", options: ["Namazın rüknü unutulduğunda", "Vaciplerden biri unutulup sonradan hatırlandığında", "Gülündüğünde tamamen", "Abdest bozulduğunda"], correct: 1 },
         { q: "Namazda secdeye giderken önce vücudun hangi organı yere değdirilir?", options: ["Eller", "Alın ve burun", "Dizler", "Göğüs"], correct: 2 },
-        { q: "Sevgililer, dostlar veya mescit dışındakilere selam vermek namazı ne yapar?", options: ["Bozmaz", "Bozar (tahrif eder)", "Mekruh yapar", "Yeniden abdest aldırır"], correct: 1 },
-        { q: "Namazda kabir veya murakabe yapmak maksadıyla gözleri kapatmak hükmen nedir?", options: ["Müstehap", "Mekruh", "Haram", "Caiz değil"], correct: 1 },
-        { q: "Hatve (iki ayak arası) mesafesi kıyamda ne kadar olmalıdır?", options: ["Birbirine yapışık", "Bir karış kadar açık", "İki metre açık", "Omuz genişliğinde"], correct: 1 },
-        { q: "Namazda gülmek (sesli kahkaha) hem namazı hem de neyi bozar?", options: ["Orucu", "Abdesti", "Guslü", "Hiçbir şeyi bozmaz"], correct: 1 },
-        { q: "İftitah tekbiri alırken namaza niyet etmek hükmen nedir?", options: ["Sünnettir", "Şarttır (farzdır)", "Mekruhtur", "Müstehaptır"], correct: 1 },
-        { q: "Son oturuşta (Kaide-i ahire) ne kadar oturmak farzdır?", options: ["Ettehiyyatü okuyacak kadar", "Salli-Barik okuyacak kadar", "Duaları bitirecek kadar", "1 dakika"], correct: 0 }
+        { q: "Namazda kabir veya murakabe yapmak maksadıyla gözleri kapatmak hükmen nedir?", options: ["Müstehap", "Mekruh", "Haram", "Caiz değil"], correct: 1 }
     ];
 
     function selectNamaz(type, btn) {
