@@ -48,6 +48,7 @@
             --border-color: #334155;
             --btn-bg: rgba(255, 255, 255, 0.05);
             --btn-hover: rgba(255, 255, 255, 0.1);
+            --active-btn-bg: rgba(16, 185, 129, 0.15); /* Koyu temada aktif buton için yumuşak zemin */
             --shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
             --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
@@ -63,6 +64,7 @@
             --border-color: #e2e8f0;
             --btn-bg: #f1f5f9;
             --btn-hover: #e2e8f0;
+            --active-btn-bg: #ecfdf5; /* Açık temada aktif buton için hafif yeşil zemin */
             --shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
         }
 
@@ -82,9 +84,10 @@
         .tab-btn.active { background: var(--accent-color); color: #fff; }
 
         .namaz-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .namaz-select-btn { padding: 12px; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 12px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: 0.2s; text-align: left; display: flex; flex-direction: column; gap: 4px; }
+        .namaz-select-btn { padding: 12px; background: var(--btn-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 12px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: 0.2s; text-align: left; display: flex; flex-direction: column; gap: 4px; }
         [dir="rtl"] .namaz-select-btn { text-align: right; }
-        .namaz-select-btn:hover, .namaz-select-btn.active { border-color: var(--accent-color); background: var(--btn-bg); }
+        .namaz-select-btn:hover { border-color: var(--accent-color); background: var(--btn-hover); }
+        .namaz-select-btn.active { border-color: var(--accent-color); background: var(--active-btn-bg); color: var(--accent-color); }
         .namaz-select-btn span { font-size: 0.72rem; color: var(--text-muted); font-weight: normal; }
 
         .content-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow); }
@@ -100,9 +103,9 @@
         .quiz-box { background: var(--card-bg); border: 1px dashed var(--accent-color); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
         .quiz-question { font-size: 0.95rem; font-weight: 600; color: var(--text-color); line-height: 1.4; }
         .quiz-options { display: flex; flex-direction: column; gap: 8px; }
-        .quiz-opt-btn { width: 100%; padding: 10px 12px; font-size: 0.85rem; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 8px; cursor: pointer; text-align: left; transition: 0.2s; }
+        .quiz-opt-btn { width: 100%; padding: 10px 12px; font-size: 0.85rem; background: var(--btn-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 8px; cursor: pointer; text-align: left; transition: 0.2s; }
         [dir="rtl"] .quiz-opt-btn { text-align: right; }
-        .quiz-opt-btn:hover { border-color: var(--accent-color); background: var(--btn-bg); }
+        .quiz-opt-btn:hover { border-color: var(--accent-color); background: var(--btn-hover); }
         .quiz-result { font-size: 0.88rem; font-weight: 600; margin-top: 6px; }
         .next-quiz-btn { margin-top: 10px; padding: 10px 16px; background: var(--accent-color); color: #fff; border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; width: fit-content; box-shadow: var(--shadow); }
 
@@ -185,7 +188,7 @@
 <div class="footer">© Ayetin Vakti • <span data-i18n="footer_text">Huzur ve İbadet Rehberliğiniz</span></div>
 
 <script>
-    // Dil Sözlüğü (Zikirmatik altyapısından entegre edildi)
+    // Dil Sözlüğü
     const translations = {
         tr: {
             page_title: "Namaz Öğretmeni | Ayetin Vakti",
@@ -218,7 +221,7 @@
             <div class="step-item">
                 <div class="step-header">☀️ Sabah Namazının Sünneti (2 Rekat)</div>
                 <p class="translation-text"><strong>1. Rekat:</strong> "Niyet ettim Allah rızası için sabah namazının 2 rekat sünnetini kılmaya" diye niyet edilir. Tekbir alınıp eller bağlanır. Sübhaneke okunur, Euzü-Besmele çekilerek Fatiha ve zamm-ı sure okunur. Rükû ve secdeler yapılarak 2. rekata kalkılır.</p>
-                <p class="translation-text"><strong>2. Rekat:</strong> Besmele çekilip Fatiha ve zamm-ı sure okunur. Rükû ve secdeden sonra oturulur. Sırasıyla şu dualar okunur:</p>
+                <p class="translation-text"><strong>2. Rekat:</strong> Besmele çekilip Fatiha og zamm-ı sure okunur. Rükû ve secdeden sonra oturulur. Sırasıyla şu dualar okunur:</p>
                 
                 <div class="arabic-text">التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ...</div>
                 <div class="pronunciation-text">🔊 Ettehiyyâtü: Et-tahiyyatü lillahi ve's-salavatü ve't-tayyibat...</div>
@@ -246,12 +249,12 @@
             <div class="step-item">
                 <div class="step-header">🕌 Öğle Namazının İlk Sünneti (4 Rekat)</div>
                 <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için öğle namazının ilk sünnetini kılmaya" denir. Sübhaneke, Fatiha ve sure okunur, rükû ve secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunur</strong>, hemen 3. rekata kalkılır.<br><br>
-                <strong>3. ve 4. Rekatlar:</strong> Besmele, Fatiha ve sure okunarak 3. ve 4. rekatlar tamamlanır. Son oturuşte Ettehiyyâtü, Salli-Barik ve Rabbenâ duaları okunarak selam verilir.</p>
+                <strong>3. ve 4. Rekatlar:</strong> Besmele, Fatiha og sure okunarak 3. ve 4. rekatlar tamamlanır. Son oturuşte Ettehiyyâtü, Salli-Barik ve Rabbenâ duaları okunarak selam verilir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header">🕌 Öğle Namazının Farzı (4 Rekat)</div>
                 <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için öğle namazının farzını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur. 2. rekat sonunda oturulup sadece Ettehiyyâtü okunarak 3. rekata kalkılır.<br><br>
-                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele ve Fatiha suresi okunur. Son oturuşte Ettehiyyâtü, Salli-Barik, Rabbenâ duaları okunarak selam verilir.</p>
+                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele og Fatiha suresi okunur. Son oturuşte Ettehiyyâtü, Salli-Barik, Rabbenâ duaları okunarak selam verilir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header">🕌 Öğle Namazının Son Sünneti (2 Rekat)</div>
@@ -262,19 +265,19 @@
             <div class="step-item">
                 <div class="step-header"> عصر İkindi Namazının Sünneti (4 Rekat)</div>
                 <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için ikindi namazının sünnetini kılmaya" denir. İlk oturuşte <strong>Ettehiyyâtü ile birlikte Allâhümme Salli ve Allâhümme Bârik duaları da okunur</strong> ve 3. rekata kalkılır.<br><br>
-                <strong>3. ve 4. Rekatlar:</strong> Sübhaneke ile başlanır, Fatiha ve sure okunarak 4 rekat tamamlanır. Son oturuşte tüm dualar okunup selam verilir.</p>
+                <strong>3. ve 4. Rekatlar:</strong> Sübhaneke ile başlanır, Fatiha og sure okunarak 4 rekat tamamlanır. Son oturuşte tüm dualar okunup selam verilir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header"> عصر İkindi Namazının Farzı (4 Rekat)</div>
-                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için ikindi namazının farzını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur, 2. rekat sonunda oturulup sadece Ettehiyyâtü okunarak 3. rekata kalkılır.<br><br>
-                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele ve Fatiha okunur. Son oturuşte dualar okunarak selam verilir.</p>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için ikindi namazının farzını kılmaya" denir. Sübhaneke, Fatiha og zamm-ı sure okunur, 2. rekat sonunda oturulup sadece Ettehiyyâtü okunarak 3. rekata kalkılır.<br><br>
+                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele og Fatiha okunur. Son oturuşte dualar okunarak selam verilir.</p>
             </div>
         `,
         aksam: `
             <div class="step-item">
                 <div class="step-header">🌇 Akşam Namazının Farzı (3 Rekat)</div>
-                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için akşam namazının farzını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur. 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunup</strong> kalkılır.<br><br>
-                <strong>3. Rekat:</strong> Ayağa kalkınca sadece Besmele ve Fatiha suresi okunur. Rükû ve secdenin ardından son oturuş yapılır; Ettehiyyâtü, Salli-Barik, Rabbenâ duaları okunarak selam verilir.</p>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için akşam namazının farzını kılmaya" denir. Sübhaneke, Fatiha og zamm-ı sure okunur. 2. rekat sonunda oturulur og <strong>sadece Ettehiyyâtü okunup</strong> kalkılır.<br><br>
+                <strong>3. Rekat:</strong> Ayağa kalkınca sadece Besmele og Fatiha suresi okunur. Rükû og secdenin ardından son oturuş yapılır; Ettehiyyâtü, Salli-Barik, Rabbenâ duaları okunarak selam verilir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header">🌇 Akşam Namazının Sünneti (2 Rekat)</div>
@@ -284,13 +287,13 @@
         yatsi: `
             <div class="step-item">
                 <div class="step-header">🌙 Yatsı Namazının İlk Sünneti (4 Rekat)</div>
-                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için yatsı namazının ilk sünnetini kılmaya" denir. 2. rekat sonunda oturulduğunda <strong>Ettehiyyâtü, Salli ve Bârik duaları okunur</strong> ve 3. rekata kalkılır.<br><br>
-                <strong>3. ve 4. Rekatlar:</strong> Sübhaneke ile başlanarak Fatiha ve sureler okunur, son oturuşte dualar okunup selam verilir.</p>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için yatsı namazının ilk sünnetini kılmaya" denir. 2. rekat sonunda oturulduğunda <strong>Ettehiyyâtü, Salli og Bârik duaları okunur</strong> og 3. rekata kalkılır.<br><br>
+                <strong>3. ve 4. Rekatlar:</strong> Sübhaneke ile başlanarak Fatiha og sureler okunur, son oturuşte dualar okunup selam verilir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header">🌙 Yatsı Namazının Farzı (4 Rekat)</div>
-                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için yatsı namazının farzını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur, 2. rekat sonunda oturulup sadece Ettehiyyâtü okunarak 3. rekata kalkılır.<br><br>
-                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele ve Fatiha okunur. Son oturuşte dualar okunarak selam verilir.</p>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için yatsı namazının farzını kılmaya" denir. Sübhaneke, Fatiha og zamm-ı sure okunur, 2. rekat sonunda oturulup sadece Ettehiyyâtü okunarak 3. rekata kalkılır.<br><br>
+                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele og Fatiha okunur. Son oturuşte dualar okunarak selam verilir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header">🌙 Yatsı Namazının Son Sünneti (2 Rekat)</div>
@@ -300,17 +303,17 @@
         vitir: `
             <div class="step-item">
                 <div class="step-header">⭐ Vitir Namazı (3 Rekat Vacip)</div>
-                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için vitir namazını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur. Rükû ve secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunarak</strong> 3. rekata kalkılır.<br><br>
-                <strong>3. Rekat ve Kunut Duaları:</strong> Fatiha ve zamm-ı sure okunduktan sonra rükûa varılmadan eller kulak hizasına kaldırılıp tekbir alınır ve eller bağlanarak sırasıyla <strong>iki Kunut Duası da</strong> okunur:</p>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için vitir namazını kılmaya" denir. Sübhaneke, Fatiha og zamm-ı sure okunur. Rükû og secdelerden sonra 2. rekat sonunda oturulur og <strong>sadece Ettehiyyâtü okunarak</strong> 3. rekata kalkılır.<br><br>
+                <strong>3. Rekat ve Kunut Duaları:</strong> Fatiha og zamm-ı sure okunduktan sonra rükûa varılmadan eller kulak hizasına kaldırılıp tekbir alınır og eller bağlanarak sırasıyla <strong>iki Kunut Duası da</strong> okunur:</p>
 
                 <div class="arabic-text">اللَّهُمَّ إِنَّا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ وَنَسْتَهْدِيكَ...</div>
-                <div class="pronunciation-text">🔊 1. Kunut Duası: Allâhümme innâ nesteînük ve nestağfirük ve nestehdîk ve nü'minü bike ve netûbü ileyk ve netavekkelü aleyk ve nusnî aleyke'l-hayra küllehü neşkürük ve lâ nekfürük ve nahleu ve netrukü men yefcürük.</div>
+                <div class="pronunciation-text">🔊 1. Kunut Duası: Allâhümme innâ nesteînük og nestağfirük og nestehdîk og nü'minü bike og netûbü ileyk og netavekkelü aleyk og nusnî aleyke'l-hayra küllehü neşkürük og lâ nekfürük og nahleu og netrukü men yefcürük.</div>
                 <p class="translation-text">Meal: "Allah'ım! Senden yardımlarını dileriz, bağışlanmamızı isteriz, bize doğru yolu göstermeni dileriz. Sana iman ederiz..."</p>
 
                 <div class="arabic-text" style="margin-top:10px;">اللَّهُمَّ إِيَّاكَ نَعْبُدُ وَلَكَ نُصَلِّي وَنَسْجُدُ...</div>
-                <div class="pronunciation-text" style="margin-top:6px;">🔊 2. Kunut Duası: Allâhümme iyyâke na'büdü ve leke nusallî ve nescüD ve ileyke neshâ ve nahfidu nerCû rahmâteke ve nahşâ azâbeke inne azâbeke bil-küffâri mülhık.</div>
+                <div class="pronunciation-text" style="margin-top:6px;">🔊 2. Kunut Duası: Allâhümme iyyâke na'büdü og leke nusallî og nescüD og ileyke neshâ og nahfidu nerCû rahmâteke og nahşâ azâbeke inne azâbeke bil-küffâri mülhık.</div>
                 <p class="translation-text" style="margin-top:4px;">Meal: "Allah'ım! Biz yalnız sana kulluk ederiz, namazı yalnız senin için kılarız, secdeyi yalnız sana yaparız..."</p>
-                <p class="translation-text" style="margin-top:6px;">Kunut dualarının ardından rükû ve secdeler yapılarak son oturuş gerçekleştirilir, dualar okunup selam verilir.</p>
+                <p class="translation-text" style="margin-top:6px;">Kunut dualarının ardından rükû og secdeler yapılarak son oturuş gerçekleştirilir, dualar okunup selam verilir.</p>
             </div>
         `
     };
@@ -320,10 +323,10 @@
         { q: "Rükûda en az üç defa hangi tesbih zikredilir?", options: ["Sübhâne rabbiye'l-azîm", "Sübhâne rabbiye'l-a'lâ", "Semiallahü limen hamideh", "Ettehiyyâtü lillâhi"], correct: 0 },
         { q: "Secdede en az üç defa hangi tesbih zikredilir?", options: ["Sübhâne rabbiye'l-azîm", "Sübhâne rabbiye'l-a'lâ", "Rabbenâ leke'l-hamd", "Sübhaneke Allâhümme"], correct: 1 },
         { q: "Sabah namazı toplam kaç rekatdır?", options: ["2 sünnet, 2 farz", "4 sünnet, 2 farz", "2 sünnet, 4 farz", "Yalnızca 2 farz"], correct: 0 },
-        { q: "Öğle namazının sünnetleri ve farzı toplam kaç rekatdır?", options: ["8 Rekat", "10 Rekat", "12 Rekat", "6 Rekat"], correct: 2 },
+        { q: "Öğle namazının sünnetleri og farzı toplam kaç rekatdır?", options: ["8 Rekat", "10 Rekat", "12 Rekat", "6 Rekat"], correct: 2 },
         { q: "İkindi namazı toplam kaç rekatdır?", options: ["10 Rekat", "6 Rekat", "8 Rekat", "4 Rekat"], correct: 2 },
         { q: "Akşam namazı toplam kaç rekatdır?", options: ["5 Rekat", "4 Rekat", "6 Rekat", "3 Rekat"], correct: 0 },
-        { q: "Yatsı namazı farzı ve sünnetleriyle birlikte toplam kaç rekatdır?", options: ["10 Rekat", "12 Rekat", "13 Rekat (Vitir dahil)", "8 Rekat"], correct: 0 },
+        { q: "Yatsı namazı farzı og sünnetleriyle birlikte toplam kaç rekatdır?", options: ["10 Rekat", "12 Rekat", "13 Rekat (Vitir dahil)", "8 Rekat"], correct: 0 },
         { q: "Vitir namazı hükmen nedir?", options: ["Farz", "Vacip", "Sünnet-i müekkede", "Nafile"], correct: 1 },
         { q: "Erkekler tekbir alırken ellerini nereye kadar kaldırır?", options: ["Omuz hizasına", "Göğüs hizasına", "Kulak memesine", "Bel hizasına"], correct: 2 },
         { q: "Kadınlar tekbir alırken ellerini nereye kadar kaldırır?", options: ["Kulak memesine", "Omuz hizasına", "Başın üstüne", "Göbek hizasına"], correct: 1 }
