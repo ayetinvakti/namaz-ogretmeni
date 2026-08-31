@@ -1,3 +1,5 @@
+Eline sağlık ustam. Sıradaki işimiz namaz öğretmeni uygulamamıza ekleme yapmak. Görselde ki gibi animasyon istiyorum ama tek kişi olacak erkek animasyonu kadın animasyonu ayrı ayrı. böyle yapabilir misin ? Seceneklerin içinde animasyonu izle kismi koyalim insanlar namaz nasıl kılınır öğrensin uygulamalı kod asagida yapabilir misin?
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -118,79 +120,6 @@
         .diff-title { font-weight: 600; font-size: 0.92rem; color: var(--text-color); }
         .diff-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
 
-        .model-container {
-            width: 100%;
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(0,0,0,0.3));
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            padding: 15px 10px;
-            margin-bottom: 14px;
-        }
-        
-        .gender-selector {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-        .gender-btn {
-            padding: 5px 14px;
-            background: var(--btn-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            font-size: 0.78rem;
-            font-weight: 600;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .gender-btn.active {
-            background: var(--accent-color);
-            color: #fff;
-            border-color: var(--accent-color);
-        }
-
-        .model-svg {
-            width: 100%;
-            height: 250px;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.35));
-        }
-        
-        .anim-controls {
-            display: flex;
-            gap: 6px;
-            padding: 6px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            margin-top: 8px;
-            width: 100%;
-            justify-content: center;
-        }
-        .anim-btn {
-            flex: 1;
-            padding: 8px 6px;
-            background: var(--btn-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            font-size: 0.75rem;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-            text-align: center;
-        }
-        .anim-btn:hover, .anim-btn.active {
-            background: var(--accent-color);
-            color: #fff;
-            border-color: var(--accent-color);
-        }
-
         .footer { margin: 20px 0; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
         .footer span { color: var(--accent-color); font-weight: 600; }
     </style>
@@ -210,73 +139,10 @@
         <button class="tab-btn" onclick="switchTab('quiz', this)" data-i18n="tab_quiz">🎯 Dini Sınav</button>
     </div>
 
+    <!-- 1. SEKME: DETAYLI NAMAZ REHBERİ -->
     <div id="tab-steps" class="content-card">
         <div class="card-title" data-i18n="card_steps_title">📖 Detaylı Namaz Kılınış Rehberi</div>
         
-        <div class="model-container">
-            <div class="gender-selector">
-                <button class="gender-btn active" id="btnKadin" onclick="setGender('kadin')">🧕 Kadın Figürü</button>
-                <button class="gender-btn" id="btnErkek" onclick="setGender('erkek')">🧔 Erkek Figürü</button>
-            </div>
-
-            <svg class="model-svg" id="namazFigureSvg" viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="150" cy="265" rx="70" ry="8" fill="rgba(0,0,0,0.3)" id="groundShadow" />
-                <line x1="60" y1="265" x2="240" y2="265" stroke="var(--accent-color)" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
-
-                <g id="figureRoot" transform="translate(0, 0)">
-                    
-                    <g id="legsGroup">
-                        <path id="legLeft" d="M136 185 Q130 225 133 258" stroke="url(#limbGradient)" stroke-width="16" stroke-linecap="round" fill="none" />
-                        <path id="legRight" d="M164 185 Q170 225 167 258" stroke="url(#limbGradient)" stroke-width="16" stroke-linecap="round" fill="none" />
-                        <path d="M125 258 L142 258" stroke="var(--accent-color)" stroke-width="6" stroke-linecap="round" />
-                        <path d="M158 258 L175 258" stroke="var(--accent-color)" stroke-width="6" stroke-linecap="round" />
-                    </g>
-
-                    <g id="torsoGroup" transform="translate(0, 0) rotate(0)">
-                        <path id="torsoBody" d="M126 115 Q112 155 120 195 L180 195 Q188 155 174 115 Z" fill="url(#mainGradient)" stroke="var(--border-color)" stroke-width="1.5"/>
-                        
-                        <g id="armsGroup">
-                            <path id="armLeft" d="M122 122 Q112 148 132 168" stroke="url(#limbGradient)" stroke-width="13" stroke-linecap="round" fill="none" />
-                            <path id="armRight" d="M178 122 Q188 148 168 168" stroke="url(#limbGradient)" stroke-width="13" stroke-linecap="round" fill="none" />
-                            <circle id="handsKnot" cx="150" cy="168" r="7" fill="#fcd34d" />
-                        </g>
-
-                        <g id="headGroup" transform="translate(0, 0) rotate(0)">
-                            <path id="headCover" d="M124 102 Q135 85 150 85 Q165 85 176 102 L185 135 Q150 142 115 135 Z" fill="#047857" />
-                            <circle cx="150" cy="98" r="14" fill="#fcd34d" />
-                            <path id="hijabOrCap" d="M130 94 Q150 72 170 94 Q166 112 150 115 Q134 112 130 94 Z" fill="#065f46" />
-                        </g>
-                    </g>
-
-                </g>
-
-                <defs>
-                    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#10b981" />
-                        <stop offset="100%" stop-color="#047857" />
-                    </linearGradient>
-                    <linearGradient id="manGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#3b82f6" />
-                        <stop offset="100%" stop-color="#1d4ed8" />
-                    </linearGradient>
-                    <linearGradient id="limbGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#059669" />
-                        <stop offset="100%" stop-color="#065f46" />
-                    </linearGradient>
-                    <linearGradient id="manLimbGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#2563eb" />
-                        <stop offset="100%" stop-color="#1e40af" />
-                    </linearGradient>
-                </defs>
-            </svg>
-
-            <div class="anim-controls">
-                <button class="anim-btn active" onclick="changePose('kiyam', this)">Kıyam (Ayakta)</button>
-                <button class="anim-btn" onclick="changePose('ruku', this)">Rükû (Eğilme)</button>
-                <button class="anim-btn" onclick="changePose('secde', this)">Secde (Kapanma)</button>
-            </div>
-        </div>
-
         <div class="namaz-grid">
             <button class="namaz-select-btn active" onclick="selectNamaz('sabah', this)">Sabah Namazı <span>2 Sünnet, 2 Farz</span></button>
             <button class="namaz-select-btn" onclick="selectNamaz('ogle', this)">Öğle Namazı <span>4 İlk, 4 Farz, 2 Son</span></button>
@@ -287,9 +153,11 @@
         </div>
 
         <div id="namaz-details-container" style="margin-top: 10px;">
-            </div>
+            <!-- Dinamik içerik buraya yüklenecek -->
+        </div>
     </div>
 
+    <!-- 2. SEKME: ERKEK / KADIN FARKLARI -->
     <div id="tab-diffs" class="content-card" style="display: none;">
         <div class="card-title" data-i18n="card_diffs_title">⚖️ Namazda Erkek ve Kadın Arasındaki Fıkhi Farklar</div>
         <div class="diff-list">
@@ -312,10 +180,12 @@
         </div>
     </div>
 
+    <!-- 3. SEKME: DİNİ SINAV -->
     <div id="tab-quiz" class="content-card" style="display: none;">
         <div class="card-title" data-i18n="card_quiz_title">🎯 Dini Sınav</div>
         <div class="quiz-box" id="dynamic-quiz-box">
-            </div>
+            <!-- Rastgele soru buraya gelecek -->
+        </div>
         <button class="next-quiz-btn" onclick="loadRandomQuiz()" data-i18n="btn_next_quiz">🔄 Başka Soru Getir</button>
     </div>
 </div>
@@ -350,74 +220,13 @@
     const activeLang = localStorage.getItem('user_lang') || 'tr';
     const t = translations[activeLang] || translations['tr'];
 
-    let currentGender = 'kadin';
-    let currentPoseState = 'kiyam';
-
-    function setGender(gender) {
-        currentGender = gender;
-        document.getElementById('btnKadin').classList.toggle('active', gender === 'kadin');
-        document.getElementById('btnErkek').classList.toggle('active', gender === 'erkek');
-        
-        const mainGrad = gender === 'kadin' ? 'url(#mainGradient)' : 'url(#manGradient)';
-        const limbGrad = gender === 'kadin' ? 'url(#limbGradient)' : 'url(#manLimbGradient)';
-        const headColor = gender === 'kadin' ? '#047857' : '#1d4ed8';
-        const headCoverColor = gender === 'kadin' ? '#065f46' : '#1e293b';
-
-        document.getElementById('torsoBody').setAttribute('fill', mainGrad);
-        document.getElementById('armLeft').setAttribute('stroke', limbGrad);
-        document.getElementById('armRight').setAttribute('stroke', limbGrad);
-        document.getElementById('headCover').setAttribute('fill', headColor);
-        document.getElementById('hijabOrCap').setAttribute('fill', headCoverColor);
-
-        applyPoseTransform(currentPoseState);
-    }
-
-    function changePose(pose, btn) {
-        document.querySelectorAll('.anim-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentPoseState = pose;
-        applyPoseTransform(pose);
-    }
-
-    function applyPoseTransform(pose) {
-        const torsoGroup = document.getElementById('torsoGroup');
-        const headGroup = document.getElementById('headGroup');
-        const armLeft = document.getElementById('armLeft');
-        const armRight = document.getElementById('armRight');
-        const handsKnot = document.getElementById('handsKnot');
-        const groundShadow = document.getElementById('groundShadow');
-
-        if (pose === 'kiyam') {
-            torsoGroup.setAttribute('transform', 'translate(0px, 0px) rotate(0deg)');
-            headGroup.setAttribute('transform', 'translate(0px, 0px) rotate(0deg)');
-            armLeft.setAttribute('d', currentGender === 'kadin' ? 'M122 122 Q112 148 132 168' : 'M125 125 Q110 150 132 165');
-            armRight.setAttribute('d', currentGender === 'kadin' ? 'M178 122 Q188 148 168 168' : 'M175 125 Q190 150 168 165');
-            handsKnot.style.opacity = '1';
-            groundShadow.setAttribute('rx', '70');
-        } else if (pose === 'ruku') {
-            torsoGroup.setAttribute('transform', 'translate(-20px, 35px) rotate(-48deg)');
-            headGroup.setAttribute('transform', 'translate(10px, -5px) rotate(35deg)');
-            armLeft.setAttribute('d', 'M122 122 Q118 148 128 178');
-            armRight.setAttribute('d', 'M178 122 Q182 148 172 178');
-            handsKnot.style.opacity = '0';
-            groundShadow.setAttribute('rx', '60');
-        } else if (pose === 'secde') {
-            torsoGroup.setAttribute('transform', 'translate(-45px, 68px) rotate(-85deg) scale(0.95, 1)');
-            headGroup.setAttribute('transform', 'translate(18px, -12px) rotate(70deg)');
-            armLeft.setAttribute('d', currentGender === 'kadin' ? 'M122 122 Q102 138 118 158' : 'M125 125 Q95 130 115 155');
-            armRight.setAttribute('d', currentGender === 'kadin' ? 'M178 122 Q198 138 182 158' : 'M175 125 Q205 130 185 155');
-            handsKnot.style.opacity = '0';
-            groundShadow.setAttribute('rx', '85');
-        }
-    }
-
     // Tam Detaylı Namaz Veritabanı
     const namazData = {
         sabah: `
             <div class="step-item">
                 <div class="step-header">☀️ Sabah Namazının Sünneti (2 Rekat)</div>
                 <p class="translation-text"><strong>1. Rekat:</strong> "Niyet ettim Allah rızası için sabah namazının 2 rekat sünnetini kılmaya" diye niyet edilir. Tekbir alınıp eller bağlanır. Sübhaneke okunur, Euzü-Besmele çekilerek Fatiha ve zamm-ı sure okunur. Rükû ve secdeler yapılarak 2. rekata kalkılır.</p>
-                <p class="translation-text"><strong>2. Rekat:</strong> Besmele çekilip Fatiha ve zamm-ı sure okunur. Rükû ve secdeden sonra oturulur. Sırasıyla şu dualar okunur:</p>
+                <p class="translation-text"><strong>2. Rekat:</strong> Besmele çekilip Fatiha ve zamm-ı sure okunur. Rükû og secdeden sonra oturulur. Sırasıyla şu dualar okunur:</p>
                 
                 <div class="arabic-text">التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ...</div>
                 <div class="pronunciation-text">🔊 Ettehiyyâtü: Et-tahiyyatü lillahi ve's-salavatü ve't-tayyibat...</div>
@@ -444,7 +253,7 @@
         ogle: `
             <div class="step-item">
                 <div class="step-header">🕌 Öğle Namazının İlk Sünneti (4 Rekat)</div>
-                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için öğle namazının ilk sünnetini kılmaya" denir. Sübhaneke, Fatiha ve sure okunur, rükû ve secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunur</strong>, hemen 3. rekata kalkılır.<br><br>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için öğle namazının ilk sünnetini kılmaya" denir. Sübhaneke, Fatiha ve sure okunur, rükû og secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunur</strong>, hemen 3. rekata kalkılır.<br><br>
                 <strong>3. ve 4. Rekatlar:</strong> Besmele, Fatiha ve sure okunarak 3. ve 4. rekatlar tamamlanır. Son oturuşte Ettehiyyâtü, Salli-Barik ve Rabbenâ duaları okunarak selam verilir.</p>
             </div>
             <div class="step-item">
@@ -499,7 +308,7 @@
         vitir: `
             <div class="step-item">
                 <div class="step-header">⭐ Vitir Namazı (3 Rekat Vacip)</div>
-                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için vitir namazını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur. Rükû e secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunarak</strong> 3. rekata kalkılır.<br><br>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için vitir namazını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur. Rükû ve secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunarak</strong> 3. rekata kalkılır.<br><br>
                 <strong>3. Rekat ve Kunut Duaları:</strong> Fatiha ve zamm-ı sure okunduktan sonra rükûa varılmadan eller kulak hizasına kaldırılıp tekbir alınır ve eller bağlanarak sırasıyla <strong>iki Kunut Duası da</strong> okunur:</p>
 
                 <div class="arabic-text">اللَّهُمَّ إِنَّا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ وَنَسْتَهْدِيكَ...</div>
@@ -507,7 +316,7 @@
                 <p class="translation-text">Meal: "Allah'ım! Senden yardımlarını dileriz, bağışlanmamızı isteriz, bize doğru yolu göstermeni dileriz. Sana iman ederiz..."</p>
 
                 <div class="arabic-text" style="margin-top:10px;">اللَّهُمَّ إِيَّاكَ نَعْبُدُ وَلَكَ نُصَلِّي وَنَسْجُدُ...</div>
-                <div class="pronunciation-text" style="margin-top:6px;">🔊 2. Kunut Duası: Allâhümme iyyâke na'büdü ve leke nusallî ve nescüd ve ileyke neshâ ve nahfidu nerCû rahmâteke ve nahşâ azâbeke inne azâbeke bil-küffâri mülhık.</div>
+                <div class="pronunciation-text" style="margin-top:6px;">🔊 2. Kunut Duası: Allâhümme iyyâke na'büdü ve leke nusallî ve nescüD ve ileyke neshâ ve nahfidu nerCû rahmâteke ve nahşâ azâbeke inne azâbeke bil-küffâri mülhık.</div>
                 <p class="translation-text" style="margin-top:4px;">Meal: "Allah'ım! Biz yalnız sana kulluk ederiz, namazı yalnız senin için kılarız, secdeyi yalnız sana yaparız..."</p>
                 <p class="translation-text" style="margin-top:6px;">Kunut dualarının ardından rükû ve secdeler yapılarak son oturuş gerçekleştirilir, dualar okunup selam verilir.</p>
             </div>
@@ -528,6 +337,7 @@
         { q: "Kadınlar tekbir alırken ellerini nereye kadar kaldırır?", options: ["Kulak memesine", "Omuz hizasına", "Başın üstüne", "Göbek hizasına"], correct: 1 }
     ];
 
+    // --- TEMA YÖNETİMİ ---
     function initTheme() {
         const savedTheme = localStorage.getItem('theme') || 'dark';
         applyTheme(savedTheme);
@@ -600,11 +410,12 @@
         }
     }
 
+    // Başlangıç Kurulumu
     window.onload = () => {
         initTheme();
         selectNamaz('sabah', document.querySelector('.namaz-select-btn'));
-        setGender('kadin');
 
+        // Dil entegrasyonu
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (t[key]) {
