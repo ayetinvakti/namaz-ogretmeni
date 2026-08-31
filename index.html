@@ -144,6 +144,87 @@
             width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: absolute; opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
         }
         .guide-render-box.active { opacity: 1; pointer-events: auto; }
+
+        /* --- ASİSTİV MENÜ (FLOATING ASSISTIVE TOUCH) STİLLERİ --- */
+        .assistive-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 9999;
+            font-family: var(--font-family);
+        }
+        [dir="rtl"] .assistive-container {
+            right: auto;
+            left: 25px;
+        }
+        .assistive-main-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.2s, background-color 0.2s;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+        .assistive-main-btn:active {
+            transform: scale(0.92);
+        }
+        .assistive-menu {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px) scale(0.95);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            min-width: 170px;
+        }
+        [dir="rtl"] .assistive-menu {
+            right: auto;
+            left: 0;
+        }
+        .assistive-menu.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+        .assistive-item {
+            background: var(--btn-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .assistive-item:hover {
+            background: var(--btn-hover);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
     </style>
 </head>
 <body>
@@ -319,7 +400,49 @@
 
 <div class="footer">© Ayetin Vakti • <span data-i18n="footer_text">Huzur ve İbadet Rehberliğiniz</span></div>
 
+<!-- === ASİSTİV HIZLI ERIŞİM MENÜSÜ (ASSİVETOUCH) === -->
+<div class="assistive-container" id="assistiveContainer">
+    <div class="assistive-menu" id="assistiveMenu">
+        <a href="../" class="assistive-item">🏠 Ana Sayfa</a>
+        <button class="assistive-item" onclick="switchTab('steps', document.querySelector('.tab-btn')); toggleAssistiveMenu();">📖 Namaz Rehberi</button>
+        <button class="assistive-item" onclick="switchTab('quiz', document.querySelectorAll('.tab-btn')[2]); toggleAssistiveMenu();">🎯 Dini Sınav</button>
+        <button class="assistive-item" onclick="toggleTheme(); toggleAssistiveMenu();">🌓 Tema Değiştir</button>
+    </div>
+    <button class="assistive-main-btn" id="assistiveMainBtn" title="Hızlı Menü">✦</button>
+</div>
+
 <script>
+    // --- ASİSTİV MENÜ MANTIĞI (BAS-ÇEK / BASILI TUT DESTEKLİ) ---
+    const assistiveMainBtn = document.getElementById('assistiveMainBtn');
+    const assistiveMenu = document.getElementById('assistiveMenu');
+    let pressTimer = null;
+    let isMenuOpen = false;
+
+    function toggleAssistiveMenu() {
+        isMenuOpen = !isMenuOpen;
+        if (isMenuOpen) {
+            assistiveMenu.classList.add('open');
+        } else {
+            assistiveMenu.classList.remove('open');
+        }
+    }
+
+    // Basit tıklama veya basılı tutma kontrolü
+    assistiveMainBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleAssistiveMenu();
+    });
+
+    // Dışarı tıklandığında menüyü kapat
+    document.addEventListener('click', (e) => {
+        if (!document.getElementById('assistiveContainer').contains(e.target)) {
+            if (isMenuOpen) {
+                isMenuOpen = false;
+                assistiveMenu.classList.remove('open');
+            }
+        }
+    });
+
     // --- GÖRSEL REHBER MANTIĞI ---
     let currentGender = 'erkek';
     let currentPos = 'kiyam';
@@ -381,7 +504,7 @@
         sabah: `
             <div class="step-item">
                 <div class="step-header">☀️ Sabah Namazının Sünneti (2 Rekat)</div>
-                <p class="translation-text"><strong>1. Rekat:</strong> "Niyet ettim Allah rızası için sabah namazının 2 rekat sünnetini kılmaya" diye niyet edilir. Tekbir alınıp eller bağlanır. Sübhaneke okunur, Euzü-Besmele çekilerek Fatiha ve zamm-ı sure okunur. Rükû ve secdeler yapılarak 2. rekata kalkılır.</p>
+                <p class="translation-text"><strong>1. Rekat:</strong> "Niyet ettim Allah rızası için sabah namazının 2 rekat sünnetini kılmaya" diye niyet edilir. Tekbir alınıp eller bağlanır. Sübhaneke okunur, Euzü-Besmele çekilerek Fatiha ve zamm-ı sure okunur. Rükû og secdeler yapılarak 2. rekata kalkılır.</p>
                 <p class="translation-text"><strong>2. Rekat:</strong> Besmele çekilip Fatiha ve zamm-ı sure okunur. Rükû og secdeden sonra oturulur. Sırasıyla şu dualar okunur:</p>
                 
                 <div class="arabic-text">التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ...</div>
@@ -438,7 +561,7 @@
             <div class="step-item">
                 <div class="step-header">🌇 Akşam Namazının Farzı (3 Rekat)</div>
                 <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için akşam namazının farzını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur. 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunup</strong> kalkılır.<br><br>
-                <strong>3. Rekat:</strong> Ayağa kalkınca sadece Besmele ve Fatiha suresi okunur. Rükû ve secdenin ardından son oturuş yapılır; Ettehiyyâtü, Salli-Barik, Rabbenâ duaları okunarak selam verilir.</p>
+                <strong>3. Rekat:</strong> Ayağa kalkınca sadece Besmele ve Fatiha suresi okunur. Rükû og secdenin ardından son oturuş yapılır; Ettehiyyâtü, Salli-Barik, Rabbenâ duaları okunarak selam verilir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header">🌇 Akşam Namazının Sünneti (2 Rekat)</div>
