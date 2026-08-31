@@ -321,18 +321,38 @@
         `
     };
 
-    // Soru Havuzu
+    // Soru Havuzu (30 Adet - Öğle Namazı düzeltildi)
     const quizPool = [
         { q: "Rükûda en az üç defa hangi tesbih zikredilir?", options: ["Sübhâne rabbiye'l-azîm", "Sübhâne rabbiye'l-a'lâ", "Semiallahü limen hamideh", "Ettehiyyâtü lillâhi"], correct: 0 },
         { q: "Secdede en az üç defa hangi tesbih zikredilir?", options: ["Sübhâne rabbiye'l-azîm", "Sübhâne rabbiye'l-a'lâ", "Rabbenâ leke'l-hamd", "Sübhaneke Allâhümme"], correct: 1 },
         { q: "Sabah namazı toplam kaç rekatdır?", options: ["2 sünnet, 2 farz", "4 sünnet, 2 farz", "2 sünnet, 4 farz", "Yalnızca 2 farz"], correct: 0 },
-        { q: "Öğle namazının sünnetleri ve farzı toplam kaç rekatdır?", options: ["8 Rekat", "10 Rekat", "12 Rekat", "6 Rekat"], correct: 2 },
+        { q: "Öğle namazı toplam kaç rekatdır? (İlk sünnet, farz ve son sünnet dahil)", options: ["8 Rekat", "10 Rekat", "14 Rekat", "12 Rekat"], correct: 2 },
         { q: "İkindi namazı toplam kaç rekatdır?", options: ["10 Rekat", "6 Rekat", "8 Rekat", "4 Rekat"], correct: 2 },
         { q: "Akşam namazı toplam kaç rekatdır?", options: ["5 Rekat", "4 Rekat", "6 Rekat", "3 Rekat"], correct: 0 },
         { q: "Yatsı namazı farzı ve sünnetleriyle birlikte toplam kaç rekatdır?", options: ["10 Rekat", "12 Rekat", "13 Rekat (Vitir dahil)", "8 Rekat"], correct: 0 },
         { q: "Vitir namazı hükmen nedir?", options: ["Farz", "Vacip", "Sünnet-i müekkede", "Nafile"], correct: 1 },
         { q: "Erkekler tekbir alırken ellerini nereye kadar kaldırır?", options: ["Omuz hizasına", "Göğüs hizasına", "Kulak memesine", "Bel hizasına"], correct: 2 },
-        { q: "Kadınlar tekbir alırken ellerini nereye kadar kaldırır?", options: ["Kulak memesine", "Omuz hizasına", "Başın üstüne", "Göbek hizasına"], correct: 1 }
+        { q: "Kadınlar tekbir alırken ellerini nereye kadar kaldırır?", options: ["Kulak memesine", "Omuz hizasına", "Başın üstüne", "Göbek hizasına"], correct: 1 },
+        { q: "Namazda fatiha suresinden sonra 'amin' denilmesi hangi mezhebe göre sesli söylenmez?", options: ["Şafii", "Hanefi", "Maliki", "Hanbeli"], correct: 1 },
+        { q: "Aşağıdakilerden hangisi namazı bozan durumlardan biri değildir?", options: ["Namazda konuşmak", "Kasten bir şeyler yemek", "Ağlamak", "Namazda gülümsemek (tebessüm etmek)"], correct: 3 },
+        { q: "Sehiv secdesi hangi durumda gerekir?", options: ["Abdestin bozulması", "Vacibin unutularak geciktirilmesi veya terk edilmesi", "Kıblenin şaşırılması", "Niyetin unutulması"], correct: 1 },
+        { q: "Günde kılınan farz namazlar toplam kaç vakittir?", options: ["4 vakit", "5 vakit", "6 vakit", "3 vakit"], correct: 1 },
+        { q: "Cemaatle kılınan namazlarda imamın arkasından Fatiha suresi okumak hangi mezhepte farz kabul edilmiştir?", options: ["Hanefi", "Şafii", "Hanbeli (Genel yaklaşım)", "Hiçbiri"], correct: 1 },
+        { q: "Sabah namazının sünneti kılınmadan farzı kılınabilir mi?", options: ["Evet, kılınabilir", "Kaza edilir", "Sünneti kılınmadan farza durulmaz, kaza edildikten sonra sünneti kılınır", "Doğrudan farz kılınır"], correct: 2 },
+        { q: "Namazda kaade-i ahire (son oturuş) ne kadardır?", options: ["Sübhaneke okuyacak kadar", "Ettehiyyatü okuyacak kadar", "Salli-Barik okuyacak kadar", "Fatiha okuyacak kadar"], correct: 1 },
+        { q: "Namazda eller hangi tekbirle bağlanır?", options: ["İftitah (başlangıç) tekbiri", "Teşrik tekbiri", "Kunut tekbiri", "Rükû tekbiri"], correct: 0 },
+        { q: "Aşağıdakilerden hangisi namazın dışındaki şartlardan (şartlarından) biridir?", options: ["Kıyam", "Rükû", "Setr-i avret (avret yerini örtmek)", "Secde"], correct: 2 },
+        { q: "Namazın içindeki rükünlerden (farzlarından) biri hangisidir?", options: ["İstikbal-i kıble", "Vakit", "Niyet", "Kıyam (ayakta durmak)"], correct: 3 },
+        { q: "Cuma namazı kimlere farzdır?", options: ["Kadın ve erkek herkese", "Şartları taşıyan mukim erkeklere", "Sadece yolculara", "Çocuklara"], correct: 1 },
+        { q: "Yolculuk (seferilik) durumunda 4 rekatlı farz namazlar kaç rekat olarak kılınır?", options: ["2 rekat", "3 rekat", "4 rekat", "1 rekat"], correct: 0 },
+        { q: "Teravih namazı ne zaman kılınır?", options: ["Kurban Bayramı geceleri", "Ramazan ayında yatsı namazından sonra", "Kadir Gecesi özel", "Cuma geceleri"], correct: 1 },
+        { q: "Bayram namazları kaç rekat ve ne zaman kılınır?", options: ["2 rekat, bayram sabahı kuşluk vaktinde", "4 rekat, öğle vakti", "2 rekat, gece", "3 rekat, sabah"], correct: 0 },
+        { q: "Kunut duaları hangi namazın hangi rekatında okunur?", options: ["Sabah namazı 2. rekatta", "Akşam namazı 3. rekatta", "Vitir namazı 3. rekatında", "Yatsı namazı son rekatında"], correct: 2 },
+        { q: "Namazda secdeye giderken önce nereye varılır?", options: ["Önce dizler, sonra eller, sonra alın ve burun", "Önce alın, sonra eller", "Önce eller, sonra dizler", "Doğrudan karın üstü"], correct: 0 },
+        { q: "Ezanı okuyan müezzinin okuduğu ezana icabet eden mümin ne söyler veya ne yapar?", options: ["Sadece susar", "Müezzinin söylediklerini içinden veya alçak sesle aynen tekrarlar (Hayye alesselâh derken la havle...)", "Sadece salavat getirir", "Kelime-i şehadet getirir"], correct: 1 },
+        { q: "İftitah tekbiri alırken ellerin durumu erkeklerde nasıldır?", options: ["Parmaklar bitişik ve gergin", "Parmaklar kendi haline serbest ve açık", "Sıkıca yumruk yapılmış", "Parmaklar içe kıvrık"], correct: 1 },
+        { q: "Namazın rükünlerinden olan 'kıyade' veya 'kıyam' ne anlama gelir?", options: ["Oturmak", "Ayakta durmak", "Eğilmek", "Yatmak"], correct: 1 },
+        { q: "Namazda 'Selam' vermek ne anlama gelir?", options: ["Namazın bitiş rüknüdür (tahrimiye veya tahlil)", "Sadece dua etmektir", "Cemaatle vedalaşmaktır", "Namazın sünnetidir"], correct: 0 }
     ];
 
     // --- TEMA YÖNETİMİ ---
