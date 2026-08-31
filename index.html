@@ -223,10 +223,10 @@
         
         <!-- YAN DURUŞ & KADIN/ERKEK SEÇENEKLİ GERÇEKÇİ ANİMASYON ALANI -->
         <div class="model-container">
-            <!-- Cinsiyet Seçimi -->
+            <!-- Cinsiyet Seçimi (ID'ler eklendi ve buton eşleşmeleri düzeltildi) -->
             <div class="gender-selector">
-                <button class="gender-btn" id="btnKadin" onclick="setGender('kadin')">🧕 Kadın Figürü</button>
-                <button class="gender-btn active" id="btnErkek" onclick="setGender('erkek')">🧔 Erkek Figürü</button>
+                <button class="gender-btn active" id="btnKadin" onclick="setGender('kadin')">🧕 Kadın Figürü</button>
+                <button class="gender-btn" id="btnErkek" onclick="setGender('erkek')">🧔 Erkek Figürü</button>
             </div>
 
             <svg class="model-svg" id="namazFigureSvg" viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
@@ -234,33 +234,21 @@
                 <ellipse cx="150" cy="265" rx="65" ry="8" fill="rgba(0,0,0,0.3)" />
                 <line x1="70" y1="265" x2="230" y2="265" stroke="var(--accent-color)" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
 
-                <!-- FİGÜR ANA GRUBU -->
+                <!-- FİGÜR ANA GRUBU (Dinamik Pozisyon Verilecek Alan) -->
                 <g id="modelGroup" class="fig-group" transform="translate(0, 0)">
                     
+                    <!-- KADIN / ERKEK İÇERİĞİ DİNAMİK OLARAK BURAYA GELECEK -->
                     <g id="figureContent">
-                        <!-- Videodaki Yan Duruş Tarzına Uyarlanmış Erkek Anatomisi ve Kıyafeti -->
-                        <!-- Ayaklar -->
-                        <path d="M135 254 L152 254 L152 263 L135 263 Z" fill="#64748b" />
-                        <!-- Pantolon / Bacak Kısmı -->
-                        <path d="M137 180 L137 255 L151 255 L151 180 Z" fill="#475569" />
-                        <!-- Gömlek Gövde -->
-                        <path d="M126 125 Q115 155 124 185 L164 185 Q173 155 162 125 Z" fill="url(#manShirtGradient)" stroke="var(--border-color)" stroke-width="1.2"/>
-                        <!-- Gri Kazak / Üst Parça (Videodaki modele birebir benzetildi) -->
-                        <path d="M125 118 Q145 110 165 118 L170 162 Q145 172 120 162 Z" fill="#94a3b8" opacity="0.95"/>
-                        <!-- Göğüs Önü / Ceket Yaka Detayı -->
-                        <path d="M145 118 L145 155" stroke="#64748b" stroke-width="1.5"/>
-                        <!-- Kollar (Göbek Üstü/Altı Kenetlenmiş Doft Yan Duruş) -->
-                        <path d="M126 124 Q114 138 132 152 Q152 158 167 146" fill="none" stroke="#64748b" stroke-width="7" stroke-linecap="round"/>
-                        <!-- Eller -->
-                        <circle cx="140" cy="153" r="4.5" fill="#fcd34d" />
-                        <!-- Omuzlar -->
-                        <path d="M126 118 Q145 102 165 118 L168 132 Q145 138 123 132 Z" fill="#64748b" />
-                        <!-- Boyun -->
-                        <path d="M138 98 Q145 92 152 98 Z" fill="#fcd34d" />
-                        <!-- Baş (Gerçekçi Yan Profil - Saç ve Yüz) -->
-                        <path d="M134 82 Q142 70 156 80 Q164 92 156 96 Q142 98 134 82 Z" fill="#1e293b" />
-                        <!-- Yüz Profili / Burun Çıkıntısı -->
-                        <path d="M152 82 Q161 88 154 95 Q149 92 150 85 Z" fill="#fcd34d" />
+                        <!-- Varsayılan Kadın Yan Duruş (Detaylı Kıyafet ve Örtü) -->
+                        <path d="M135 255 L155 255 L155 263 L135 263 Z" fill="#94a3b8" />
+                        <path d="M125 140 Q105 210 118 258 L172 258 Q182 210 162 140 Z" fill="url(#womanGradient)" stroke="var(--border-color)" stroke-width="1.5"/>
+                        <path d="M128 125 Q145 118 162 125 L170 165 Q145 175 122 165 Z" fill="#047857" opacity="0.95"/>
+                        <path d="M126 130 Q112 145 132 160 Q152 165 168 152" fill="none" stroke="#059669" stroke-width="8" stroke-linecap="round"/>
+                        <circle cx="145" cy="156" r="5" fill="#fcd34d" />
+                        <path d="M132 105 Q142 95 156 105 L160 130 Q140 135 128 125 Z" fill="#059669" />
+                        <path d="M138 90 Q145 85 152 93 Z" fill="#fcd34d" />
+                        <path d="M128 78 Q132 62 154 68 Q172 82 168 115 Q150 120 130 102 Z" fill="#065f46" stroke="var(--border-color)" stroke-width="1"/>
+                        <path d="M150 78 Q158 82 153 92 Q147 94 148 85 Z" fill="#fcd34d" />
                     </g>
 
                 </g>
@@ -271,9 +259,9 @@
                         <stop offset="0%" stop-color="#10b981" />
                         <stop offset="100%" stop-color="#047857" />
                     </linearGradient>
-                    <linearGradient id="manShirtGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#cbd5e1" />
-                        <stop offset="100%" stop-color="#94a3b8" />
+                    <linearGradient id="manGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#3b82f6" />
+                        <stop offset="100%" stop-color="#1d4ed8" />
                     </linearGradient>
                 </defs>
             </svg>
@@ -310,15 +298,15 @@
             </div>
             <div class="diff-row">
                 <div class="diff-title" data-i18n="diff_2_title">2. Elleri Bağlama (Kıyam Hali)</div>
-                <div class="diff-desc" data-i18n="diff_2_desc"><strong>Erkekler:</strong> Sağ elin avucu sol elin üzerine konulur; sağ elin baş ve küçük parmağı sol bileği halka şeklinde kavrar ve eller göbek altında bağlanır.<br><strong>Kadınlar:</strong> Sağ el sol elin üzerine konulur ancak bilekleri kavramadan doğrudan göğsün üzerine konulur.</div>
+                <div class="diff-desc" data-i18n="diff_2_desc"><strong>Erkekler:</strong> Sağ elin avucu sol elin üzerine konulur; sağ elin baş ve küçük parmağı sol bileği halka şeklinde kavrar ve eller göbek altında bağlanır.<br><strong>Kadınlar:</strong> Sağ el sol elin üzerine konulur ancak bilekleri kavramadan doğrudan göğsün üzerine (sağ el sol elin üstünde olarak) konulur.</div>
             </div>
             <div class="diff-row">
                 <div class="diff-title" data-i18n="diff_3_title">3. Rükû Hali</div>
-                <div class="diff-desc" data-i18n="diff_3_desc"><strong>Erkekler:</strong> Sırt, baş ile aynı hizada olacak şekilde dosdoğru (masa gibi) tutulur. Dizler dik tutulur, parmaklar açık bir şekilde diz kapakları kavranır.<br><strong>Kadınlar:</strong> Sırt o kadar çok düzleştirilmez, hafifçe salınık tutulur. Dizler tamamen dik tutulmayıp hafifçe bükülü bırakılır.</div>
+                <div class="diff-desc" data-i18n="diff_3_desc"><strong>Erkekler:</strong> Sırt, baş ile aynı hizada olacak şekilde dosdoğru (masa gibi) tutulur. Dizler dik tutulur, parmaklar açık bir şekilde diz kapakları kavranır.<br><strong>Kadınlar:</strong> Sırt o kadar çok düzleştirilmez, hafifçe salınık tutulur. Dizler tamamen dik tutulmayıp hafifçe bükülü bırakılır ve eller parmaklar açılmadan dizlerin üzerine konulur.</div>
             </div>
             <div class="diff-row">
                 <div class="diff-title" data-i18n="diff_4_title">4. Secde ve Oturuş Hali</div>
-                <div class="diff-desc" data-i18n="diff_4_desc"><strong>Erkekler:</strong> Secdede dirsekler yerden kaldırılır ve yan kaburgalardan uzak tutulur. Oturuşte sol ayak üzerine oturulur.<br><strong>Kadınlar:</strong> Secdede kollar ve dirsekler tamamen yere ve yanlara bitişik tutulur. Oturuşte her iki ayak da sağ tarafa çıkarılır.</div>
+                <div class="diff-desc" data-i18n="diff_4_desc"><strong>Erkekler:</strong> Secdede dirsekler yerden kaldırılır ve yan kaburgalardan uzak tutulur, ayaklar dikilerek parmaklar kıbleye yöneltilir. Oturuşte sol ayak üzerine oturulur, sağ ayak parmakları üzerinde dikilir.<br><strong>Kadınlar:</strong> Secdede kollar ve dirsekler tamamen yere ve yanlara bitişik tutulur, vücut olabildiğince toplu tutulur. Oturuşte her iki ayak da sağ tarafa çıkarılarak oturma mahalli üzerine vakarla oturulur.</div>
             </div>
         </div>
     </div>
@@ -336,6 +324,7 @@
 <div class="footer">© Ayetin Vakti • <span data-i18n="footer_text">Huzur ve İbadet Rehberliğiniz</span></div>
 
 <script>
+    // Dil Sözlüğü
     const translations = {
         tr: {
             page_title: "Namaz Öğretmeni | Ayetin Vakti",
@@ -345,6 +334,14 @@
             tab_quiz: "🎯 Dini Sınav",
             card_steps_title: "📖 Detaylı Namaz Kılınış Rehberi",
             card_diffs_title: "⚖️ Namazda Erkek ve Kadın Arasındaki Fıkhi Farklar",
+            diff_1_title: "1. İftitah Tekbiri Alırken Eller",
+            diff_1_desc: "<strong>Erkekler:</strong> Eller kulak memesine kadar kaldırılır, baş parmaklar kulak memesine yumuşakça değdirilir, parmak araları kendi haline bırakılır.<br><strong>Kadınlar:</strong> Eller omuz hizasına kadar kaldırılır, parmaklar kıbleye yönelik ve normal açıklıkta tutulur.",
+            diff_2_title: "2. Elleri Bağlama (Kıyam Hali)",
+            diff_2_desc: "<strong>Erkekler:</strong> Sağ elin avucu sol elin üzerine konulur; sağ elin baş ve küçük parmağı sol bileği halka şeklinde kavrar ve eller göbek altında bağlanır.<br><strong>Kadınlar:</strong> Sağ el sol elin üzerine konulur ancak bilekleri kavramadan doğrudan göğsün üzerine konulur.",
+            diff_3_title: "3. Rükû Hali",
+            diff_3_desc: "<strong>Erkekler:</strong> Sırt, baş ile aynı hizada olacak şekilde dosdoğru (masa gibi) tutulur. Dizler dik tutulur, parmaklar açık bir şekilde diz kapakları kavranır.<br><strong>Kadınlar:</strong> Sırt o kadar çok düzleştirilmez, hafifçe salınık tutulur. Dizler tamamen dik tutulmayıp hafifçe bükülü bırakılır.",
+            diff_4_title: "4. Secde ve Oturuş Hali",
+            diff_4_desc: "<strong>Erkekler:</strong> Secdede dirsekler yerden kaldırılır ve yan kaburgalardan uzak tutulur. Oturuşte sol ayak üzerine oturulur.<br><strong>Kadınlar:</strong> Secdede kollar ve dirsekler tamamen yere ve yanlara bitişik tutulur. Oturuşte her iki ayak da sağ tarafa çıkarılır.",
             card_quiz_title: "🎯 Dini Sınav",
             btn_next_quiz: "🔄 Başka Soru Getir",
             footer_text: "Huzur ve İbadet Rehberliğiniz"
@@ -354,26 +351,32 @@
     const activeLang = localStorage.getItem('user_lang') || 'tr';
     const t = translations[activeLang] || translations['tr'];
 
-    let currentGender = 'erkek';
+    // Figür Şablonları (Kadın ve Erkek Yan Duruş Anatomisi)
+    let currentGender = 'kadin';
     let currentPoseState = 'kiyam';
 
     const figureTemplates = {
         kadin: `
-            <!-- Şimdilik boş bırakıldı, ileride eklenecek -->
-            <text x="100" y="150" fill="var(--text-muted)" font-size="12">Kadın figürü yakında eklenecektir</text>
+            <path d="M135 255 L155 255 L155 263 L135 263 Z" fill="#94a3b8" />
+            <path d="M125 140 Q105 210 118 258 L172 258 Q182 210 162 140 Z" fill="url(#womanGradient)" stroke="var(--border-color)" stroke-width="1.5"/>
+            <path d="M128 125 Q145 118 162 125 L170 165 Q145 175 122 165 Z" fill="#047857" opacity="0.95"/>
+            <path d="M126 130 Q112 145 132 160 Q152 165 168 152" fill="none" stroke="#059669" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="145" cy="156" r="5" fill="#fcd34d" />
+            <path d="M132 105 Q142 95 156 105 L160 130 Q140 135 128 125 Z" fill="#059669" />
+            <path d="M138 90 Q145 85 152 93 Z" fill="#fcd34d" />
+            <path d="M128 78 Q132 62 154 68 Q172 82 168 115 Q150 120 130 102 Z" fill="#065f46" stroke="var(--border-color)" stroke-width="1"/>
+            <path d="M150 78 Q158 82 153 92 Q147 94 148 85 Z" fill="#fcd34d" />
         `,
         erkek: `
-            <path d="M135 254 L152 254 L152 263 L135 263 Z" fill="#64748b" />
-            <path d="M137 180 L137 255 L151 255 L151 180 Z" fill="#475569" />
-            <path d="M126 125 Q115 155 124 185 L164 185 Q173 155 162 125 Z" fill="url(#manShirtGradient)" stroke="var(--border-color)" stroke-width="1.2"/>
-            <path d="M125 118 Q145 110 165 118 L170 162 Q145 172 120 162 Z" fill="#94a3b8" opacity="0.95"/>
-            <path d="M145 118 L145 155" stroke="#64748b" stroke-width="1.5"/>
-            <path d="M126 124 Q114 138 132 152 Q152 158 167 146" fill="none" stroke="#64748b" stroke-width="7" stroke-linecap="round"/>
-            <circle cx="140" cy="153" r="4.5" fill="#fcd34d" />
-            <path d="M126 118 Q145 102 165 118 L168 132 Q145 138 123 132 Z" fill="#64748b" />
-            <path d="M138 98 Q145 92 152 98 Z" fill="#fcd34d" />
-            <path d="M134 82 Q142 70 156 80 Q164 92 156 96 Q142 98 134 82 Z" fill="#1e293b" />
-            <path d="M152 82 Q161 88 154 95 Q149 92 150 85 Z" fill="#fcd34d" />
+            <path d="M132 255 L152 255 L152 263 L132 263 Z" fill="#64748b" />
+            <path d="M125 140 Q115 210 122 258 L168 258 Q175 210 165 140 Z" fill="url(#manGradient)" stroke="var(--border-color)" stroke-width="1.5"/>
+            <path d="M125 125 Q145 115 165 125 L172 165 Q145 175 118 165 Z" fill="#1d4ed8" opacity="0.95"/>
+            <path d="M125 130 Q110 150 132 162 Q150 165 168 155" fill="none" stroke="#2563eb" stroke-width="7" stroke-linecap="round"/>
+            <circle cx="142" cy="158" r="5" fill="#fcd34d" />
+            <path d="M128 105 Q142 92 162 105 L165 130 Q145 135 125 125 Z" fill="#2563eb" />
+            <path d="M136 88 Q145 82 154 90 Z" fill="#fcd34d" />
+            <path d="M135 75 Q145 65 158 75 Q162 88 155 92 Z" fill="#1e293b" />
+            <path d="M150 78 Q159 84 153 95 Q146 92 148 84 Z" fill="#fcd34d" />
         `
     };
 
@@ -382,9 +385,12 @@
         document.getElementById('btnKadin').classList.toggle('active', gender === 'kadin');
         document.getElementById('btnErkek').classList.toggle('active', gender === 'erkek');
         document.getElementById('figureContent').innerHTML = figureTemplates[gender];
+        
+        // Cinsiyet değiştiğinde mevcut pozisyonu koruyarak uygula
         applyPoseTransform(currentPoseState);
     }
 
+    // Kusursuz Pozisyon ve Transformasyon Kontrolü
     function changePose(pose, btn) {
         document.querySelectorAll('.anim-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -404,56 +410,121 @@
         }
     }
 
+    // Tam Detaylı Namaz Veritabanı
     const namazData = {
         sabah: `
             <div class="step-item">
                 <div class="step-header">☀️ Sabah Namazının Sünneti (2 Rekat)</div>
                 <p class="translation-text"><strong>1. Rekat:</strong> "Niyet ettim Allah rızası için sabah namazının 2 rekat sünnetini kılmaya" diye niyet edilir. Tekbir alınıp eller bağlanır. Sübhaneke okunur, Euzü-Besmele çekilerek Fatiha ve zamm-ı sure okunur. Rükû ve secdeler yapılarak 2. rekata kalkılır.</p>
-                <p class="translation-text"><strong>2. Rekat:</strong> Besmele çekilip Fatiha ve zamm-ı sure okunur. Rükû ve secdeden sonra oturulur. Ettehiyyâtü, Salli-Bârik ve Rabbenâ duaları okunarak selam verilir.</p>
+                <p class="translation-text"><strong>2. Rekat:</strong> Besmele çekilip Fatiha ve zamm-ı sure okunur. Rükû ve secdeden sonra oturulur. Sırasıyla şu dualar okunur:</p>
+                
+                <div class="arabic-text">التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ...</div>
+                <div class="pronunciation-text">🔊 Ettehiyyâtü: Et-tahiyyatü lillahi ve's-salavatü ve't-tayyibat...</div>
+                <p class="translation-text">Meal: "Ey yüce Allah'ım! Dil ile, beden ve mal ile yapılan bütün ibadetler sanadır..."</p>
+
+                <div class="arabic-text" style="margin-top:6px;">اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ...</div>
+                <div class="pronunciation-text">🔊 Allâhümme Salli: Allâhümme salli alâ Muhammedin ve alâ âli Muhammed...</div>
+                <p class="translation-text">Meal: "Allah'ım! Hz. Muhammed'e ve ailesine rahmet eyle..."</p>
+
+                <div class="arabic-text" style="margin-top:6px;">اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ...</div>
+                <div class="pronunciation-text">🔊 Allâhümme Bârik: Allâhümme bârik alâ Muhammedin ve alâ âli Muhammed...</div>
+                <p class="translation-text">Meal: "Allah'ım! Hz. Muhammed'e ve ailesine bereket ihsan eyle..."</p>
+
+                <div class="arabic-text" style="margin-top:6px;">رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً...</div>
+                <div class="pronunciation-text">🔊 Rabbenâ Âtinâ: Rabbenâ âtinâ fi'd-dünyâ haseneten ve fi'l-âhirati haseneten ve kı azâbe'n-nâr.</div>
+                <p class="translation-text">Meal: "Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi cehennem azabından koru."</p>
+                <p class="translation-text" style="margin-top:6px;">Önce sağa sonra sola "Esselâmu aleyküm ve rahmetullah" denilerek selam verilir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header">☀️ Sabah Namazının Farzı (2 Rekat)</div>
-                <p class="translation-text">Kamet getirilir. "Niyet ettim Allah rızası için sabah namazının 2 rekat farzını kılmaya" denir. Aynı sünnet gibi kılınır.</p>
+                <p class="translation-text">Kamet getirilir. "Niyet ettim Allah rızası için sabah namazının 2 rekat farzını kılmaya" denir. Aynı sünnet gibi 2 rekat kılınır; son oturuşte Ettehiyyâtü, Salli-Barik ve Rabbenâ duaları okunarak selam verilir.</p>
             </div>
         `,
         ogle: `
             <div class="step-item">
-                <div class="step-header">🕌 Öğle Namazı Rehberi</div>
-                <p class="translation-text">Öğle namazı 4 rekat ilk sünnet, 4 rekat farz ve 2 rekat son sünnet olmak üzere toplam 10 rekattır.</p>
+                <div class="step-header">🕌 Öğle Namazının İlk Sünneti (4 Rekat)</div>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için öğle namazının ilk sünnetini kılmaya" denir. Sübhaneke, Fatiha ve sure okunur, rükû ve secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunur</strong>, hemen 3. rekata kalkılır.<br><br>
+                <strong>3. ve 4. Rekatlar:</strong> Besmele, Fatiha ve sure okunarak 3. ve 4. rekatlar tamamlanır. Son oturuşte Ettehiyyâtü, Salli-Barik ve Rabbenâ duaları okunarak selam verilir.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-header">🕌 Öğle Namazının Farzı (4 Rekat)</div>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için öğle namazının farzını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur. 2. rekat sonunda oturulup sadece Ettehiyyâtü okunarak 3. rekata kalkılır.<br><br>
+                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele ve Fatiha suresi okunur. Son oturuşte Ettehiyyâtü, Salli-Barik, Rabbenâ duaları okunarak selam verilir.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-header">🕌 Öğle Namazının Son Sünneti (2 Rekat)</div>
+                <p class="translation-text">"Niyet ettim Allah rızası için öğle namazının son sünnetini kılmaya" denir. Sabah namazının sünneti gibi 2 rekat olarak kılınır, son oturuşte tüm dualar okunarak tamamlanır.</p>
             </div>
         `,
         ikindi: `
             <div class="step-item">
-                <div class="step-header"> عصر İkindi Namazı Rehberi</div>
-                <p class="translation-text">İkindi namazı 4 rekat sünnet ve 4 rekat farz olmak üzere 8 rekattır.</p>
+                <div class="step-header"> عصر İkindi Namazının Sünneti (4 Rekat)</div>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için ikindi namazının sünnetini kılmaya" denir. İlk oturuşte <strong>Ettehiyyâtü ile birlikte Allâhümme Salli ve Allâhümme Bârik duaları da okunur</strong> ve 3. rekata kalkılır.<br><br>
+                <strong>3. ve 4. Rekatlar:</strong> Sübhaneke ile başlanır, Fatiha ve sure okunarak 4 rekat tamamlanır. Son oturuşte tüm dualar okunup selam verilir.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-header"> عصر İkindi Namazının Farzı (4 Rekat)</div>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için ikindi namazının farzını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur, 2. rekat sonunda oturulup sadece Ettehiyyâtü okunarak 3. rekata kalkılır.<br><br>
+                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele ve Fatiha okunur. Son oturuşte dualar okunarak selam verilir.</p>
             </div>
         `,
         aksam: `
             <div class="step-item">
-                <div class="step-header">🌇 Akşam Namazı Rehberi</div>
-                <p class="translation-text">Akşam namazı 3 rekat farz ve 2 rekat sünnettir.</p>
+                <div class="step-header">🌇 Akşam Namazının Farzı (3 Rekat)</div>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için akşam namazının farzını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur. 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunup</strong> kalkılır.<br><br>
+                <strong>3. Rekat:</strong> Ayağa kalkınca sadece Besmele ve Fatiha suresi okunur. Rükû ve secdenin ardından son oturuş yapılır; Ettehiyyâtü, Salli-Barik, Rabbenâ duaları okunarak selam verilir.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-header">🌇 Akşam Namazının Sünneti (2 Rekat)</div>
+                <p class="translation-text">"Niyet ettim Allah rızası için akşam namazının sünnetini kılmaya" denir. Sabah namazının sünneti gibi 2 rekat kılınarak tamamlanır.</p>
             </div>
         `,
         yatsi: `
             <div class="step-item">
-                <div class="step-header">🌙 Yatsı Namazı Rehberi</div>
-                <p class="translation-text">Yatsı namazı 4 rekat ilk sünnet, 4 rekat farz, 2 rekat son sünnet ve 3 rekat vitir vacip namazından oluşur.</p>
+                <div class="step-header">🌙 Yatsı Namazının İlk Sünneti (4 Rekat)</div>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için yatsı namazının ilk sünnetini kılmaya" denir. 2. rekat sonunda oturulduğunda <strong>Ettehiyyâtü, Salli ve Bârik duaları okunur</strong> ve 3. rekata kalkılır.<br><br>
+                <strong>3. ve 4. Rekatlar:</strong> Sübhaneke ile başlanarak Fatiha ve sureler okunur, son oturuşte dualar okunup selam verilir.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-header">🌙 Yatsı Namazının Farzı (4 Rekat)</div>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için yatsı namazının farzını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur, 2. rekat sonunda oturulup sadece Ettehiyyâtü okunarak 3. rekata kalkılır.<br><br>
+                <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele ve Fatiha okunur. Son oturuşte dualar okunarak selam verilir.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-header">🌙 Yatsı Namazının Son Sünneti (2 Rekat)</div>
+                <p class="translation-text">"Niyet ettim Allah rızası için yatsı namazının son sünneti kılmaya" denir. Sabah namazının sünneti gibi 2 rekat kılınarak tamamlanır.</p>
             </div>
         `,
         vitir: `
             <div class="step-item">
                 <div class="step-header">⭐ Vitir Namazı (3 Rekat Vacip)</div>
-                <p class="translation-text">3. rekatta Fatiha ve sure okunduktan sonra tekbir alınıp eller bağlanır ve Kunut Duaları okunarak rükûya varılır.</p>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için vitir namazını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur. Rükû ve secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunarak</strong> 3. rekata kalkılır.<br><br>
+                <strong>3. Rekat ve Kunut Duaları:</strong> Fatiha ve zamm-ı sure okunduktan sonra rükûa varılmadan eller kulak hizasına kaldırılıp tekbir alınır ve eller bağlanarak sırasıyla <strong>iki Kunut Duası da</strong> okunur:</p>
+
+                <div class="arabic-text">اللَّهُمَّ إِنَّا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ وَنَسْتَهْدِيكَ...</div>
+                <div class="pronunciation-text">🔊 1. Kunut Duası: Allâhümme innâ nesteînük ve nestağfirük ve nestehdîk ve nü'minü bike ve netûbü ileyk ve netavekkelü aleyk ve nusnî aleyke'l-hayra küllehü neşkürük ve lâ nekfürük ve nahleu ve netrukü men yefcürük.</div>
+                <p class="translation-text">Meal: "Allah'ım! Senden yardımlarını dileriz, bağışlanmamızı isteriz, bize doğru yolu göstermeni dileriz. Sana iman ederiz..."</p>
+
+                <div class="arabic-text" style="margin-top:10px;">اللَّهُمَّ إِيَّاكَ نَعْبُدُ وَلَكَ نُصَلِّي وَنَسْجُدُ...</div>
+                <div class="pronunciation-text" style="margin-top:6px;">🔊 2. Kunut Duası: Allâhümme iyyâke na'büdü ve leke nusallî ve nescüd ve ileyke neshâ ve nahfidu nerCû rahmâteke ve nahşâ azâbeke inne azâbeke bil-küffâri mülhık.</div>
+                <p class="translation-text" style="margin-top:4px;">Meal: "Allah'ım! Biz yalnız sana kulluk ederiz, namazı yalnız senin için kılarız, secdeyi yalnız sana yaparız..."</p>
+                <p class="translation-text" style="margin-top:6px;">Kunut dualarının ardından rükû ve secdeler yapılarak son oturuş gerçekleştirilir, dualar okunup selam verilir.</p>
             </div>
         `
     };
 
+    // Soru Havuzu
     const quizPool = [
         { q: "Rükûda en az üç defa hangi tesbih zikredilir?", options: ["Sübhâne rabbiye'l-azîm", "Sübhâne rabbiye'l-a'lâ", "Semiallahü limen hamideh", "Ettehiyyâtü lillâhi"], correct: 0 },
         { q: "Secdede en az üç defa hangi tesbih zikredilir?", options: ["Sübhâne rabbiye'l-azîm", "Sübhâne rabbiye'l-a'lâ", "Rabbenâ leke'l-hamd", "Sübhaneke Allâhümme"], correct: 1 },
         { q: "Sabah namazı toplam kaç rekatdır?", options: ["2 sünnet, 2 farz", "4 sünnet, 2 farz", "2 sünnet, 4 farz", "Yalnızca 2 farz"], correct: 0 },
+        { q: "Öğle namazının sünnetleri ve farzı toplam kaç rekatdır?", options: ["8 Rekat", "10 Rekat", "12 Rekat", "6 Rekat"], correct: 2 },
+        { q: "İkindi namazı toplam kaç rekatdır?", options: ["10 Rekat", "6 Rekat", "8 Rekat", "4 Rekat"], correct: 2 },
+        { q: "Akşam namazı toplam kaç rekatdır?", options: ["5 Rekat", "4 Rekat", "6 Rekat", "3 Rekat"], correct: 0 },
+        { q: "Yatsı namazı farzı ve sünnetleriyle birlikte toplam kaç rekatdır?", options: ["10 Rekat", "12 Rekat", "13 Rekat (Vitir dahil)", "8 Rekat"], correct: 0 },
         { q: "Vitir namazı hükmen nedir?", options: ["Farz", "Vacip", "Sünnet-i müekkede", "Nafile"], correct: 1 },
-        { q: "Erkekler tekbir alırken ellerini nereye kadar kaldırır?", options: ["Omuz hizasına", "Göğüs hizasına", "Kulak memesine", "Bel hizasına"], correct: 2 }
+        { q: "Erkekler tekbir alırken ellerini nereye kadar kaldırır?", options: ["Omuz hizasına", "Göğüs hizasına", "Kulak memesine", "Bel hizasına"], correct: 2 },
+        { q: "Kadınlar tekbir alırken ellerini nereye kadar kaldırır?", options: ["Kulak memesine", "Omuz hizasına", "Başın üstüne", "Göbek hizasına"], correct: 1 }
     ];
 
     function initTheme() {
@@ -463,7 +534,8 @@
 
     function toggleTheme() {
         const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-        applyTheme(isLight ? 'dark' : 'light');
+        const newTheme = isLight ? 'dark' : 'light';
+        applyTheme(newTheme);
     }
 
     function applyTheme(theme) {
@@ -493,16 +565,22 @@
         document.getElementById('tab-diffs').style.display = tabId === 'diffs' ? 'flex' : 'none';
         document.getElementById('tab-quiz').style.display = tabId === 'quiz' ? 'flex' : 'none';
 
-        if(tabId === 'quiz') loadRandomQuiz();
+        if(tabId === 'quiz') {
+            loadRandomQuiz();
+        }
     }
 
     function loadRandomQuiz() {
-        const item = quizPool[Math.floor(Math.random() * quizPool.length)];
+        const randomIndex = Math.floor(Math.random() * quizPool.length);
+        const item = quizPool[randomIndex];
+        
         let html = `<div class="quiz-question">❓ ${item.q}</div><div class="quiz-options">`;
         item.options.forEach((opt, idx) => {
-            html += `<button class="quiz-opt-btn" onclick="checkDynamicQuiz(this, ${idx === item.correct})">${opt}</button>`;
+            const isCorr = (idx === item.correct);
+            html += `<button class="quiz-opt-btn" onclick="checkDynamicQuiz(this, ${isCorr})">${opt}</button>`;
         });
         html += `</div><div class="quiz-result" id="dyn-result"></div>`;
+        
         document.getElementById('dynamic-quiz-box').innerHTML = html;
     }
 
@@ -524,7 +602,15 @@
     window.onload = () => {
         initTheme();
         selectNamaz('sabah', document.querySelector('.namaz-select-btn'));
-        setGender('erkek');
+        setGender('kadin');
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[key]) {
+                if (el.tagName === 'TITLE') document.title = t[key];
+                else el.innerHTML = t[key];
+            }
+        });
     };
 </script>
 </body>
