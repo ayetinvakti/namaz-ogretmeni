@@ -120,111 +120,6 @@
 
         .footer { margin: 20px 0; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
         .footer span { color: var(--accent-color); font-weight: 600; }
-
-        /* --- İSTERİNİZ İÇİN ÖZGÜN İZOMETRİK GÖRSEL REHBER STİLLERİ --- */
-        .isometric-stage-card {
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; box-shadow: var(--shadow);
-        }
-        .guide-controls-container {
-            display: flex; flex-direction: column; gap: 8px;
-        }
-        .control-row {
-            display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;
-        }
-        .guide-btn {
-            flex: 1; min-width: 75px; padding: 8px 10px; font-size: 0.8rem; font-weight: 600; border-radius: 10px; cursor: pointer; transition: 0.2s; border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--text-color); text-align: center;
-        }
-        .guide-btn:hover { border-color: var(--accent-color); background: var(--btn-hover); }
-        .guide-btn.active { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
-
-        .guide-viewport {
-            width: 100%; height: 210px; background: var(--btn-bg); border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--border-color); position: relative;
-        }
-        .guide-render-box {
-            width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: absolute; opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
-        }
-        .guide-render-box.active { opacity: 1; pointer-events: auto; }
-
-        /* --- ASİSTİV MENÜ (FLOATING ASSISTIVE TOUCH) STİLLERİ --- */
-        .assistive-container {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            z-index: 9999;
-            font-family: var(--font-family);
-        }
-        [dir="rtl"] .assistive-container {
-            right: auto;
-            left: 25px;
-        }
-        .assistive-main-btn {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: var(--accent-color);
-            color: #ffffff;
-            border: none;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.5rem;
-            transition: transform 0.2s, background-color 0.2s;
-            user-select: none;
-            -webkit-touch-callout: none;
-        }
-        .assistive-main-btn:active {
-            transform: scale(0.92);
-        }
-        .assistive-menu {
-            position: absolute;
-            bottom: 70px;
-            right: 0;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            box-shadow: var(--shadow);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px) scale(0.95);
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            min-width: 170px;
-        }
-        [dir="rtl"] .assistive-menu {
-            right: auto;
-            left: 0;
-        }
-        .assistive-menu.open {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-        }
-        .assistive-item {
-            background: var(--btn-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 10px 12px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            transition: 0.2s;
-            white-space: nowrap;
-        }
-        .assistive-item:hover {
-            background: var(--btn-hover);
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-        }
     </style>
 </head>
 <body>
@@ -246,111 +141,6 @@
     <div id="tab-steps" class="content-card">
         <div class="card-title" data-i18n="card_steps_title">📖 Detaylı Namaz Kılınış Rehberi</div>
         
-        <!-- === ENTEGRE EDİLEN GÖRSEL İZOMETRİK REHBER BÖLÜMÜ === -->
-        <div class="isometric-stage-card">
-            <div class="guide-controls-container">
-                <!-- Cinsiyet Seçimi -->
-                <div class="control-row">
-                    <button class="guide-btn active" onclick="setGender('erkek', this)">🚹 Erkek</button>
-                    <button class="guide-btn" onclick="setGender('kadin', this)">🚺 Kadın</button>
-                </div>
-                <!-- Pozisyon Seçimi -->
-                <div class="control-row">
-                    <button class="guide-btn active" onclick="setPosition('kiyam', this)">Kıyam (Ayakta)</button>
-                    <button class="guide-btn" onclick="setPosition('riku', this)">Rükû</button>
-                    <button class="guide-btn" onclick="setPosition('secde', this)">Secde</button>
-                    <button class="guide-btn" onclick="setPosition('otur', this)">Oturuş</button>
-                </div>
-            </div>
-
-            <!-- Görsel Ekran Alanı -->
-            <div class="guide-viewport" id="guide-viewport">
-                <!-- ERKEK - KIYAM -->
-                <div class="guide-render-box active" data-gender="erkek" data-pos="kiyam">
-                    <svg viewBox="0 0 200 180" width="100%" height="100%">
-                        <ellipse cx="100" cy="160" rx="45" ry="10" fill="rgba(0,0,0,0.15)" />
-                        <rect x="85" y="130" width="12" height="30" rx="6" fill="#3b82f6" />
-                        <rect x="103" y="130" width="12" height="30" rx="6" fill="#3b82f6" />
-                        <path d="M75 75 Q100 65 125 75 L120 135 Q100 140 80 135 Z" fill="#10b981" />
-                        <circle cx="100" cy="50" r="16" fill="#fcd34d" />
-                        <path d="M84 45 Q100 35 116 45 L114 38 Q100 32 86 38 Z" fill="#f8fafc" />
-                        <!-- Eller göbek altında -->
-                        <rect x="90" y="95" width="20" height="12" rx="4" fill="#fcd34d" />
-                    </svg>
-                </div>
-                <!-- ERKEK - RÜKÛ -->
-                <div class="guide-render-box" data-gender="erkek" data-pos="riku">
-                    <svg viewBox="0 0 200 180" width="100%" height="100%">
-                        <ellipse cx="100" cy="160" rx="40" ry="10" fill="rgba(0,0,0,0.15)" />
-                        <rect x="80" y="130" width="12" height="30" rx="6" fill="#3b82f6" />
-                        <rect x="108" y="130" width="12" height="30" rx="6" fill="#3b82f6" />
-                        <path d="M70 90 L130 90 L120 140 L80 140 Z" fill="#10b981" />
-                        <circle cx="145" cy="85" r="15" fill="#fcd34d" />
-                        <path d="M135 75 Q145 70 155 78 Z" fill="#f8fafc" />
-                    </svg>
-                </div>
-                <!-- ERKEK - SECDE -->
-                <div class="guide-render-box" data-gender="erkek" data-pos="secde">
-                    <svg viewBox="0 0 200 180" width="100%" height="100%">
-                        <ellipse cx="100" cy="160" rx="55" ry="12" fill="rgba(0,0,0,0.15)" />
-                        <path d="M60 130 Q100 100 140 130 L150 150 L50 150 Z" fill="#10b981" />
-                        <circle cx="50" cy="140" r="14" fill="#fcd34d" />
-                        <path d="M40 132 Q50 126 60 135 Z" fill="#f8fafc" />
-                    </svg>
-                </div>
-                <!-- ERKEK - OTUR -->
-                <div class="guide-render-box" data-gender="erkek" data-pos="otur">
-                    <svg viewBox="0 0 200 180" width="100%" height="100%">
-                        <ellipse cx="100" cy="160" rx="40" ry="10" fill="rgba(0,0,0,0.15)" />
-                        <rect x="85" y="115" width="30" height="25" rx="8" fill="#10b981" />
-                        <circle cx="100" cy="85" r="15" fill="#fcd34d" />
-                        <path d="M88 78 Q100 70 112 78 Z" fill="#f8fafc" />
-                    </svg>
-                </div>
-
-                <!-- KADIN - KIYAM -->
-                <div class="guide-render-box" data-gender="kadin" data-pos="kiyam">
-                    <svg viewBox="0 0 200 180" width="100%" height="100%">
-                        <ellipse cx="100" cy="160" rx="45" ry="10" fill="rgba(0,0,0,0.15)" />
-                        <path d="M75 75 L125 75 L130 145 L70 145 Z" fill="#059669" />
-                        <circle cx="100" cy="50" r="16" fill="#fcd34d" />
-                        <!-- Başörtüsü -->
-                        <path d="M82 40 Q100 25 118 40 L125 65 Q100 75 75 65 Z" fill="#047857" />
-                        <!-- Eller göğüs üstünde -->
-                        <rect x="92" y="88" width="16" height="10" rx="4" fill="#fcd34d" />
-                    </svg>
-                </div>
-                <!-- KADIN - RÜKÛ -->
-                <div class="guide-render-box" data-gender="kadin" data-pos="riku">
-                    <svg viewBox="0 0 200 180" width="100%" height="100%">
-                        <ellipse cx="100" cy="160" rx="40" ry="10" fill="rgba(0,0,0,0.15)" />
-                        <path d="M70 95 L130 95 L125 145 L75 145 Z" fill="#059669" />
-                        <circle cx="140" cy="90" r="15" fill="#fcd34d" />
-                        <path d="M130 80 Q140 75 150 85 Z" fill="#047857" />
-                    </svg>
-                </div>
-                <!-- KADIN - SECDE -->
-                <div class="guide-render-box" data-gender="kadin" data-pos="secde">
-                    <svg viewBox="0 0 200 180" width="100%" height="100%">
-                        <ellipse cx="100" cy="160" rx="55" ry="12" fill="rgba(0,0,0,0.15)" />
-                        <path d="M60 125 Q100 100 140 125 L145 150 L55 150 Z" fill="#059669" />
-                        <circle cx="50" cy="138" r="14" fill="#fcd34d" />
-                        <path d="M42 128 Q50 122 58 132 Z" fill="#047857" />
-                    </svg>
-                </div>
-                <!-- KADIN - OTUR -->
-                <div class="guide-render-box" data-gender="kadin" data-pos="otur">
-                    <svg viewBox="0 0 200 180" width="100%" height="100%">
-                        <ellipse cx="100" cy="160" rx="40" ry="10" fill="rgba(0,0,0,0.15)" />
-                        <rect x="80" y="115" width="40" height="25" rx="10" fill="#059669" />
-                        <circle cx="100" cy="85" r="15" fill="#fcd34d" />
-                        <path d="M88 75 Q100 68 112 75 Z" fill="#047857" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-        <!-- === /ENTEGRASYON BİTTİ === -->
-
         <div class="namaz-grid">
             <button class="namaz-select-btn active" onclick="selectNamaz('sabah', this)">Sabah Namazı <span>2 Sünnet, 2 Farz</span></button>
             <button class="namaz-select-btn" onclick="selectNamaz('ogle', this)">Öğle Namazı <span>4 İlk, 4 Farz, 2 Son</span></button>
@@ -400,78 +190,7 @@
 
 <div class="footer">© Ayetin Vakti • <span data-i18n="footer_text">Huzur ve İbadet Rehberliğiniz</span></div>
 
-<!-- === ASİSTİV HIZLI ERIŞİM MENÜSÜ (ASSİVETOUCH) === -->
-<div class="assistive-container" id="assistiveContainer">
-    <div class="assistive-menu" id="assistiveMenu">
-        <a href="../" class="assistive-item">🏠 Ana Sayfa</a>
-        <button class="assistive-item" onclick="switchTab('steps', document.querySelector('.tab-btn')); toggleAssistiveMenu();">📖 Namaz Rehberi</button>
-        <button class="assistive-item" onclick="switchTab('quiz', document.querySelectorAll('.tab-btn')[2]); toggleAssistiveMenu();">🎯 Dini Sınav</button>
-        <button class="assistive-item" onclick="toggleTheme(); toggleAssistiveMenu();">🌓 Tema Değiştir</button>
-    </div>
-    <button class="assistive-main-btn" id="assistiveMainBtn" title="Hızlı Menü">✦</button>
-</div>
-
 <script>
-    // --- ASİSTİV MENÜ MANTIĞI (BAS-ÇEK / BASILI TUT DESTEKLİ) ---
-    const assistiveMainBtn = document.getElementById('assistiveMainBtn');
-    const assistiveMenu = document.getElementById('assistiveMenu');
-    let pressTimer = null;
-    let isMenuOpen = false;
-
-    function toggleAssistiveMenu() {
-        isMenuOpen = !isMenuOpen;
-        if (isMenuOpen) {
-            assistiveMenu.classList.add('open');
-        } else {
-            assistiveMenu.classList.remove('open');
-        }
-    }
-
-    // Basit tıklama veya basılı tutma kontrolü
-    assistiveMainBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleAssistiveMenu();
-    });
-
-    // Dışarı tıklandığında menüyü kapat
-    document.addEventListener('click', (e) => {
-        if (!document.getElementById('assistiveContainer').contains(e.target)) {
-            if (isMenuOpen) {
-                isMenuOpen = false;
-                assistiveMenu.classList.remove('open');
-            }
-        }
-    });
-
-    // --- GÖRSEL REHBER MANTIĞI ---
-    let currentGender = 'erkek';
-    let currentPos = 'kiyam';
-
-    function setGender(gender, btn) {
-        currentGender = gender;
-        // Buton aktiflik sınıflarını güncelle
-        btn.parentElement.querySelectorAll('.guide-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        updateGuideDisplay();
-    }
-
-    function setPosition(pos, btn) {
-        currentPos = pos;
-        btn.parentElement.querySelectorAll('.guide-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        updateGuideDisplay();
-    }
-
-    function updateGuideDisplay() {
-        document.querySelectorAll('.guide-render-box').forEach(box => {
-            if (box.getAttribute('data-gender') === currentGender && box.getAttribute('data-pos') === currentPos) {
-                box.classList.add('active');
-            } else {
-                box.classList.remove('active');
-            }
-        });
-    }
-
     // Dil Sözlüğü
     const translations = {
         tr: {
@@ -504,7 +223,7 @@
         sabah: `
             <div class="step-item">
                 <div class="step-header">☀️ Sabah Namazının Sünneti (2 Rekat)</div>
-                <p class="translation-text"><strong>1. Rekat:</strong> "Niyet ettim Allah rızası için sabah namazının 2 rekat sünnetini kılmaya" diye niyet edilir. Tekbir alınıp eller bağlanır. Sübhaneke okunur, Euzü-Besmele çekilerek Fatiha ve zamm-ı sure okunur. Rükû og secdeler yapılarak 2. rekata kalkılır.</p>
+                <p class="translation-text"><strong>1. Rekat:</strong> "Niyet ettim Allah rızası için sabah namazının 2 rekat sünnetini kılmaya" diye niyet edilir. Tekbir alınıp eller bağlanır. Sübhaneke okunur, Euzü-Besmele çekilerek Fatiha ve zamm-ı sure okunur. Rükû ve secdeler yapılarak 2. rekata kalkılır.</p>
                 <p class="translation-text"><strong>2. Rekat:</strong> Besmele çekilip Fatiha ve zamm-ı sure okunur. Rükû og secdeden sonra oturulur. Sırasıyla şu dualar okunur:</p>
                 
                 <div class="arabic-text">التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ...</div>
@@ -561,7 +280,7 @@
             <div class="step-item">
                 <div class="step-header">🌇 Akşam Namazının Farzı (3 Rekat)</div>
                 <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için akşam namazının farzını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur. 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunup</strong> kalkılır.<br><br>
-                <strong>3. Rekat:</strong> Ayağa kalkınca sadece Besmele ve Fatiha suresi okunur. Rükû og secdenin ardından son oturuş yapılır; Ettehiyyâtü, Salli-Barik, Rabbenâ duaları okunarak selam verilir.</p>
+                <strong>3. Rekat:</strong> Ayağa kalkınca sadece Besmele ve Fatiha suresi okunur. Rükû ve secdenin ardından son oturuş yapılır; Ettehiyyâtü, Salli-Barik, Rabbenâ duaları okunarak selam verilir.</p>
             </div>
             <div class="step-item">
                 <div class="step-header">🌇 Akşam Namazının Sünneti (2 Rekat)</div>
@@ -587,7 +306,7 @@
         vitir: `
             <div class="step-item">
                 <div class="step-header">⭐ Vitir Namazı (3 Rekat Vacip)</div>
-                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için vitir namazını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur. Rükû og secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunarak</strong> 3. rekata kalkılır.<br><br>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için vitir namazını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur. Rükû ve secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunarak</strong> 3. rekata kalkılır.<br><br>
                 <strong>3. Rekat ve Kunut Duaları:</strong> Fatiha ve zamm-ı sure okunduktan sonra rükûa varılmadan eller kulak hizasına kaldırılıp tekbir alınır ve eller bağlanarak sırasıyla <strong>iki Kunut Duası da</strong> okunur:</p>
 
                 <div class="arabic-text">اللَّهُمَّ إِنَّا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ وَنَسْتَهْدِيكَ...</div>
@@ -597,7 +316,7 @@
                 <div class="arabic-text" style="margin-top:10px;">اللَّهُمَّ إِيَّاكَ نَعْبُدُ وَلَكَ نُصَلِّي وَنَسْجُدُ...</div>
                 <div class="pronunciation-text" style="margin-top:6px;">🔊 2. Kunut Duası: Allâhümme iyyâke na'büdü ve leke nusallî ve nescüD ve ileyke neshâ ve nahfidu nerCû rahmâteke ve nahşâ azâbeke inne azâbeke bil-küffâri mülhık.</div>
                 <p class="translation-text" style="margin-top:4px;">Meal: "Allah'ım! Biz yalnız sana kulluk ederiz, namazı yalnız senin için kılarız, secdeyi yalnız sana yaparız..."</p>
-                <p class="translation-text" style="margin-top:6px;">Kunut dualarının ardından rükû og secdeler yapılarak son oturuş gerçekleştirilir, dualar okunup selam verilir.</p>
+                <p class="translation-text" style="margin-top:6px;">Kunut dualarının ardından rükû ve secdeler yapılarak son oturuş gerçekleştirilir, dualar okunup selam verilir.</p>
             </div>
         `
     };
