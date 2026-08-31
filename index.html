@@ -247,25 +247,25 @@
                 <g id="figureRoot" transform="translate(0, 0)">
                     
                     <g id="legsGroup">
-                        <path d="M140 190 Q135 225 138 258" stroke="url(#limbGradient)" stroke-width="14" stroke-linecap="round" fill="none" />
-                        <path d="M160 190 Q165 225 162 258" stroke="url(#limbGradient)" stroke-width="14" stroke-linecap="round" fill="none" />
-                        <path d="M130 258 L146 258" stroke="var(--accent-color)" stroke-width="6" stroke-linecap="round" />
-                        <path d="M154 258 L170 258" stroke="var(--accent-color)" stroke-width="6" stroke-linecap="round" />
+                        <path id="legLeft" d="M136 185 Q130 225 133 258" stroke="url(#limbGradient)" stroke-width="16" stroke-linecap="round" fill="none" />
+                        <path id="legRight" d="M164 185 Q170 225 167 258" stroke="url(#limbGradient)" stroke-width="16" stroke-linecap="round" fill="none" />
+                        <path d="M125 258 L142 258" stroke="var(--accent-color)" stroke-width="6" stroke-linecap="round" />
+                        <path d="M158 258 L175 258" stroke="var(--accent-color)" stroke-width="6" stroke-linecap="round" />
                     </g>
 
                     <g id="torsoGroup" class="torso-group" transform="translate(0, 0) rotate(0)">
-                        <path id="torsoBody" d="M130 120 Q118 160 125 195 L175 195 Q182 160 170 120 Z" fill="url(#mainGradient)" stroke="var(--border-color)" stroke-width="1.5"/>
+                        <path id="torsoBody" d="M126 115 Q112 155 120 195 L180 195 Q188 155 174 115 Z" fill="url(#mainGradient)" stroke="var(--border-color)" stroke-width="1.5"/>
                         
                         <g id="armsGroup">
-                            <path id="armLeft" class="arm-left" d="M125 125 Q115 150 135 168" stroke="url(#limbGradient)" stroke-width="11" stroke-linecap="round" fill="none" />
-                            <path id="armRight" class="arm-right" d="M175 125 Q185 150 165 168" stroke="url(#limbGradient)" stroke-width="11" stroke-linecap="round" fill="none" />
-                            <circle id="handsKnot" cx="150" cy="168" r="6" fill="#fcd34d" />
+                            <path id="armLeft" class="arm-left" d="M122 122 Q112 148 132 168" stroke="url(#limbGradient)" stroke-width="13" stroke-linecap="round" fill="none" />
+                            <path id="armRight" class="arm-right" d="M178 122 Q188 148 168 168" stroke="url(#limbGradient)" stroke-width="13" stroke-linecap="round" fill="none" />
+                            <circle id="handsKnot" cx="150" cy="168" r="7" fill="#fcd34d" />
                         </g>
 
                         <g id="headGroup" class="head-group" transform="translate(0, 0) rotate(0)">
-                            <path id="headCover" d="M132 105 Q142 90 158 105 L165 125 Q135 130 132 105 Z" fill="#047857" />
-                            <circle cx="150" cy="102" r="14" fill="#fcd34d" />
-                            <path id="hijabOrCap" d="M132 98 Q150 75 168 98 Q165 115 150 120 Q135 115 132 98 Z" fill="#065f46" />
+                            <path id="headCover" d="M124 102 Q135 85 150 85 Q165 85 176 102 L185 135 Q150 142 115 135 Z" fill="#047857" />
+                            <circle cx="150" cy="98" r="14" fill="#fcd34d" />
+                            <path id="hijabOrCap" d="M130 94 Q150 72 170 94 Q166 112 150 115 Q134 112 130 94 Z" fill="#065f46" />
                         </g>
                     </g>
 
@@ -412,22 +412,22 @@
         if (pose === 'kiyam') {
             torsoGroup.style.transform = 'translate(0px, 0px) rotate(0deg)';
             headGroup.style.transform = 'translate(0px, 0px) rotate(0deg)';
-            armLeft.setAttribute('d', currentGender === 'kadin' ? 'M125 125 Q112 145 132 165' : 'M125 125 Q110 150 132 165');
-            armRight.setAttribute('d', currentGender === 'kadin' ? 'M175 125 Q188 145 168 165' : 'M175 125 Q190 150 168 165');
+            armLeft.setAttribute('d', currentGender === 'kadin' ? 'M122 122 Q112 148 132 168' : 'M125 125 Q110 150 132 165');
+            armRight.setAttribute('d', currentGender === 'kadin' ? 'M178 122 Q188 148 168 168' : 'M175 125 Q190 150 168 165');
             handsKnot.style.opacity = '1';
             groundShadow.setAttribute('rx', '70');
         } else if (pose === 'ruku') {
             torsoGroup.style.transform = 'translate(-20px, 35px) rotate(-48deg)';
             headGroup.style.transform = 'translate(10px, -5px) rotate(35deg)';
-            armLeft.setAttribute('d', 'M125 125 Q120 150 130 180');
-            armRight.setAttribute('d', 'M175 125 Q170 150 160 180');
+            armLeft.setAttribute('d', 'M122 122 Q118 148 128 178');
+            armRight.setAttribute('d', 'M178 122 Q182 148 172 178');
             handsKnot.style.opacity = '0';
             groundShadow.setAttribute('rx', '60');
         } else if (pose === 'secde') {
             torsoGroup.style.transform = 'translate(-45px, 68px) rotate(-85deg) scaleX(0.95)';
             headGroup.style.transform = 'translate(18px, -12px) rotate(70deg)';
-            armLeft.setAttribute('d', currentGender === 'kadin' ? 'M125 125 Q105 140 120 160' : 'M125 125 Q95 130 115 155');
-            armRight.setAttribute('d', currentGender === 'kadin' ? 'M175 125 Q195 140 180 160' : 'M175 125 Q205 130 185 155');
+            armLeft.setAttribute('d', currentGender === 'kadin' ? 'M122 122 Q102 138 118 158' : 'M125 125 Q95 130 115 155');
+            armRight.setAttribute('d', currentGender === 'kadin' ? 'M178 122 Q198 138 182 158' : 'M175 125 Q205 130 185 155');
             handsKnot.style.opacity = '0';
             groundShadow.setAttribute('rx', '85');
         }
@@ -466,7 +466,7 @@
         ogle: `
             <div class="step-item">
                 <div class="step-header">🕌 Öğle Namazının İlk Sünneti (4 Rekat)</div>
-                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için öğle namazının ilk sünnetini kılmaya" denir. Süبhaneke, Fatiha ve sure okunur, rükû ve secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunur</strong>, hemen 3. rekata kalkılır.<br><br>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için öğle namazının ilk sünnetini kılmaya" denir. Sübhaneke, Fatiha ve sure okunur, rükû ve secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunur</strong>, hemen 3. rekata kalkılır.<br><br>
                 <strong>3. ve 4. Rekatlar:</strong> Besmele, Fatiha ve sure okunarak 3. ve 4. rekatlar tamamlanır. Son oturuşte Ettehiyyâtü, Salli-Barik ve Rabbenâ duaları okunarak selam verilir.</p>
             </div>
             <div class="step-item">
