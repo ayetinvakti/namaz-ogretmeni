@@ -118,7 +118,7 @@
         .diff-title { font-weight: 600; font-size: 0.92rem; color: var(--text-color); }
         .diff-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
 
-        /* DÜZELTİLMİŞ & KUSURSUZ YAN DURUŞ 3D ANİMASYON ALANI */
+        /* ULTRA GERÇEKÇİ 3D ANİMASYON ALANI (EKLEMLİ KINEMATİK GEÇİŞLER) */
         .model-container {
             width: 100%;
             background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(0,0,0,0.3));
@@ -158,8 +158,8 @@
 
         .model-svg {
             width: 100%;
-            height: 240px;
-            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.3));
+            height: 250px;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.35));
         }
         
         .anim-controls {
@@ -192,10 +192,24 @@
             border-color: var(--accent-color);
         }
 
-        /* Doğru Eksen ve Merkez Üzerinde Kusursuz Animasyon Geçişleri */
-        .fig-group {
-            transform-origin: 150px 255px;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Yumuşak ve Kesintisiz Eklem Geçişleri (CSS Smooth Transitions) */
+        .joint {
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), d 0.6s ease;
+        }
+        
+        .torso-group {
+            transform-origin: 150px 200px;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .head-group {
+            transform-origin: 150px 115px;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .arm-left, .arm-right {
+            transform-origin: 150px 125px;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .footer { margin: 20px 0; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
@@ -217,45 +231,48 @@
         <button class="tab-btn" onclick="switchTab('quiz', this)" data-i18n="tab_quiz">🎯 Dini Sınav</button>
     </div>
 
-    <!-- 1. SEKME: DETAYLI NAMAZ REHBERİ -->
     <div id="tab-steps" class="content-card">
         <div class="card-title" data-i18n="card_steps_title">📖 Detaylı Namaz Kılınış Rehberi</div>
         
-        <!-- YAN DURUŞ & KADIN/ERKEK SEÇENEKLİ GERÇEKÇİ ANİMASYON ALANI -->
         <div class="model-container">
-            <!-- Cinsiyet Seçimi (ID'ler eklendi ve buton eşleşmeleri düzeltildi) -->
             <div class="gender-selector">
                 <button class="gender-btn active" id="btnKadin" onclick="setGender('kadin')">🧕 Kadın Figürü</button>
                 <button class="gender-btn" id="btnErkek" onclick="setGender('erkek')">🧔 Erkek Figürü</button>
             </div>
 
             <svg class="model-svg" id="namazFigureSvg" viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
-                <!-- Zemin Gölgesi ve Seccade Çizgisi -->
-                <ellipse cx="150" cy="265" rx="65" ry="8" fill="rgba(0,0,0,0.3)" />
-                <line x1="70" y1="265" x2="230" y2="265" stroke="var(--accent-color)" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+                <ellipse cx="150" cy="265" rx="70" ry="8" fill="rgba(0,0,0,0.3)" id="groundShadow" />
+                <line x1="60" y1="265" x2="240" y2="265" stroke="var(--accent-color)" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
 
-                <!-- FİGÜR ANA GRUBU (Dinamik Pozisyon Verilecek Alan) -->
-                <g id="modelGroup" class="fig-group" transform="translate(0, 0)">
+                <g id="figureRoot" transform="translate(0, 0)">
                     
-                    <!-- KADIN / ERKEK İÇERİĞİ DİNAMİK OLARAK BURAYA GELECEK -->
-                    <g id="figureContent">
-                        <!-- Varsayılan Kadın Yan Duruş (Detaylı Kıyafet ve Örtü) -->
-                        <path d="M135 255 L155 255 L155 263 L135 263 Z" fill="#94a3b8" />
-                        <path d="M125 140 Q105 210 118 258 L172 258 Q182 210 162 140 Z" fill="url(#womanGradient)" stroke="var(--border-color)" stroke-width="1.5"/>
-                        <path d="M128 125 Q145 118 162 125 L170 165 Q145 175 122 165 Z" fill="#047857" opacity="0.95"/>
-                        <path d="M126 130 Q112 145 132 160 Q152 165 168 152" fill="none" stroke="#059669" stroke-width="8" stroke-linecap="round"/>
-                        <circle cx="145" cy="156" r="5" fill="#fcd34d" />
-                        <path d="M132 105 Q142 95 156 105 L160 130 Q140 135 128 125 Z" fill="#059669" />
-                        <path d="M138 90 Q145 85 152 93 Z" fill="#fcd34d" />
-                        <path d="M128 78 Q132 62 154 68 Q172 82 168 115 Q150 120 130 102 Z" fill="#065f46" stroke="var(--border-color)" stroke-width="1"/>
-                        <path d="M150 78 Q158 82 153 92 Q147 94 148 85 Z" fill="#fcd34d" />
+                    <g id="legsGroup">
+                        <path d="M140 190 Q135 225 138 258" stroke="url(#limbGradient)" stroke-width="14" stroke-linecap="round" fill="none" />
+                        <path d="M160 190 Q165 225 162 258" stroke="url(#limbGradient)" stroke-width="14" stroke-linecap="round" fill="none" />
+                        <path d="M130 258 L146 258" stroke="var(--accent-color)" stroke-width="6" stroke-linecap="round" />
+                        <path d="M154 258 L170 258" stroke="var(--accent-color)" stroke-width="6" stroke-linecap="round" />
+                    </g>
+
+                    <g id="torsoGroup" class="torso-group" transform="translate(0, 0) rotate(0)">
+                        <path id="torsoBody" d="M130 120 Q118 160 125 195 L175 195 Q182 160 170 120 Z" fill="url(#mainGradient)" stroke="var(--border-color)" stroke-width="1.5"/>
+                        
+                        <g id="armsGroup">
+                            <path id="armLeft" class="arm-left" d="M125 125 Q115 150 135 168" stroke="url(#limbGradient)" stroke-width="11" stroke-linecap="round" fill="none" />
+                            <path id="armRight" class="arm-right" d="M175 125 Q185 150 165 168" stroke="url(#limbGradient)" stroke-width="11" stroke-linecap="round" fill="none" />
+                            <circle id="handsKnot" cx="150" cy="168" r="6" fill="#fcd34d" />
+                        </g>
+
+                        <g id="headGroup" class="head-group" transform="translate(0, 0) rotate(0)">
+                            <path id="headCover" d="M132 105 Q142 90 158 105 L165 125 Q135 130 132 105 Z" fill="#047857" />
+                            <circle cx="150" cy="102" r="14" fill="#fcd34d" />
+                            <path id="hijabOrCap" d="M132 98 Q150 75 168 98 Q165 115 150 120 Q135 115 132 98 Z" fill="#065f46" />
+                        </g>
                     </g>
 
                 </g>
 
-                <!-- Renk Gradientleri -->
                 <defs>
-                    <linearGradient id="womanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stop-color="#10b981" />
                         <stop offset="100%" stop-color="#047857" />
                     </linearGradient>
@@ -263,10 +280,17 @@
                         <stop offset="0%" stop-color="#3b82f6" />
                         <stop offset="100%" stop-color="#1d4ed8" />
                     </linearGradient>
+                    <linearGradient id="limbGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#059669" />
+                        <stop offset="100%" stop-color="#065f46" />
+                    </linearGradient>
+                    <linearGradient id="manLimbGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#2563eb" />
+                        <stop offset="100%" stop-color="#1e40af" />
+                    </linearGradient>
                 </defs>
             </svg>
 
-            <!-- Pozisyon Kontrol Düğmeleri -->
             <div class="anim-controls">
                 <button class="anim-btn active" onclick="changePose('kiyam', this)">Kıyam (Ayakta)</button>
                 <button class="anim-btn" onclick="changePose('ruku', this)">Rükû (Eğilme)</button>
@@ -284,11 +308,9 @@
         </div>
 
         <div id="namaz-details-container" style="margin-top: 10px;">
-            <!-- Dinamik içerik buraya yüklenecek -->
-        </div>
+            </div>
     </div>
 
-    <!-- 2. SEKME: ERKEK / KADIN FARKLARI -->
     <div id="tab-diffs" class="content-card" style="display: none;">
         <div class="card-title" data-i18n="card_diffs_title">⚖️ Namazda Erkek ve Kadın Arasındaki Fıkhi Farklar</div>
         <div class="diff-list">
@@ -311,12 +333,10 @@
         </div>
     </div>
 
-    <!-- 3. SEKME: DİNİ SINAV -->
     <div id="tab-quiz" class="content-card" style="display: none;">
         <div class="card-title" data-i18n="card_quiz_title">🎯 Dini Sınav</div>
         <div class="quiz-box" id="dynamic-quiz-box">
-            <!-- Rastgele soru buraya gelecek -->
-        </div>
+            </div>
         <button class="next-quiz-btn" onclick="loadRandomQuiz()" data-i18n="btn_next_quiz">🔄 Başka Soru Getir</button>
     </div>
 </div>
@@ -351,46 +371,29 @@
     const activeLang = localStorage.getItem('user_lang') || 'tr';
     const t = translations[activeLang] || translations['tr'];
 
-    // Figür Şablonları (Kadın ve Erkek Yan Duruş Anatomisi)
     let currentGender = 'kadin';
     let currentPoseState = 'kiyam';
-
-    const figureTemplates = {
-        kadin: `
-            <path d="M135 255 L155 255 L155 263 L135 263 Z" fill="#94a3b8" />
-            <path d="M125 140 Q105 210 118 258 L172 258 Q182 210 162 140 Z" fill="url(#womanGradient)" stroke="var(--border-color)" stroke-width="1.5"/>
-            <path d="M128 125 Q145 118 162 125 L170 165 Q145 175 122 165 Z" fill="#047857" opacity="0.95"/>
-            <path d="M126 130 Q112 145 132 160 Q152 165 168 152" fill="none" stroke="#059669" stroke-width="8" stroke-linecap="round"/>
-            <circle cx="145" cy="156" r="5" fill="#fcd34d" />
-            <path d="M132 105 Q142 95 156 105 L160 130 Q140 135 128 125 Z" fill="#059669" />
-            <path d="M138 90 Q145 85 152 93 Z" fill="#fcd34d" />
-            <path d="M128 78 Q132 62 154 68 Q172 82 168 115 Q150 120 130 102 Z" fill="#065f46" stroke="var(--border-color)" stroke-width="1"/>
-            <path d="M150 78 Q158 82 153 92 Q147 94 148 85 Z" fill="#fcd34d" />
-        `,
-        erkek: `
-            <path d="M132 255 L152 255 L152 263 L132 263 Z" fill="#64748b" />
-            <path d="M125 140 Q115 210 122 258 L168 258 Q175 210 165 140 Z" fill="url(#manGradient)" stroke="var(--border-color)" stroke-width="1.5"/>
-            <path d="M125 125 Q145 115 165 125 L172 165 Q145 175 118 165 Z" fill="#1d4ed8" opacity="0.95"/>
-            <path d="M125 130 Q110 150 132 162 Q150 165 168 155" fill="none" stroke="#2563eb" stroke-width="7" stroke-linecap="round"/>
-            <circle cx="142" cy="158" r="5" fill="#fcd34d" />
-            <path d="M128 105 Q142 92 162 105 L165 130 Q145 135 125 125 Z" fill="#2563eb" />
-            <path d="M136 88 Q145 82 154 90 Z" fill="#fcd34d" />
-            <path d="M135 75 Q145 65 158 75 Q162 88 155 92 Z" fill="#1e293b" />
-            <path d="M150 78 Q159 84 153 95 Q146 92 148 84 Z" fill="#fcd34d" />
-        `
-    };
 
     function setGender(gender) {
         currentGender = gender;
         document.getElementById('btnKadin').classList.toggle('active', gender === 'kadin');
         document.getElementById('btnErkek').classList.toggle('active', gender === 'erkek');
-        document.getElementById('figureContent').innerHTML = figureTemplates[gender];
         
-        // Cinsiyet değiştiğinde mevcut pozisyonu koruyarak uygula
+        const mainGrad = gender === 'kadin' ? 'url(#mainGradient)' : 'url(#manGradient)';
+        const limbGrad = gender === 'kadin' ? 'url(#limbGradient)' : 'url(#manLimbGradient)';
+        const headColor = gender === 'kadin' ? '#047857' : '#1d4ed8';
+        const headCoverColor = gender === 'kadin' ? '#065f46' : '#1e293b';
+
+        document.getElementById('torsoBody').setAttribute('fill', mainGrad);
+        document.getElementById('armLeft').setAttribute('stroke', limbGrad);
+        document.getElementById('armRight').setAttribute('stroke', limbGrad);
+        document.getElementById('headCover').setAttribute('fill', headColor);
+        document.getElementById('hijabOrCap').setAttribute('fill', headCoverColor);
+
         applyPoseTransform(currentPoseState);
     }
 
-    // Kusursuz Pozisyon ve Transformasyon Kontrolü
+    // Doğal Kinematik Eklem ve Gövde Pozisyon Ayarlamaları
     function changePose(pose, btn) {
         document.querySelectorAll('.anim-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -399,14 +402,34 @@
     }
 
     function applyPoseTransform(pose) {
-        const modelGroup = document.getElementById('modelGroup');
-        
+        const torsoGroup = document.getElementById('torsoGroup');
+        const headGroup = document.getElementById('headGroup');
+        const armLeft = document.getElementById('armLeft');
+        const armRight = document.getElementById('armRight');
+        const handsKnot = document.getElementById('handsKnot');
+        const groundShadow = document.getElementById('groundShadow');
+
         if (pose === 'kiyam') {
-            modelGroup.style.transform = 'translate(0px, 0px) rotate(0deg)';
+            torsoGroup.style.transform = 'translate(0px, 0px) rotate(0deg)';
+            headGroup.style.transform = 'translate(0px, 0px) rotate(0deg)';
+            armLeft.setAttribute('d', currentGender === 'kadin' ? 'M125 125 Q112 145 132 165' : 'M125 125 Q110 150 132 165');
+            armRight.setAttribute('d', currentGender === 'kadin' ? 'M175 125 Q188 145 168 165' : 'M175 125 Q190 150 168 165');
+            handsKnot.style.opacity = '1';
+            groundShadow.setAttribute('rx', '70');
         } else if (pose === 'ruku') {
-            modelGroup.style.transform = 'translate(-25px, 25px) rotate(-40deg)';
+            torsoGroup.style.transform = 'translate(-20px, 35px) rotate(-48deg)';
+            headGroup.style.transform = 'translate(10px, -5px) rotate(35deg)';
+            armLeft.setAttribute('d', 'M125 125 Q120 150 130 180');
+            armRight.setAttribute('d', 'M175 125 Q170 150 160 180');
+            handsKnot.style.opacity = '0';
+            groundShadow.setAttribute('rx', '60');
         } else if (pose === 'secde') {
-            modelGroup.style.transform = 'translate(-10px, 58px) rotate(-88deg) scaleX(1.02) scaleY(0.72)';
+            torsoGroup.style.transform = 'translate(-45px, 68px) rotate(-85deg) scaleX(0.95)';
+            headGroup.style.transform = 'translate(18px, -12px) rotate(70deg)';
+            armLeft.setAttribute('d', currentGender === 'kadin' ? 'M125 125 Q105 140 120 160' : 'M125 125 Q95 130 115 155');
+            armRight.setAttribute('d', currentGender === 'kadin' ? 'M175 125 Q195 140 180 160' : 'M175 125 Q205 130 185 155');
+            handsKnot.style.opacity = '0';
+            groundShadow.setAttribute('rx', '85');
         }
     }
 
@@ -443,7 +466,7 @@
         ogle: `
             <div class="step-item">
                 <div class="step-header">🕌 Öğle Namazının İlk Sünneti (4 Rekat)</div>
-                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için öğle namazının ilk sünnetini kılmaya" denir. Sübhaneke, Fatiha ve sure okunur, rükû ve secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunur</strong>, hemen 3. rekata kalkılır.<br><br>
+                <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için öğle namazının ilk sünnetini kılmaya" denir. Süبhaneke, Fatiha ve sure okunur, rükû ve secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunur</strong>, hemen 3. rekata kalkılır.<br><br>
                 <strong>3. ve 4. Rekatlar:</strong> Besmele, Fatiha ve sure okunarak 3. ve 4. rekatlar tamamlanır. Son oturuşte Ettehiyyâtü, Salli-Barik ve Rabbenâ duaları okunarak selam verilir.</p>
             </div>
             <div class="step-item">
