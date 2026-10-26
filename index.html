@@ -100,7 +100,7 @@
         .step-header { font-weight: 700; font-size: 0.95rem; color: var(--accent-color); }
         
         .arabic-text { font-size: 1.2rem; font-family: 'Amiri', 'Traditional Arabic', serif; text-align: right; color: var(--text-color); line-height: 1.9; direction: rtl; }
-        .pronunciation-text { font-size: 0.86rem; color: var(--accent-color); font-weight: 600; background: var(--card-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .pronunciation-text { font-size: 0.86rem; color: var(--accent-color); font-weight: 600; background: var(--card-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); line-height: 1.5; }
         .translation-text { font-size: 0.85rem; color: var(--text-muted); font-style: italic; line-height: 1.5; }
 
         .quiz-box { background: var(--card-bg); border: 1px dashed var(--accent-color); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
@@ -218,6 +218,43 @@
     const activeLang = localStorage.getItem('user_lang') || 'tr';
     const t = translations[activeLang] || translations['tr'];
 
+    // Ortak dua bloğu: Arapça + okunuş + meal (tekrar eden metinler tek yerde durur)
+    const duaBlok = (ad, ar, okunus, meal, ilk) => `
+                <div class="arabic-text"${ilk ? '' : ' style="margin-top:6px;"'}>${ar}</div>
+                <div class="pronunciation-text"${ilk ? '' : ' style="margin-top:6px;"'}>🔊 ${ad}: ${okunus}</div>
+                <p class="translation-text">Meal: "${meal}"</p>`;
+
+    const DUALAR = {
+        ettehiyyat: duaBlok('Ettehiyyâtü',
+            'التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ',
+            'Ettehiyyâtü lillâhi ves-salavâtü vet-tayyibât. Es-selâmü aleyke eyyühen-nebiyyü ve rahmetullâhi ve berekâtüh. Es-selâmü aleynâ ve alâ ibâdillâhis-sâlihîn. Eşhedü en lâ ilâhe illallâh ve eşhedü enne Muhammeden abdühû ve resûlüh.',
+            'Dil ile, beden ve mal ile yapılan bütün ibadetler Allah\'a mahsustur. Ey Peygamber! Allah\'ın selamı, rahmeti ve bereketi senin üzerine olsun. Selam bizim üzerimize ve Allah\'ın salih kulları üzerine olsun. Şahitlik ederim ki Allah\'tan başka ilah yoktur ve yine şahitlik ederim ki Muhammed O\'nun kulu ve elçisidir.', true),
+        salli: duaBlok('Allâhümme Salli',
+            'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ',
+            'Allâhümme salli alâ Muhammedin ve alâ âli Muhammed, kemâ sallayte alâ İbrâhîme ve alâ âli İbrâhîm, inneke hamîdün mecîd.',
+            'Allah\'ım! Hz. İbrahim\'e ve ailesine rahmet ettiğin gibi Hz. Muhammed\'e ve ailesine de rahmet eyle. Şüphesiz sen övülmeye layıksın, şanı yücesin.'),
+        barik: duaBlok('Allâhümme Bârik',
+            'اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ',
+            'Allâhümme bârik alâ Muhammedin ve alâ âli Muhammed, kemâ bârekte alâ İbrâhîme ve alâ âli İbrâhîm, inneke hamîdün mecîd.',
+            'Allah\'ım! Hz. İbrahim\'e ve ailesine bereket verdiğin gibi Hz. Muhammed\'e ve ailesine de bereket ver. Şüphesiz sen övülmeye layıksın, şanı yücesin.'),
+        rabbena1: duaBlok('Rabbenâ Âtinâ',
+            'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ',
+            'Rabbenâ âtinâ fid-dünyâ haseneten ve fîl-âhirati haseneten ve kınâ azâben-nâr.',
+            'Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi ateşin azabından koru.'),
+        rabbena2: duaBlok('Rabbenağfirlî',
+            'رَبَّنَا اغْفِرْ لِي وَلِوَالِدَيَّ وَلِلْمُؤْمِنِينَ يَوْمَ يَقُومُ الْحِسَابُ',
+            'Rabbenağfirlî ve li-vâlideyye ve lil-mü\'minîne yevme yekûmül-hisâb.',
+            'Rabbimiz! Hesabın görüleceği gün beni, annemi babamı ve bütün müminleri bağışla.'),
+        kunut1: duaBlok('1. Kunut Duası',
+            'اللَّهُمَّ إِنَّا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ وَنَسْتَهْدِيكَ وَنُؤْمِنُ بِكَ وَنَتُوبُ إِلَيْكَ وَنَتَوَكَّلُ عَلَيْكَ وَنُثْنِي عَلَيْكَ الْخَيْرَ كُلَّهُ نَشْكُرُكَ وَلَا نَكْفُرُكَ وَنَخْلَعُ وَنَتْرُكُ مَنْ يَفْجُرُكَ',
+            'Allâhümme innâ nesteînüke ve nestağfirük ve nestehdîk ve nü\'minü bike ve netûbü ileyk ve netevekkelü aleyk ve nüsnî aleykel-hayra küllehû neşkürüke ve lâ nekfürük ve nahlau ve netrukü men yefcürük.',
+            'Allah\'ım! Senden yardım dileriz, günahlarımızı bağışlamanı isteriz ve doğru yolu göstermeni dileriz. Sana inanırız, sana tövbe ederiz, sana güveniriz. Bütün hayırları sana yakıştırarak seni överiz. Sana şükrederiz, nankörlük etmeyiz. Sana isyan edenlerden uzaklaşır ve onları terk ederiz.', true),
+        kunut2: duaBlok('2. Kunut Duası',
+            'اللَّهُمَّ إِيَّاكَ نَعْبُدُ وَلَكَ نُصَلِّي وَنَسْجُدُ وَإِلَيْكَ نَسْعَى وَنَحْفِدُ نَرْجُو رَحْمَتَكَ وَنَخْشَى عَذَابَكَ إِنَّ عَذَابَكَ بِالْكُفَّارِ مُلْحِقٌ',
+            'Allâhümme iyyâke na\'büdü ve leke nusallî ve nescüd ve ileyke nes\'â ve nahfid, nercû rahmeteke ve nahşâ azâbeke, inne azâbeke bil-küffâri mülhık.',
+            'Allah\'ım! Yalnız sana ibadet ederiz, yalnız senin için namaz kılar ve secde ederiz. Sana koşar ve sana yönelir, hizmetinde bulunuruz. Rahmetini umar, azabından korkarız. Şüphesiz senin azabın kâfirlere ulaşacaktır.')
+    };
+
     // Tam Detaylı Namaz Veritabanı
     const namazData = {
         sabah: `
@@ -225,22 +262,11 @@
                 <div class="step-header">☀️ Sabah Namazının Sünneti (2 Rekat)</div>
                 <p class="translation-text"><strong>1. Rekat:</strong> "Niyet ettim Allah rızası için sabah namazının 2 rekat sünnetini kılmaya" diye niyet edilir. Tekbir alınıp eller bağlanır. Sübhaneke okunur, Euzü-Besmele çekilerek Fatiha ve zamm-ı sure okunur. Rükû ve secdeler yapılarak 2. rekata kalkılır.</p>
                 <p class="translation-text"><strong>2. Rekat:</strong> Besmele çekilip Fatiha ve zamm-ı sure okunur. Rükû ve secdeden sonra oturulur. Sırasıyla şu dualar okunur:</p>
-                
-                <div class="arabic-text">التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ...</div>
-                <div class="pronunciation-text">🔊 Ettehiyyâtü: Et-tahiyyatü lillahi ve's-salavatü ve't-tayyibat...</div>
-                <p class="translation-text">Meal: "Ey yüce Allah'ım! Dil ile, beden ve mal ile yapılan bütün ibadetler sanadır..."</p>
-
-                <div class="arabic-text" style="margin-top:6px;">اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ...</div>
-                <div class="pronunciation-text">🔊 Allâhümme Salli: Allâhümme salli alâ Muhammedin ve alâ âli Muhammed...</div>
-                <p class="translation-text">Meal: "Allah'ım! Hz. Muhammed'e ve ailesine rahmet eyle..."</p>
-
-                <div class="arabic-text" style="margin-top:6px;">اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ...</div>
-                <div class="pronunciation-text">🔊 Allâhümme Bârik: Allâhümme bârik alâ Muhammedin ve alâ âli Muhammed...</div>
-                <p class="translation-text">Meal: "Allah'ım! Hz. Muhammed'e ve ailesine bereket ihsan eyle..."</p>
-
-                <div class="arabic-text" style="margin-top:6px;">رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً...</div>
-                <div class="pronunciation-text">🔊 Rabbenâ Âtinâ: Rabbenâ âtinâ fi'd-dünyâ haseneten ve fi'l-âhirati haseneten ve kı azâbe'n-nâr.</div>
-                <p class="translation-text">Meal: "Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi cehennem azabından koru."</p>
+                ${DUALAR.ettehiyyat}
+                ${DUALAR.salli}
+                ${DUALAR.barik}
+                ${DUALAR.rabbena1}
+                ${DUALAR.rabbena2}
                 <p class="translation-text" style="margin-top:6px;">Önce sağa sonra sola "Esselâmu aleyküm ve rahmetullah" denilerek selam verilir.</p>
             </div>
             <div class="step-item">
@@ -300,7 +326,7 @@
             </div>
             <div class="step-item">
                 <div class="step-header">🌙 Yatsı Namazının Son Sünneti (2 Rekat)</div>
-                <p class="translation-text">"Niyet ettim Allah rızası için yatsı namazının son sünneti kılmaya" denir. Sabah namazının sünneti gibi 2 rekat kılınarak tamamlanır.</p>
+                <p class="translation-text">"Niyet ettim Allah rızası için yatsı namazının son sünnetini kılmaya" denir. Sabah namazının sünneti gibi 2 rekat kılınarak tamamlanır.</p>
             </div>
         `,
         vitir: `
@@ -308,20 +334,14 @@
                 <div class="step-header">⭐ Vitir Namazı (3 Rekat Vacip)</div>
                 <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için vitir namazını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur. Rükû ve secdelerden sonra 2. rekat sonunda oturulur ve <strong>sadece Ettehiyyâtü okunarak</strong> 3. rekata kalkılır.<br><br>
                 <strong>3. Rekat ve Kunut Duaları:</strong> Fatiha ve zamm-ı sure okunduktan sonra rükûa varılmadan eller kulak hizasına kaldırılıp tekbir alınır ve eller bağlanarak sırasıyla <strong>iki Kunut Duası da</strong> okunur:</p>
-
-                <div class="arabic-text">اللَّهُمَّ إِنَّا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ وَنَسْتَهْدِيكَ...</div>
-                <div class="pronunciation-text">🔊 1. Kunut Duası: Allâhümme innâ nesteînük ve nestağfirük ve nestehdîk ve nü'minü bike ve netûbü ileyk ve netavekkelü aleyk ve nusnî aleyke'l-hayra küllehü neşkürük ve lâ nekfürük ve nahleu ve netrukü men yefcürük.</div>
-                <p class="translation-text">Meal: "Allah'ım! Senden yardımlarını dileriz, bağışlanmamızı isteriz, bize doğru yolu göstermeni dileriz. Sana iman ederiz..."</p>
-
-                <div class="arabic-text" style="margin-top:10px;">اللَّهُمَّ إِيَّاكَ نَعْبُدُ وَلَكَ نُصَلِّي وَنَسْجُدُ...</div>
-                <div class="pronunciation-text" style="margin-top:6px;">🔊 2. Kunut Duası: Allâhümme iyyâke na'büdü ve leke nusallî ve nescüd ve ileyke neshâ ve nahfidu nercû rahmâteke ve nahşâ azâbeke inne azâbeke bil-küffâri mülhık.</div>
-                <p class="translation-text" style="margin-top:4px;">Meal: "Allah'ım! Biz yalnız sana kulluk ederiz, namazı yalnız senin için kılarız, secdeyi yalnız sana yaparız..."</p>
+                ${DUALAR.kunut1}
+                ${DUALAR.kunut2}
                 <p class="translation-text" style="margin-top:6px;">Kunut dualarının ardından rükû ve secdeler yapılarak son oturuş gerçekleştirilir, dualar okunup selam verilir.</p>
             </div>
         `
     };
 
-    // Soru Havuzu (30 Adet - Öğle Namazı 10 rekat olarak düzeltildi)
+    // Soru Havuzu (30 soru)
     const quizPool = [
         { q: "Rükûda en az üç defa hangi tesbih zikredilir?", options: ["Sübhâne rabbiye'l-azîm", "Sübhâne rabbiye'l-a'lâ", "Semiallahü limen hamideh", "Ettehiyyâtü lillâhi"], correct: 0 },
         { q: "Secdede en az üç defa hangi tesbih zikredilir?", options: ["Sübhâne rabbiye'l-azîm", "Sübhâne rabbiye'l-a'lâ", "Rabbenâ leke'l-hamd", "Sübhaneke Allâhümme"], correct: 1 },
@@ -329,19 +349,19 @@
         { q: "Öğle namazı toplam kaç rekatdır? (İlk sünnet, farz ve son sünnet dahil)", options: ["8 Rekat", "10 Rekat", "14 Rekat", "12 Rekat"], correct: 1 },
         { q: "İkindi namazı toplam kaç rekatdır?", options: ["10 Rekat", "6 Rekat", "8 Rekat", "4 Rekat"], correct: 2 },
         { q: "Akşam namazı toplam kaç rekatdır?", options: ["5 Rekat", "4 Rekat", "6 Rekat", "3 Rekat"], correct: 0 },
-        { q: "Yatsı namazı farzı ve sünnetleriyle birlikte toplam kaç rekatdır?", options: ["10 Rekat", "12 Rekat", "13 Rekat (Vitir dahil)", "8 Rekat"], correct: 0 },
+        { q: "Yatsı namazı farzı ve sünnetleriyle birlikte (vitir hariç) toplam kaç rekatdır?", options: ["10 Rekat", "12 Rekat", "11 Rekat", "8 Rekat"], correct: 0 },
         { q: "Vitir namazı hükmen nedir?", options: ["Farz", "Vacip", "Sünnet-i müekkede", "Nafile"], correct: 1 },
         { q: "Erkekler tekbir alırken ellerini nereye kadar kaldırır?", options: ["Omuz hizasına", "Göğüs hizasına", "Kulak memesine", "Bel hizasına"], correct: 2 },
         { q: "Kadınlar tekbir alırken ellerini nereye kadar kaldırır?", options: ["Kulak memesine", "Omuz hizasına", "Başın üstüne", "Göbek hizasına"], correct: 1 },
-        { q: "Namazda fatiha suresinden sonra 'amin' denilmesi hangi mezhebe göre sesli söylenmez?", options: ["Şafii", "Hanefi", "Maliki", "Hanbeli"], correct: 1 },
-        { q: "Aşağıdakilerden hangisi namazı bozan durumlardan biri değildir?", options: ["Namazda konuşmak", "Kasten bir şeyler yemek", "Ağlamak", "Namazda gülümsemek (tebessüm etmek)"], correct: 3 },
+        { q: "Namazda Fatiha suresinden sonra 'amin' denilmesi hangi mezhebe göre sesli söylenmez?", options: ["Şafii", "Hanefi", "Maliki", "Hanbeli"], correct: 1 },
+        { q: "Aşağıdakilerden hangisi namazı bozmaz?", options: ["Namazda konuşmak", "Kasten bir şeyler yemek", "Kahkaha ile gülmek", "Tebessüm etmek (sessizce gülümsemek)"], correct: 3 },
         { q: "Sehiv secdesi hangi durumda gerekir?", options: ["Abdestin bozulması", "Vacibin unutularak geciktirilmesi veya terk edilmesi", "Kıblenin şaşırılması", "Niyetin unutulması"], correct: 1 },
         { q: "Günde kılınan farz namazlar toplam kaç vakittir?", options: ["4 vakit", "5 vakit", "6 vakit", "3 vakit"], correct: 1 },
         { q: "Cemaatle kılınan namazlarda imamın arkasından Fatiha suresi okumak hangi mezhepte farz kabul edilmiştir?", options: ["Hanefi", "Şafii", "Hanbeli (Genel yaklaşım)", "Hiçbiri"], correct: 1 },
-        { q: "Sabah namazının sünneti kılınmadan farzı kılınabilir mi?", options: ["Evet, kılınabilir", "Kaza edilir", "Sünneti kılınmadan farza durulmaz, kaza edildikten sonra sünneti kılınır", "Doğrudan farz kılınır"], correct: 2 },
+        { q: "Sabah namazının sünneti kılınmadan farz namaz geçerli olur mu?", options: ["Evet, sünnet farzın şartı değildir", "Hayır, önce sünnet kılınmalıdır", "Ancak cemaatle kılınırsa geçerli olur", "Ancak kaza edilirse geçerli olur"], correct: 0 },
         { q: "Namazda kaade-i ahire (son oturuş) ne kadardır?", options: ["Sübhaneke okuyacak kadar", "Ettehiyyatü okuyacak kadar", "Salli-Barik okuyacak kadar", "Fatiha okuyacak kadar"], correct: 1 },
         { q: "Namazda eller hangi tekbirle bağlanır?", options: ["İftitah (başlangıç) tekbiri", "Teşrik tekbiri", "Kunut tekbiri", "Rükû tekbiri"], correct: 0 },
-        { q: "Aşağıdakilerden hangisi namazın dışındaki şartlardan (şartlarından) biridir?", options: ["Kıyam", "Rükû", "Setr-i avret (avret yerini örtmek)", "Secde"], correct: 2 },
+        { q: "Aşağıdakilerden hangisi namazın dışındaki şartlarından biridir?", options: ["Kıyam", "Rükû", "Setr-i avret (avret yerini örtmek)", "Secde"], correct: 2 },
         { q: "Namazın içindeki rükünlerden (farzlarından) biri hangisidir?", options: ["İstikbal-i kıble", "Vakit", "Niyet", "Kıyam (ayakta durmak)"], correct: 3 },
         { q: "Cuma namazı kimlere farzdır?", options: ["Kadın ve erkek herkese", "Şartları taşıyan mukim erkeklere", "Sadece yolculara", "Çocuklara"], correct: 1 },
         { q: "Yolculuk (seferilik) durumunda 4 rekatlı farz namazlar kaç rekat olarak kılınır?", options: ["2 rekat", "3 rekat", "4 rekat", "1 rekat"], correct: 0 },
@@ -349,10 +369,10 @@
         { q: "Bayram namazları kaç rekat ve ne zaman kılınır?", options: ["2 rekat, bayram sabahı kuşluk vaktinde", "4 rekat, öğle vakti", "2 rekat, gece", "3 rekat, sabah"], correct: 0 },
         { q: "Kunut duaları hangi namazın hangi rekatında okunur?", options: ["Sabah namazı 2. rekatta", "Akşam namazı 3. rekatta", "Vitir namazı 3. rekatında", "Yatsı namazı son rekatında"], correct: 2 },
         { q: "Namazda secdeye giderken önce nereye varılır?", options: ["Önce dizler, sonra eller, sonra alın ve burun", "Önce alın, sonra eller", "Önce eller, sonra dizler", "Doğrudan karın üstü"], correct: 0 },
-        { q: "Ezanı okuyan müezzinin okuduğu ezana icabet eden mümin ne söyler veya ne yapar?", options: ["Sadece susar", "Müezzinin söylediklerini içinden veya alçak sesle aynen tekrarlar (Hayye alesselâh derken la havle...)", "Sadece salavat getirir", "Kelime-i şehadet getirir"], correct: 1 },
+        { q: "Ezanı dinleyen kişi ne yapar?", options: ["Sadece susar", "Müezzinin söylediklerini içinden veya alçak sesle tekrarlar ('Hayye alessalâh' derken 'lâ havle ve lâ kuvvete illâ billâh' der)", "Sadece salavat getirir", "Kelime-i şehadet getirir"], correct: 1 },
         { q: "İftitah tekbiri alırken ellerin durumu erkeklerde nasıldır?", options: ["Parmaklar bitişik ve gergin", "Parmaklar kendi haline serbest ve açık", "Sıkıca yumruk yapılmış", "Parmaklar içe kıvrık"], correct: 1 },
-        { q: "Namazın rükünlerinden olan 'kıyade' veya 'kıyam' ne anlama gelir?", options: ["Oturmak", "Ayakta durmak", "Eğilmek", "Yatmak"], correct: 1 },
-        { q: "Namazda 'Selam' vermek ne anlama gelir?", options: ["Namazın bitiş rüknüdür (tahrimiye veya tahlil)", "Sadece dua etmektir", "Cemaatle vedalaşmaktır", "Namazın sünnetidir"], correct: 0 }
+        { q: "Namazın rükünlerinden olan 'kıyam' ne anlama gelir?", options: ["Oturmak", "Ayakta durmak", "Eğilmek", "Yatmak"], correct: 1 },
+        { q: "Hanefi mezhebine göre namazı selam vererek bitirmenin hükmü nedir?", options: ["Farz", "Vacip", "Sünnet", "Müstehap"], correct: 1 }
     ];
 
     // --- TEMA YÖNETİMİ ---
