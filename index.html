@@ -5,38 +5,54 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="page_title">Namaz Öğretmeni | Ayetin Vakti</title>
-    <meta name="theme-color" content="#10b981">
     
+    <meta name="theme-color" content="#0f172a">
     <script>
-        // Tema ve Dil Kontrolü (Sayfa yüklenmeden önce çalışır, titremeyi önler)
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        if (savedTheme === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-        } else {
-            document.documentElement.removeAttribute('data-theme');
-        }
+        // Tema ve özel renk paleti (titremeyi önlemek için en başta çalışır)
+        (function () {
+            const d = document.documentElement;
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isLight = savedTheme === 'light' || (!savedTheme && !systemPrefersDark);
+            if (isLight) {
+                d.classList.add('light-mode');
+            }
+            const a = localStorage.getItem('custom_accent');
+            const t = localStorage.getItem('custom_text');
+            const b = localStorage.getItem('custom_bg');
+            if (a) d.style.setProperty('--accent-color', a);
+            if (t) d.style.setProperty('--text-color', t);
+            if (b) {
+                d.style.setProperty('--bg-color', b);
+                d.style.setProperty('--card-bg', b);
+            }
+            // Özel arka plan var, yazı rengi seçilmemişse okunabilir renkleri zeminin açıklığına göre seç
+            if (b && !t) {
+                const m = /^#([0-9a-f]{6})$/i.exec(b.trim());
+                if (m) {
+                    const n = parseInt(m[1], 16);
+                    const lin = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+                    const L = 0.2126 * lin(n >> 16) + 0.7152 * lin((n >> 8) & 255) + 0.0722 * lin(n & 255);
+                    const bgIsLight = L > 0.18;
+                    d.style.setProperty('--text-color', bgIsLight ? '#0f172a' : '#f8fafc');
+                    d.style.setProperty('--text-muted', bgIsLight ? '#475569' : '#cbd5e1');
+                    d.style.setProperty('--border-color', bgIsLight ? 'rgba(15,23,42,0.18)' : 'rgba(248,250,252,0.22)');
+                    // Buton zeminleri de zemine göre okunabilir kalsın
+                    d.style.setProperty('--btn-bg', bgIsLight ? 'rgba(15,23,42,0.06)' : 'rgba(248,250,252,0.10)');
+                    d.style.setProperty('--btn-hover', bgIsLight ? 'rgba(15,23,42,0.12)' : 'rgba(248,250,252,0.18)');
+                }
+            }
+            // Safari/Chrome üst-alt çubuğu sayfa zeminine uysun
+            const meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', b || (isLight ? '#f1f5f9' : '#0f172a'));
 
-        const savedAccent = localStorage.getItem('custom_accent');
-        const savedText = localStorage.getItem('custom_text');
-
-        if (savedAccent) document.documentElement.style.setProperty('--accent-color', savedAccent);
-        if (savedText) document.documentElement.style.setProperty('--text-color', savedText);
-
-        // Özel arkaplan sadece koyu modda veya kullanıcı özellikle override etmediyse uygulanır
-        const savedBg = localStorage.getItem('custom_bg');
-        if (savedBg && savedTheme !== 'light') {
-            document.documentElement.style.setProperty('--bg-color', savedBg);
-            document.documentElement.style.setProperty('--card-bg', savedBg);
-        }
-
-        const currentLang = localStorage.getItem('user_lang') || 'tr';
-        if (currentLang === 'ar') {
-            document.documentElement.setAttribute('dir', 'rtl');
-        } else {
-            document.documentElement.setAttribute('dir', 'ltr');
-        }
+            // Dil ve yön
+            const currentLang = localStorage.getItem('user_lang') || 'tr';
+            d.setAttribute('lang', currentLang);
+            d.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+        })();
     </script>
 
     <style>
@@ -51,25 +67,28 @@
             --border-color: #334155;
             --btn-bg: rgba(255, 255, 255, 0.05);
             --btn-hover: rgba(255, 255, 255, 0.1);
-            --active-btn-bg: rgba(16, 185, 129, 0.15);
+            --active-btn-bg: color-mix(in srgb, var(--accent-color) 15%, transparent);
             --shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
             --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color-scheme: dark;
         }
 
-        /* Gündüz Teması (Açık Mode - Kesin Geçiş) */
-        [data-theme="light"] {
-            --bg-color: #f1f5f9 !important;
-            --card-bg: #ffffff !important;
-            --accent-color: #059669 !important;
-            --accent-hover: #047857 !important;
-            --text-color: #0f172a !important;
-            --text-muted: #64748b !important;
-            --border-color: #cbd5e1 !important;
-            --btn-bg: #f8fafc !important;
-            --btn-hover: #e2e8f0 !important;
-            --active-btn-bg: #ecfdf5 !important;
-            --shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+        /* Gündüz Teması (Açık Mod) */
+        html.light-mode {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --accent-color: #059669;
+            --accent-hover: #047857;
+            --text-color: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --btn-bg: #f8fafc;
+            --btn-hover: #e2e8f0;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            color-scheme: light;
         }
+
+        html, body, button, a, select, input, label, [onclick] { touch-action: manipulation; }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { font-family: var(--font-family); background-color: var(--bg-color); color: var(--text-color); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 16px; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
@@ -79,7 +98,9 @@
         [dir="rtl"] .navbar { flex-direction: row-reverse; }
 
         .circle-btn { width: 42px; height: 42px; border-radius: 50%; background: var(--btn-bg); border: 1px solid var(--border-color); color: var(--text-color); display: flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; font-size: 1.2rem; transition: 0.2s; }
-        .circle-btn:hover { border-color: var(--accent-color); color: var(--accent-color); background: var(--btn-hover); }
+        @media (hover: hover) {
+            .circle-btn:hover { border-color: var(--accent-color); color: var(--accent-color); background: var(--btn-hover); }
+        }
         .app-title { font-size: 1.1rem; font-weight: 700; color: var(--accent-color); text-align: center; }
 
         .tabs-container { display: flex; gap: 6px; background: var(--card-bg); padding: 6px; border: 1px solid var(--border-color); border-radius: 16px; overflow-x: auto; box-shadow: var(--shadow); transition: background-color 0.3s ease, border-color 0.3s ease; }
@@ -89,7 +110,9 @@
         .namaz-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         .namaz-select-btn { padding: 12px; background: var(--btn-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 12px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: 0.2s; text-align: left; display: flex; flex-direction: column; gap: 4px; }
         [dir="rtl"] .namaz-select-btn { text-align: right; }
-        .namaz-select-btn:hover { border-color: var(--accent-color); background: var(--btn-hover); }
+        @media (hover: hover) {
+            .namaz-select-btn:hover { border-color: var(--accent-color); background: var(--btn-hover); }
+        }
         .namaz-select-btn.active { border-color: var(--accent-color); background: var(--active-btn-bg); color: var(--accent-color); }
         .namaz-select-btn span { font-size: 0.72rem; color: var(--text-muted); font-weight: normal; }
 
@@ -108,7 +131,9 @@
         .quiz-options { display: flex; flex-direction: column; gap: 8px; }
         .quiz-opt-btn { width: 100%; padding: 10px 12px; font-size: 0.85rem; background: var(--btn-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 8px; cursor: pointer; text-align: left; transition: 0.2s; }
         [dir="rtl"] .quiz-opt-btn { text-align: right; }
-        .quiz-opt-btn:hover { border-color: var(--accent-color); background: var(--btn-hover); }
+        @media (hover: hover) {
+            .quiz-opt-btn:hover { border-color: var(--accent-color); background: var(--btn-hover); }
+        }
         .quiz-result { font-size: 0.88rem; font-weight: 600; margin-top: 6px; }
         .next-quiz-btn { margin-top: 10px; padding: 10px 16px; background: var(--accent-color); color: #fff; border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; width: fit-content; box-shadow: var(--shadow); }
 
@@ -376,28 +401,21 @@
     ];
 
     // --- TEMA YÖNETİMİ ---
-    function initTheme() {
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        applyTheme(savedTheme);
-    }
-
-    function toggleTheme() {
-        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-        const newTheme = isLight ? 'dark' : 'light';
-        applyTheme(newTheme);
-    }
-
-    function applyTheme(theme) {
+    function updateThemeButton() {
         const btn = document.getElementById('theme-btn');
-        if (theme === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            if (btn) btn.innerHTML = '🌙'; 
-            localStorage.setItem('theme', 'light');
-        } else {
-            document.documentElement.removeAttribute('data-theme');
-            if (btn) btn.innerHTML = '☀️'; 
-            localStorage.setItem('theme', 'dark');
-        }
+        if (btn) btn.textContent = document.documentElement.classList.contains('light-mode') ? '☀️' : '🌙';
+    }
+    function updateThemeColor() {
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (!meta) return;
+        const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg-color').trim();
+        if (bg) meta.setAttribute('content', bg);
+    }
+    function toggleTheme() {
+        const isLight = document.documentElement.classList.toggle('light-mode');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        updateThemeButton();
+        updateThemeColor();
     }
 
     function selectNamaz(type, btn) {
@@ -450,7 +468,8 @@
 
     // Başlangıç Kurulumu
     window.onload = () => {
-        initTheme();
+        updateThemeButton();
+        updateThemeColor();
         selectNamaz('sabah', document.querySelector('.namaz-select-btn'));
 
         // Dil entegrasyonu
