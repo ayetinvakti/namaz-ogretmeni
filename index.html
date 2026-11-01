@@ -145,6 +145,20 @@
 
         .footer { margin: 20px 0; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
         .footer span { color: var(--accent-color); font-weight: 600; }
+
+        .gender-row { display: flex; gap: 8px; }
+        .g-btn { flex: 1; padding: 10px; background: var(--btn-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 12px; font-weight: 600; cursor: pointer; }
+        .g-btn.active { border-color: var(--accent-color); background: var(--active-btn-bg); color: var(--accent-color); }
+        .stage { background: var(--btn-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 6px; }
+        .stage svg { width: 100%; height: auto; display: block; }
+        .t-say { font-weight: 700; color: var(--accent-color); line-height: 1.5; font-size: 0.95rem; }
+        .t-ctrl { display: flex; gap: 8px; }
+        .t-ctrl button { flex: 1; padding: 11px 6px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--text-color); font-weight: 600; cursor: pointer; }
+        .t-ctrl button.main { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
+        .t-dots { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; }
+        .t-dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--border-color); }
+        .t-dots i.on { background: var(--accent-color); }
+        .fig-m { --c: #2563eb; } .fig-f { --c: #a21caf; }
     </style>
 </head>
 <body>
@@ -160,6 +174,9 @@
         <button class="tab-btn active" onclick="switchTab('steps', this)" data-i18n="tab_steps">📖 Adım Adım Namaz</button>
         <button class="tab-btn" onclick="switchTab('diffs', this)" data-i18n="tab_diffs">⚖️ Kadın/Erkek Farkı</button>
         <button class="tab-btn" onclick="switchTab('quiz', this)" data-i18n="tab_quiz">🎯 Dini Sınav</button>
+        <button class="tab-btn" onclick="switchTab('teacher', this)">🎬 Canlı Öğretmen</button>
+        <button class="tab-btn" onclick="switchTab('oku', this)">📚 Okunacaklar</button>
+        <button class="tab-btn" onclick="switchTab('diger', this)">🕌 Diğer Namazlar</button>
     </div>
 
     <!-- 1. SEKME: DETAYLI NAMAZ REHBERİ -->
@@ -211,6 +228,40 @@
         </div>
         <button class="next-quiz-btn" onclick="loadRandomQuiz()" data-i18n="btn_next_quiz">🔄 Başka Soru Getir</button>
     </div>
+    <div id="tab-oku" class="content-card" style="display: none;"></div>
+    <div id="tab-diger" class="content-card" style="display: none;"></div>
+    <!-- 4. SEKME: CANLI ÖĞRETMEN -->
+    <div id="tab-teacher" class="content-card" style="display: none;">
+        <div class="card-title">🎬 Canlı Namaz Öğretmeni (2 rekâtlık örnek)</div>
+        <div class="gender-row">
+            <button class="g-btn active" id="g-m" onclick="setGender('m')">👨 Erkek</button>
+            <button class="g-btn" id="g-f" onclick="setGender('f')">🧕 Kadın</button>
+        </div>
+        <div class="stage" style="padding:0;overflow:hidden;">
+            <canvas id="t3d" style="width:100%;height:340px;display:block;touch-action:none;cursor:grab;" aria-label="3B namaz figürü"></canvas>
+        </div>
+        <div class="gender-row">
+            <button class="g-btn" onclick="setView(0)">Yan</button>
+            <button class="g-btn active" id="v-34" onclick="setView(-0.6)">3/4</button>
+            <button class="g-btn" onclick="setView(-1.5708)">Ön</button>
+            <button class="g-btn" onclick="setView(1.5708)">Arka</button>
+            <button class="g-btn" id="v-auto" onclick="toggleAuto()">⟳</button>
+        </div>
+        <p class="translation-text" style="margin:0;text-align:center;">Figürü parmakla sürükleyerek her açıdan döndürebilirsin.</p>
+        <div class="step-item" style="margin:0">
+            <div class="step-header" id="t-title"></div>
+            <div class="t-say" id="t-say"></div>
+            <p class="translation-text" id="t-note"></p>
+            <p class="translation-text" id="t-gnote" style="font-style:normal;color:var(--text-color)"></p>
+        </div>
+        <div class="t-dots" id="t-dots"></div>
+        <div class="t-ctrl">
+            <button onclick="tStep(-1)">⏮ Geri</button>
+            <button class="main" id="t-play" onclick="tTogglePlay()">▶ Oynat</button>
+            <button onclick="tStep(1)">İleri ⏭</button>
+        </div>
+        <p class="translation-text">Çizim şematiktir; ayrıntılar yazıdadır. Anlatım Diyanet İşleri Başkanlığı'nın namaz kılınışı anlatımına ve Hanefî ilmihaline dayanır. Sübhâneke, Fâtiha, sûre ve dua metinleri "Okunacaklar" sekmesindedir.</p>
+    </div>
 </div>
 
 <div class="footer">© Ayetin Vakti • <span data-i18n="footer_text">Huzur ve İbadet Rehberliğiniz</span></div>
@@ -226,14 +277,6 @@
             tab_quiz: "🎯 Dini Sınav",
             card_steps_title: "📖 Detaylı Namaz Kılınış Rehberi",
             card_diffs_title: "⚖️ Namazda Erkek ve Kadın Arasındaki Fıkhi Farklar",
-            diff_1_title: "1. İftitah Tekbiri Alırken Eller",
-            diff_1_desc: "<strong>Erkekler:</strong> Eller kulak memesine kadar kaldırılır, baş parmaklar kulak memesine yumuşakça değdirilir, parmak araları kendi haline bırakılır.<br><strong>Kadınlar:</strong> Eller omuz hizasına kadar kaldırılır, parmaklar kıbleye yönelik ve normal açıklıkta tutulur.",
-            diff_2_title: "2. Elleri Bağlama (Kıyam Hali)",
-            diff_2_desc: "<strong>Erkekler:</strong> Sağ elin avucu sol elin üzerine konulur; sağ elin baş ve küçük parmağı sol bileği halka şeklinde kavrar ve eller göbek altında bağlanır.<br><strong>Kadınlar:</strong> Sağ el sol elin üzerine konulur ancak bilekleri kavramadan doğrudan göğsün üzerine konulur.",
-            diff_3_title: "3. Rükû Hali",
-            diff_3_desc: "<strong>Erkekler:</strong> Sırt, baş ile aynı hizada olacak şekilde dosdoğru (masa gibi) tutulur. Dizler dik tutulur, parmaklar açık bir şekilde diz kapakları kavranır.<br><strong>Kadınlar:</strong> Sırt o kadar çok düzleştirilmez, hafifçe salınık tutulur. Dizler tamamen dik tutulmayıp hafifçe bükülü bırakılır.",
-            diff_4_title: "4. Secde ve Oturuş Hali",
-            diff_4_desc: "<strong>Erkekler:</strong> Secdede dirsekler yerden kaldırılır ve yan kaburgalardan uzak tutulur. Oturuşte sol ayak üzerine oturulur.<br><strong>Kadınlar:</strong> Secdede kollar ve dirsekler tamamen yere ve yanlara bitişik tutulur. Oturuşte her iki ayak da sağ tarafa çıkarılır.",
             card_quiz_title: "🎯 Dini Sınav",
             btn_next_quiz: "🔄 Başka Soru Getir",
             footer_text: "Huzur ve İbadet Rehberliğiniz"
@@ -246,39 +289,127 @@
     // Ortak dua bloğu: Arapça + okunuş + meal (tekrar eden metinler tek yerde durur)
     const duaBlok = (ad, ar, okunus, meal, ilk) => `
                 <div class="arabic-text"${ilk ? '' : ' style="margin-top:6px;"'}>${ar}</div>
-                <div class="pronunciation-text"${ilk ? '' : ' style="margin-top:6px;"'}>🔊 ${ad}: ${okunus}</div>
+                <div class="pronunciation-text"${ilk ? '' : ' style="margin-top:6px;"'}>📖 ${ad}: ${okunus}</div>
                 <p class="translation-text">Meal: "${meal}"</p>`;
 
     const DUALAR = {
-        ettehiyyat: duaBlok('Ettehiyyâtü',
-            'التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ',
-            'Ettehiyyâtü lillâhi ves-salavâtü vet-tayyibât. Es-selâmü aleyke eyyühen-nebiyyü ve rahmetullâhi ve berekâtüh. Es-selâmü aleynâ ve alâ ibâdillâhis-sâlihîn. Eşhedü en lâ ilâhe illallâh ve eşhedü enne Muhammeden abdühû ve resûlüh.',
-            'Dil ile, beden ve mal ile yapılan bütün ibadetler Allah\'a mahsustur. Ey Peygamber! Allah\'ın selamı, rahmeti ve bereketi senin üzerine olsun. Selam bizim üzerimize ve Allah\'ın salih kulları üzerine olsun. Şahitlik ederim ki Allah\'tan başka ilah yoktur ve yine şahitlik ederim ki Muhammed O\'nun kulu ve elçisidir.', true),
-        salli: duaBlok('Allâhümme Salli',
-            'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ',
-            'Allâhümme salli alâ Muhammedin ve alâ âli Muhammed, kemâ sallayte alâ İbrâhîme ve alâ âli İbrâhîm, inneke hamîdün mecîd.',
-            'Allah\'ım! Hz. İbrahim\'e ve ailesine rahmet ettiğin gibi Hz. Muhammed\'e ve ailesine de rahmet eyle. Şüphesiz sen övülmeye layıksın, şanı yücesin.'),
-        barik: duaBlok('Allâhümme Bârik',
-            'اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ',
-            'Allâhümme bârik alâ Muhammedin ve alâ âli Muhammed, kemâ bârekte alâ İbrâhîme ve alâ âli İbrâhîm, inneke hamîdün mecîd.',
-            'Allah\'ım! Hz. İbrahim\'e ve ailesine bereket verdiğin gibi Hz. Muhammed\'e ve ailesine de bereket ver. Şüphesiz sen övülmeye layıksın, şanı yücesin.'),
-        rabbena1: duaBlok('Rabbenâ Âtinâ',
-            'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ',
-            'Rabbenâ âtinâ fid-dünyâ haseneten ve fîl-âhirati haseneten ve kınâ azâben-nâr.',
-            'Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi ateşin azabından koru.'),
-        rabbena2: duaBlok('Rabbenağfirlî',
-            'رَبَّنَا اغْفِرْ لِي وَلِوَالِدَيَّ وَلِلْمُؤْمِنِينَ يَوْمَ يَقُومُ الْحِسَابُ',
-            'Rabbenağfirlî ve li-vâlideyye ve lil-mü\'minîne yevme yekûmül-hisâb.',
-            'Rabbimiz! Hesabın görüleceği gün beni, annemi babamı ve bütün müminleri bağışla.'),
-        kunut1: duaBlok('1. Kunut Duası',
-            'اللَّهُمَّ إِنَّا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ وَنَسْتَهْدِيكَ وَنُؤْمِنُ بِكَ وَنَتُوبُ إِلَيْكَ وَنَتَوَكَّلُ عَلَيْكَ وَنُثْنِي عَلَيْكَ الْخَيْرَ كُلَّهُ نَشْكُرُكَ وَلَا نَكْفُرُكَ وَنَخْلَعُ وَنَتْرُكُ مَنْ يَفْجُرُكَ',
-            'Allâhümme innâ nesteînüke ve nestağfirük ve nestehdîk ve nü\'minü bike ve netûbü ileyk ve netevekkelü aleyk ve nüsnî aleykel-hayra küllehû neşkürüke ve lâ nekfürük ve nahlau ve netrukü men yefcürük.',
-            'Allah\'ım! Senden yardım dileriz, günahlarımızı bağışlamanı isteriz ve doğru yolu göstermeni dileriz. Sana inanırız, sana tövbe ederiz, sana güveniriz. Bütün hayırları sana yakıştırarak seni överiz. Sana şükrederiz, nankörlük etmeyiz. Sana isyan edenlerden uzaklaşır ve onları terk ederiz.', true),
-        kunut2: duaBlok('2. Kunut Duası',
-            'اللَّهُمَّ إِيَّاكَ نَعْبُدُ وَلَكَ نُصَلِّي وَنَسْجُدُ وَإِلَيْكَ نَسْعَى وَنَحْفِدُ نَرْجُو رَحْمَتَكَ وَنَخْشَى عَذَابَكَ إِنَّ عَذَابَكَ بِالْكُفَّارِ مُلْحِقٌ',
-            'Allâhümme iyyâke na\'büdü ve leke nusallî ve nescüd ve ileyke nes\'â ve nahfid, nercû rahmeteke ve nahşâ azâbeke, inne azâbeke bil-küffâri mülhık.',
-            'Allah\'ım! Yalnız sana ibadet ederiz, yalnız senin için namaz kılar ve secde ederiz. Sana koşar ve sana yönelir, hizmetinde bulunuruz. Rahmetini umar, azabından korkarız. Şüphesiz senin azabın kâfirlere ulaşacaktır.')
+        subhaneke: duaBlok(`Sübhâneke`,
+            `سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ وَلَا إِلَهَ غَيْرُكَ`,
+            `Sübhânekellâhümme ve bi hamdik ve tebârekesmük ve teâlâ ceddük ve lâ ilâhe ğayrük.`,
+            `Allah'ım! Sen eksik sıfatlardan pak ve uzaksın. Seni daima böyle tenzih eder ve överim. Senin adın mübarektir. Varlığın her şeyden üstündür, şanın yücedir. Senden başka tanrı yoktur.`, true),
+        fatiha: duaBlok(`Fâtiha Sûresi`,
+            `بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ الرَّحْمَٰنِ الرَّحِيمِ مَالِكِ يَوْمِ الدِّينِ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ`,
+            `Bismillâhirrahmânirrahîm. Elhamdü lillâhi rabbil'alemin. Errahmânir'rahim. Mâliki yevmiddin. İyyâke na'budü ve iyyâke neste'în. İhdinessırâtel müstakîm. Sırâtellezine en'amte aleyhim ğayrilmağdûbi aleyhim ve leddâllîn.`,
+            `Rahmân ve rahîm olan Allah'ın adıyla. Hamd (övme ve övülme), âlemlerin Rabbi Allah'a mahsustur. O, rahmândır ve rahîmdir. Ceza gününün mâlikidir. (Rabbimiz!) Ancak sana kulluk ederiz ve yalnız senden medet umarız. Bize doğru yolu göster. Kendilerine lütuf ve ikramda bulunduğun kimselerin yolunu; gazaba uğramışların ve sapmışların yolunu değil! Âmin.`, true),
+        ihlas: duaBlok(`İhlâs Sûresi (zamm-ı sûre örneği)`,
+            `قُلْ هُوَ اللَّهُ أَحَدٌ اللَّهُ الصَّمَدُ لَمْ يَلِدْ وَلَمْ يُولَدْ وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ`,
+            `Kul hüvellâhü ehad. Allâhüssamed. Lem yelid ve lem yûled. Ve lem yekün lehû küfüven ehad.`,
+            `De ki: O Allah birdir. Allah samed (her şey O'na muhtaç, O kimseye muhtaç değil)'dir. O doğurmamıştır ve doğurulmamıştır. Ve hiçbir şey O'nun dengi değildir.`, true),
+        ettehiyyat: duaBlok(`Ettehiyyâtü`,
+            `التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ`,
+            `Ettehıyyâtü lillâhi ve's-salevâtü ve't-tayyibâtü esselâmü aleyke eyyühennebiyyü ve rahmetüllâhi ve berakâtühû esselâmü aleynâ ve alâ ibâdi'l-lâhi's-sâlihîn. Eşhedü en lâ ilâhe illallâhü ve eşhedü enne Muhammeden abdühû ve rasûlüh.`,
+            `Her türlü kavlî, bedenî ve mâlî ibâdetler Allâh'a mahsustur. Ey Peygamber, selâm ve Allah'ın rahmetiyle bereketleri senin üzerine olsun ve selâm bizlere ve Allâh'ın sâlih kullarına olsun. Ben şehâdet ederim (yakînen bilirim) ki, Allâh'tan başka hiçbir ilâh yoktur. Ve şehâdet ederim ki Hazret-i Muhammed Allah'ın kulu ve Resûlüdür.`, true),
+        salli: duaBlok(`Allâhümme Salli`,
+            `اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ`,
+            `Allâhümme salli alâ Muhammedin ve alâ âli Muhammed. Kemâ salleyte alâ İbrahîme ve alâ âli İbrahîm. İnneke hamîdün mecîd.`,
+            `Allah'ım! Muhammed'e ve Muhammed'in ümmetine rahmet eyle; şerefini yücelt. İbrahim'e ve İbrahim'in ümmetine rahmet ettiğin gibi. Şüphesiz övülmeye lâyık yalnız sensin, şan ve şeref sahibi de sensin.`),
+        barik: duaBlok(`Allâhümme Bârik`,
+            `اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ`,
+            `Allâhümme bârik alâ Muhammedin ve alâ âli Muhammed. Kemâ bârekte alâ İbrahîme ve alâ âli İbrahîm. İnneke hamîdün mecîd.`,
+            `Allah'ım! Muhammed'e ve Muhammed'in ümmetine hayır ve bereket ver. İbrahim'e ve İbrahim'in ümmetine verdiğin gibi. Şüphesiz övülmeye lâyık yalnız sensin, şan ve şeref sahibi de sensin.`),
+        rabbena1: duaBlok(`Rabbenâ Âtinâ`,
+            `رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ`,
+            `Rabbenâ âtinâ fid-dünyâ haseneten ve fi'l-âhirati haseneten ve kınâ azâbe'n-nâr.`,
+            `Allah'ım! Bize dünyada iyilik ve güzellik, ahirette de iyilik, güzellik ver. Bizi ateş azabından koru.`),
+        rabbena2: duaBlok(`Rabbenağfirlî`,
+            `رَبَّنَا اغْفِرْ لِي وَلِوَالِدَيَّ وَلِلْمُؤْمِنِينَ يَوْمَ يَقُومُ الْحِسَابُ`,
+            `Rabbenağfirlî ve li vâlideyye ve lil-mü'minîne yevme yekûmü'l-hısâb.`,
+            `Ey Rabbimiz! Herkesin hesaba çekileceği günde beni, ana-babamı ve müminleri bağışla!`),
+        kunut1: duaBlok(`1. Kunut Duası`,
+            `اللَّهُمَّ إِنَّا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ وَنَسْتَهْدِيكَ وَنُؤْمِنُ بِكَ وَنَتُوبُ إِلَيْكَ وَنَتَوَكَّلُ عَلَيْكَ وَنُثْنِي عَلَيْكَ الْخَيْرَ كُلَّهُ نَشْكُرُكَ وَلَا نَكْفُرُكَ وَنَخْلَعُ وَنَتْرُكُ مَنْ يَفْجُرُكَ`,
+            `Allâhümme innâ neste'înüke ve nestağfirüke ve nestehdîke ve nü'minü bike ve netûbü ileyke ve netevekkelü aleyke ve nüsnî aleyke'l-hayra küllehû neşküruke ve lâ nekfüruke ve nahleu ve netrukü men yefcürük.`,
+            `Allah'ım! Senden yardım isteriz, günahlarımızı bağışlamanı isteriz, razı olduğun şeylere hidayet etmeni isteriz. Sana inanırız, sana tevbe ederiz. Sana güveniriz. Bize verdiğin bütün nimetleri bilerek seni hayır ile överiz. Sana şükrederiz. Hiçbir nimetini inkâr etmez ve onları başkasından bilmeyiz. Nimetlerini inkâr eden ve sana karşı geleni bırakırız.`, true),
+        kunut2: duaBlok(`2. Kunut Duası`,
+            `اللَّهُمَّ إِيَّاكَ نَعْبُدُ وَلَكَ نُصَلِّي وَنَسْجُدُ وَإِلَيْكَ نَسْعَى وَنَحْفِدُ نَرْجُو رَحْمَتَكَ وَنَخْشَى عَذَابَكَ إِنَّ عَذَابَكَ بِالْكُفَّارِ مُلْحِقٌ`,
+            `Allâhümme iyyâke na'büdü ve leke nüsallî ve nescüdü ve ileyke nes'â ve nahfidü nercû rahmeteke ve nahşâ azâbeke inne azâbeke bi'l-küffâri mülhık.`,
+            `Allah'ım! Biz yalnız sana kulluk ederiz. Namazı yalnız senin için kılarız, ancak sana secde ederiz. Yalnız sana koşar ve sana yaklaştıracak şeyleri kazanmaya çalışırız. İbadetlerini sevinçle yaparız. Rahmetinin devamını ve çoğalmasını dileriz. Azabından korkarız, şüphesiz senin azabın kâfirlere ve inançsızlara ulaşır.`)
     };
+
+
+    const SURELER = [
+      [`Fil Sûresi`,`اَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِاَصْحَابِ الْف۪يلِۜ اَلَمْ يَجْعَلْ كَيْدَهُمْ ف۪ي تَضْل۪يلٍۙ وَاَرْسَلَ عَلَيْهِمْ طَيْراً اَبَاب۪يلَۙ تَرْم۪يهِمْ بِحِجَارَةٍ مِنْ سِجّ۪يلٍۖۙ فَجَعَلَهُمْ كَعَصْفٍ مَأْكُولٍ`,`Elem tera keyfe fe'ale rabbüke biashâbilfîl. Elem yec'al keydehüm fî tadlîl. Ve ersele aleyhim tayran ebâbîl. Termîhim bihicâratin min siccîl. Fece'alehüm ke'asfin me'kûl.`,`Görmedin mi Rabbin ne yaptı fil sahiplerine! Onların tuzaklarını boşa çıkarmadı mı? Üzerlerine sürü sürü kuşlar saldı. Onlara balçıktan pişirilmiş sert taşlar atıyorlardı. Derken onları, yenilmiş ekin yaprağı gibi kılıverdi.`],
+      [`Kureyş Sûresi`,`لِا۪يلَافِ قُرَيْشٍۙ ا۪يلَافِهِمْ رِحْلَةَ الشِّتَٓاءِ وَالصَّيْفِۚ فَلْيَعْبُدُوا رَبَّ هٰذَا الْبَيْتِۙ اَلَّذ۪ٓي اَطْعَمَهُمْ مِنْ جُوعٍ وَاٰمَنَهُمْ مِنْ خَوْفٍ`,`Li'î lâfi Kurayş'in. Îlâfihim rihleteşşitâi vessayf. Felya'büdû rabbe hâzelbeyt. Ellezî et'amehüm min cû'in ve âmenehüm min havf.`,`Kureyş'e imkan sağlandığı için, kışın ve yazın yolculuk etme imkanı sağlandığı için, hiç olmazsa onun için bu Beyt'in (Kabe'nin) Rabbine kulluk etsinler! Ki kendilerini açlıktan doyurdu ve onları korkudan emin kıldı.`],
+      [`Mâûn Sûresi`,`اَرَاَيْتَ الَّذ۪ي يُكَذِّبُ بِالدّ۪ينِۜ فَذٰلِكَ الَّذ۪ي يَدُعُّ الْيَت۪يمَۙ وَلَا يَحُضُّ عَلٰى طَعَامِ الْمِسْك۪ينِۜ فَوَيْلٌ لِلْمُصَلّ۪ينَۙ اَلَّذ۪ينَ هُمْ عَنْ صَلَاتِهِمْ سَاهُونَۙ اَلَّذ۪ينَ هُمْ يُرَٓاؤُ۫نَۙ وَيَمْنَعُونَ الْمَاعُونَ`,`Era'eytellezî yükezzibü biddîn. Fezâlikellezî, yedu'ulyetîm. Velâ yehüddü alâ ta'âmilmiskîn. Feveylün lilmüsallîn. Ellezîne hüman salâtihim sâhûn. Ellezîne hüm yürâûne. Ve yemne'ûnelmâ'ûn.`,`Gördün mü o dine yalan diyeni? İşte yetimi itip kakan odur! Yoksulu doyurmaya teşvik etmez. Fakat veyl o namaz kılanlara ki, namazlarında yanılmaktadırlar. Onlar ki, gösteriş yaparlar. Ve yardımlığı sakınırlar (zekatı vermezler).`],
+      [`Kevser Sûresi`,`اِنَّٓا اَعْطَيْنَاكَ الْـكَوْثَرَۜ فَصَلِّ لِرَبِّكَ وَانْحَرْۜ اِنَّ شَانِئَكَ هُوَ الْاَبْتَرُ`,`İnnâ a'taynâkel kevser. Fesalli lirabbike venhar. İnne şânieke hüvel'ebter.`,`Şüphesiz biz sana bitip tükenmez nimetler verdik. Şimdi sen rabbin için namaz kıl ve kurban kes! Asıl soyu gelmeyecek olan, sana karşı nefret duyandır.`],
+      [`Kâfirûn Sûresi`,`قُلْ يَٓا اَيُّهَا الْـكَافِرُونَۙ لَٓا اَعْبُدُ مَا تَعْبُدُونَۙ وَلَٓا اَنْتُمْ عَابِدُونَ مَٓا اَعْبُدُۚ وَلَٓا اَنَا۬ عَابِدٌ مَا عَبَدْتُمْۙ وَلَٓا اَنْتُمْ عَابِدُونَ مَٓا اَعْبُدُۜ لَـكُمْ د۪ينُكُمْ وَلِيَ د۪ينِ`,`Kul yâ eyyühel kâfirûn. Lâ a'büdü mâ ta'büdûn. Ve lâ entüm âbidûne mâ a'büd. Ve lâ ene âbidün mâ abedtüm. Ve lâ entüm âbidûne mâ a'büd. Leküm dînüküm veliye dîn.`,`De ki: Ey kâfirler! Ben sizin kulluk ettiklerinize kulluk etmem. Siz de benim kulluk ettiğime kulluk edecek değilsiniz. Ben sizin kulluk ettiklerinize kulluk edecek değilim. Siz de benim kulluk ettiğime kulluk edecek değilsiniz. Sizin dininiz size, benim dinim de banadır.`],
+      [`Nasr Sûresi`,`اِذَا جَٓاءَ نَصْرُ اللّٰهِ وَالْفَتْحُۙ وَرَاَيْتَ النَّاسَ يَدْخُلُونَ ف۪ي د۪ينِ اللّٰهِ اَفْوَاجاًۙ فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُۜ اِنَّهُ كَانَ تَوَّاباً`,`İzâ câe nasrullahi velfeth. Ve raeytennâse yedhulûne fî dinillâhi efvâcâ. Fesebbih bihamdi rabbike vestağfirh, İnnehû kâne tevvâbâ.`,`Allah'ın yardımı ve fetih geldiğinde, insanları bölük bölük Allah'ın dinine girerlerken gördüğünde, artık Rabbini hamd ile tesbih et ve bağışlamasını dile! Muhakkak ki O, çok bağışlayandır!`],
+      [`Tebbet Sûresi`,`تَبَّتْ يَدَٓا اَب۪ي لَهَبٍ وَتَبَّۜ مَٓا اَغْنٰى عَنْهُ مَالُهُ وَمَا كَسَبَۜ سَيَصْلٰى نَاراً ذَاتَ لَهَبٍۚ وَامْرَاَتُهُۜ حَمَّالَةَ الْحَطَبِۚ ف۪ي ج۪يدِهَا حَبْلٌ مِنْ مَسَدٍ`,`Tebbet yedâ ebî lehebin ve tebb. Mâ eğnâ anhü mâlühû ve mâ keseb. Seyeslâ nâren zâte leheb. Vemraetühû hammâletelhatab. Fî cîdihâ hablün min mesed.`,`Ebu Leheb'in iki eline yuh oldu, kendine de yuh. Ona ne malı fayda verdi, ne de kazandığı. O, bir alevli ateşe yaslanacak. Karısı da odun hamalı olacak! Gerdanında fitillisinden bir ip olduğu halde.`],
+      [`Felak Sûresi`,`قُلْ اَعُوذُ بِرَبِّ الْفَلَقِۙ مِنْ شَرِّ مَا خَلَقَۙ وَمِنْ شَرِّ غَاسِقٍ اِذَا وَقَبَۙ وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِۙ وَمِنْ شَرِّ حَاسِدٍ اِذَا حَسَدَ`,`Kul e'ûzü birabbil felak. Min şerri mâ halak. Ve min şerri ğasikın izâ vekab. Ve min şerrinneffâsâti fil'ukad. Ve min şerri hâsidin izâ hased.`,`De ki: Sığınırım o sabahın Rabbine, yarattığı şeylerin şerrinden, karanlığı çöküp bastırdığında bir gecenin şerrinden, o düğümlere üfleyen üfürükçülerin şerrinden ve kıskançlık gösterdiğinde bir kıskancın şerrinden!`],
+      [`Nâs Sûresi`,`قُلْ اَعُوذُ بِرَبِّ النَّاسِۙ مَلِكِ النَّاسِۙ اِلٰهِ النَّاسِۙ مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِۙ اَلَّذ۪ي يُوَسْوِسُ ف۪ي صُدُورِ النَّاسِۙ مِنَ الْجِنَّةِ وَالنَّاسِ`,`Kul e'ûzü birabbinnâs. Melikinnâs. İlâhinnâs. Min şerrilvesvâsilhannâs. Ellezî yüvesvisü fî sudûrinnâsi. Minelcinneti vennâs.`,`De ki: Sığınırım ben insanların Rabbine, insanların hükümdârına, insanların ilâhına, o sinsi vesvesecinin şerrinden. O ki, insanların göğüslerine vesveseler fısıldar. Gerek cinlerden, gerek insanlardan.`]
+    ];
+    const surelerHtml = SURELER.map(x => `<details style="margin-top:6px;"><summary style="cursor:pointer;font-weight:600;">${x[0]}</summary>${duaBlok(x[0], x[1], x[2], x[3], true)}</details>`).join('');
+    const kursiHtml = duaBlok(`Âyetü'l-Kürsî`,
+        `اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ`,
+        `Allahü lâ ilâhe illâ hüvel hayyül kayyûm. Lâ te'huzühû sinetüv ve lâ nevm. Lehû mâ fîs-semâvâti ve mâ fîl-ard. Men zellezî yeşfeu indehû illâ bi iznih. Ya'lemü mâ beyne eydîhim ve mâ halfehüm. Ve lâ yühîtûne bi şey'im min ilmihî illâ bi mâ şâ'. Vesia kürsiyyühüs-semâvâti vel-ard. Ve lâ yeûdühû hıfzuhümâ. Ve hüvel aliyyül azîm.`,
+        `Allah, O'ndan başka tanrı yoktur; diridir, her şeyin varlığı O'na bağlı ve dayalıdır. Ne uykusu gelir ne de uyur. Göklerde ve yerde ne varsa hepsi O'nundur. O'nun izni olmadıkça katında hiçbir kimse şefaat edemez. Onların önlerinde ve arkalarında olanları O bilir. O'nun ilminden hiçbir şeyi -dilediği müstesna- kimse bilgisi içine sığdıramaz. O'nun kürsüsü gökleri ve yeri içine almıştır. Onları korumak kendisine zor gelmez. O yücedir, mutlak büyüktür.`, true);
+
+    // --- OKUNACAKLAR SEKMESİ (kaynaklı metinler) ---
+    const okuHtml = `
+        <div class="card-title">📚 Okunacaklar ve Hazırlık</div>
+        <p class="translation-text">Dualar ve okunuşlar Diyanet İşleri Başkanlığı'nın namaz anlatımına uygundur. Arapça metinler hadis ve Kur'ân kaynaklarıyla karşılaştırılmıştır. Fâtiha, İhlâs, Kevser ve Âyetü'l-Kürsî mealleri Diyanet mealidir; diğer sûrelerin anlamları kaynaklardan aktarılmıştır.</p>
+        <div class="step-item"><div class="step-header">🚿 Abdest (Hanefî)</div>
+            <p class="translation-text"><strong>Farzları (4):</strong> Yüzü yıkamak; kolları dirseklerle birlikte yıkamak; başın dörtte birini mesh etmek; ayakları topuklarla birlikte yıkamak.<br><br>
+            <strong>Alınış sırası:</strong> 1) Niyet ve besmele 2) Eller yıkanır 3) Ağız çalkalanır 4) Burun temizlenir 5) Yüz yıkanır (saç bitiminden çene altına, kulaklar arasında) 6) Sağ, sonra sol kol dirsekle birlikte yıkanır 7) Baş mesh edilir 8) Kulaklar silinir 9) Boyun mesh edilir 10) Önce sağ, sonra sol ayak topuklarla birlikte yıkanır.<br><br>
+            Yüz, kollar ve ayaklar üçer kez yıkanır. Kadın ve erkeğin abdest alışı aynıdır.<br><br>
+            <strong>Abdestin sünnetleri (Diyanet İlmihali):</strong> Niyet etmek; Eûzü-Besmele ile başlamak; önce elleri bileklere kadar yıkamak; dişleri misvak, fırça ya da parmakla temizlemek; ağza ve burna üçer defa su vermek; organları peş peşe, kurumadan yıkamak; yıkanan organları ovmak; sıraya (yüz, kollar, baş, ayaklar) uymak; her organı üç kere yıkamak; çift organlarda sağdan başlamak; elleri ve ayakları parmak uçlarından yıkamaya başlamak ve parmakları aralamak; kulakları ve boynu mesh etmek. Mesh edilen organlar birden fazla mesh edilmez; boyun mesh edilirken boğaz mesh edilmez.</p></div>
+        <div class="step-item"><div class="step-header">📣 Kamet (farz namazlardan önce)</div>
+            <p class="translation-text">Ayakta ve kıbleye karşı getirilir; erkekler için sünnettir, kadınlar için gerekli değildir. Kamet ezan gibidir; farkı, “Hayye ale'l-felâh”tan sonra iki defa “Kad kâmeti's-salâh” denmesidir.</p>
+            ${duaBlok(`Kamet`,
+              `اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ حَيَّ عَلَى الصَّلَاةِ حَيَّ عَلَى الصَّلَاةِ حَيَّ عَلَى الْفَلَاحِ حَيَّ عَلَى الْفَلَاحِ قَدْ قَامَتِ الصَّلَاةُ قَدْ قَامَتِ الصَّلَاةُ اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ لَا إِلَهَ إِلَّا اللَّهُ`,
+              `Allâhü Ekber (4 kere). Eşhedü en lâ ilâhe illallâh (2). Eşhedü enne Muhammeden Resûlullâh (2). Hayye ale's-salâh (2). Hayye ale'l-felâh (2). Kad kâmeti's-salâh (2). Allâhü Ekber (2). Lâ ilâhe illallâh (1).`,
+              `Allah en büyüktür. Allah'tan başka ilâh olmadığına şahitlik ederim. Muhammed'in Allah'ın elçisi olduğuna şahitlik ederim. Haydin namaza, haydin kurtuluşa! Namaz başladı. Allah en büyüktür. Allah'tan başka ilâh yoktur.`, true)}</div>
+        <div class="step-item"><div class="step-header">🔰 Namazın başında okunanlar</div>
+            ${DUALAR.subhaneke}${duaBlok(`Eûzü-Besmele`,
+              `أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ`,
+              `Eûzü billâhi mineşşeytânirracîm. Bismillâhirrahmânirrahîm.`,
+              `Kovulmuş şeytanın şerrinden Allah'a sığınırım. Rahman ve Rahim olan Allah'ın adı ile.`, true)}${DUALAR.fatiha}
+            <p class="translation-text" style="margin-top:6px;">Eûzü-Besmele, ilk rekâtta Sübhâneke'den sonra çekilir; sonraki rekâtlarda yalnızca Besmele çekilir. Farz namazların ilk iki rekâtında, sünnet ve vacip namazların tüm rekâtlarında Fâtiha'dan sonra bir sûre okunur. Kısa sûreler (Fâtiha'dan sonra okunan zamm-ı sûreler) aşağıdadır.</p>${surelerHtml}</div>
+        <div class="step-item"><div class="step-header">🔸 Rükû, kavme ve secde</div>
+            <p class="translation-text">Rükûda üç defa: “Sübhâne Rabbiye'l-azîm”. Doğrulurken: “Semiallâhü limen hamideh”; ayakta: “Rabbenâ leke'l-hamd”. Secdede üç defa: “Sübhâne Rabbiye'l-a'lâ”.</p></div>
+        <div class="step-item"><div class="step-header">🪑 Oturuşta okunanlar</div>
+            ${DUALAR.ettehiyyat}${DUALAR.salli}${DUALAR.barik}${DUALAR.rabbena1}${DUALAR.rabbena2}</div>
+        <div class="step-item"><div class="step-header">🌙 Vitir: Kunut duaları</div>${DUALAR.kunut1}${DUALAR.kunut2}</div>
+        <div class="step-item"><div class="step-header">📿 Namaz sonrası tesbihat</div>
+            <p class="translation-text">Sünnet olan tesbihat sırası:<br>1) “Estağfirullâh” (3 kere); “Allâhümme ente's-selâmü ve minke's-selâm, tebârekte yâ zel-celâli vel-ikrâm.”<br>
+            2) “Sübhânellâhi ve'l-hamdü lillâhi ve lâ ilâhe illellâhü ve'llâhü ekber ve lâ havle ve lâ kuvvete illâ billâhi'l-aliyyi'l-azîm.”<br>
+            3) Âyetü'l-Kürsî okunur (metni aşağıdadır).<br>
+            4) 33 kere “Sübhânellâh”, 33 kere “Elhamdülillâh”, 33 kere “Allâhü Ekber”.<br>
+            5) “Lâ ilâhe illellâhü vahdehû lâ şerike leh, lehü'l-mülkü ve lehü'l-hamdü ve hüve alâ külli şey'in kadîr.”<br>
+            6) Dua yapılır.</p>${duaBlok(`33'lük tesbihat`, `سُبْحَانَ اللَّهِ الْحَمْدُ لِلَّهِ اللَّهُ أَكْبَرُ`, `Sübhânallâh. Elhamdülillâh. Allâhü Ekber.`, `Allah her türlü eksiklikten uzaktır. Hamd Allah'adır. Allah en büyüktür.`, true)}${duaBlok(`Tehlil`, `لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ`, `Lâ ilâhe illellâhü vahdehû lâ şerîke leh, lehü'l-mülkü ve lehü'l-hamdü ve hüve alâ külli şey'in kadîr.`, `Allah'tan başka ilâh yoktur; O tektir, ortağı yoktur. Mülk O'nundur, hamd O'na aittir ve O her şeye kadirdir.`, true)}${kursiHtml}</div>`;
+    document.getElementById('tab-oku').innerHTML = okuHtml;
+
+    document.getElementById('tab-diger').innerHTML = `
+        <div class="card-title">🕌 Diğer Namazlar ve Durumlar</div>
+        <details class="step-item" open><summary class="step-header" style="cursor:pointer;">🕋 Cuma namazı</summary>
+            <p class="translation-text">Cuma namazı farzdır; cuma günü öğle vaktinde camide cemaatle kılınır. Cuma namazını kılmakla yükümlü olanlar akıl sağlığı yerinde, ergenliğe girmiş, mukim ve sağlıklı erkeklerdir.<br><br>
+            <strong>Toplam 10 rekât:</strong> 4 rekât ilk sünnet (öğlenin ilk sünneti gibi), hutbe, 2 rekât farz, 4 rekât son sünnet (ilk sünnet gibi).<br><br>
+            Sünnetin ardından imam-hatip minbere çıkıp oturur, müezzin iç ezanı okur; hutbe dinlenir, sonra farz kılınır. Niyet örneği: “Niyet ettim Allah rızası için cuma namazının son sünnetini kılmaya.”</p></details>
+        <details class="step-item"><summary class="step-header" style="cursor:pointer;">🎉 Bayram namazı (2 rekât)</summary>
+            <p class="translation-text">Ramazan ve Kurban Bayramı'nın ilk günü cemaatle kılınır; cemaatle kılınması vaciptir (Diyanet). Namazdan sonra hutbe okunur ve dinlenmesi sünnettir.<br><br>
+            <strong>1. rekât:</strong> Niyet, iftitah tekbiri, eller bağlanır, Sübhâneke okunur. Sonra 3 ilave (zâit) tekbir: 1. ve 2. tekbirde eller kulak hizasına kaldırılıp yanlara salınır; 3. tekbirde eller kaldırılıp bağlanır. İmam gizlice Eûzü-Besmele çeker, Fâtiha ve zamm-ı sûreyi açıktan okur; cemaat sessizce dinler. Rükû ve secdelerle 2. rekâta kalkılır.<br><br>
+            <strong>2. rekât:</strong> Besmele, Fâtiha ve zamm-ı sûre okunur. Rükûya gitmeden önce 3 ilave tekbir alınır, her birinde eller kaldırılıp yanlara salınır. 4. tekbirle eller kaldırılmadan rükûya gidilir. Secdelerden sonra oturulur; Ettehiyyâtü, Salli-Bârik duaları okunup selam verilir.</p></details>
+        <details class="step-item"><summary class="step-header" style="cursor:pointer;">🌙 Teravih namazı</summary>
+            <p class="translation-text">Ramazan gecelerinde yatsıdan sonra kılınan 20 rekâtlık, erkek ve kadınlar için sünnet-i müekkede bir namazdır. Yatsının ilk sünneti, farzı ve son sünneti kılındıktan sonra, vitirden önce kılınır. İki rekâtta bir selam vermek daha faziletlidir; dört rekâtta bir selamla da kılınabilir. Her iki rekâtta bir selamla kılınıyorsa sabah namazının sünneti gibi, dört rekâtta bir selamla kılınıyorsa ikindi sünneti gibi kılınır. Vaktinde kılınmayan teravih sonradan kaza edilmez.</p></details>
+        <details class="step-item"><summary class="step-header" style="cursor:pointer;">🧳 Seferî (yolcu) namazı</summary>
+            <p class="translation-text">En az 90 km yolculukta dört rekâtlı farzlar (öğle, ikindi, yatsı) iki rekât kılınır. Sabah ve akşam farzı ile vitir kısaltılmaz. Seferî diye ayrıca niyet edilmez; normal farz niyeti yapılır. Seferde kazaya kalan dört rekâtlı farz, nerede kılınırsa kılınsın iki rekât kaza edilir.</p></details>
+        <details class="step-item"><summary class="step-header" style="cursor:pointer;">🔁 Sehiv (yanılma) secdesi</summary>
+            <p class="translation-text">Namazda bir farzı geciktirmek veya bir vacibi unutarak terk etmek ya da geciktirmek halinde yapılır (örnek: Fâtiha'dan sonra sûre okumadan rükûya gitmek, ilk oturuşu unutup 3. rekâta kalkmak).<br><br>
+            <strong>Nasıl yapılır:</strong> Son oturuşta sadece Ettehiyyâtü okunur, sağa selam verilir. “Allâhü Ekber” diyerek iki secde yapılır, oturulur; Ettehiyyâtü, Allâhümme Salli, Allâhümme Bârik ve Rabbenâ Âtinâ… duaları okunup önce sağa sonra sola selam verilir.<br><br>
+            Bir farzın bilerek terk edilmesi veya vacibin bilerek terk edilmesi halinde sehiv secdesi yapılmaz, namaz tekrar kılınır.</p></details>
+        <details class="step-item"><summary class="step-header" style="cursor:pointer;">🔤 Kısa bilgiler</summary>
+            <p class="translation-text">Namazın sonunda “Esselâmü aleyküm ve rahmetüllâh” denilerek önce sağa, sonra sola selam verilir. Farz, vacip ve sünnet bütün namazların ilk ve son oturuşunda Ettehiyyâtü okunur; son oturuşta ayrıca Salli-Bârik ve Rabbenâ duaları okunur. Öğle ilk sünneti gibi müekked sünnetlerin ve farzların ilk oturuşunda sadece Ettehiyyâtü okunur.</p></details>`;
+
+
 
     // Tam Detaylı Namaz Veritabanı
     const namazData = {
@@ -317,12 +448,12 @@
         `,
         ikindi: `
             <div class="step-item">
-                <div class="step-header"> عصر İkindi Namazının Sünneti (4 Rekat)</div>
+                <div class="step-header">🕓 İkindi Namazının Sünneti (4 Rekat)</div>
                 <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> "Niyet ettim Allah rızası için ikindi namazının sünnetini kılmaya" denir. İlk oturuşte <strong>Ettehiyyâtü ile birlikte Allâhümme Salli ve Allâhümme Bârik duaları da okunur</strong> ve 3. rekata kalkılır.<br><br>
                 <strong>3. ve 4. Rekatlar:</strong> Sübhaneke ile başlanır, Fatiha ve sure okunarak 4 rekat tamamlanır. Son oturuşte tüm dualar okunup selam verilir.</p>
             </div>
             <div class="step-item">
-                <div class="step-header"> عصر İkindi Namazının Farzı (4 Rekat)</div>
+                <div class="step-header">🕓 İkindi Namazının Farzı (4 Rekat)</div>
                 <p class="translation-text"><strong>1. ve 2. Rekatlar:</strong> Kamet getirilir. "Niyet ettim Allah rızası için ikindi namazının farzını kılmaya" denir. Sübhaneke, Fatiha ve zamm-ı sure okunur, 2. rekat sonunda oturulup sadece Ettehiyyâtü okunarak 3. rekata kalkılır.<br><br>
                 <strong>3. ve 4. Rekatlar:</strong> Sadece Besmele ve Fatiha okunur. Son oturuşte dualar okunarak selam verilir.</p>
             </div>
@@ -400,6 +531,34 @@
         { q: "Hanefi mezhebine göre namazı selam vererek bitirmenin hükmü nedir?", options: ["Farz", "Vacip", "Sünnet", "Müstehap"], correct: 1 }
     ];
 
+    // Kaynakla doğrulanan yeni sorular (Diyanet namaz kılınışı anlatımı, Hanefî)
+    quizPool.push(
+        { q: "Öğle namazının 4 rekâtlı ilk sünnetinde, 2. rekâtın sonundaki oturuşta ne okunur?", options: ["Sadece Ettehiyyâtü", "Ettehiyyâtü, Allâhümme Salli ve Bârik", "Sadece Allâhümme Salli", "Hiçbir şey okunmaz"], correct: 0 },
+        { q: "İkindi namazının 4 rekâtlı sünnetinde 2. rekâtın sonunda ne okunur ve 3. rekâta kalkınca ne ile başlanır?", options: ["Sadece Ettehiyyâtü; Besmele ile", "Ettehiyyâtü, Salli, Bârik; Sübhâneke ile", "Rabbenâ duaları; Fâtiha ile", "Hiçbiri okunmaz"], correct: 1 },
+        { q: "Rükûdan doğrulurken ne denir?", options: ["Semiallâhü limen hamideh", "Sübhâne Rabbiye'l-a'lâ", "Esselâmü aleyküm", "Allâhü Ekber"], correct: 0 },
+        { q: "Kadınlar rükûda nasıl durur?", options: ["Sırtlarını erkekler gibi tam düz tutar", "Sırtlarını biraz meyilli tutar, erkeklerden daha az eğilir; elleri parmakları açmadan dizlerine koyar", "Elleriyle dizlerini sıkıca kavrar", "Başlarını yere değdirir"], correct: 1 },
+        { q: "Kadınlar kıyamda elleri nasıl bağlar?", options: ["Göbek altında, sol bileği kavrayarak", "Göğüs üzerinde, sağ el sol elin üstünde, bilek kavranmadan", "Yanlarına salarak", "Kulak hizasında"], correct: 1 },
+        { q: "Kadınlar oturuşlarda (iki secde arası ve teşehhüt) nasıl oturur?", options: ["Sağ ayak dik, sol ayak üzerine", "Sol ayaklarını sağ yanlarına yatık tutarak", "Bağdaş kurarak", "Dizlerini dikerek"], correct: 1 },
+        { q: "Erkekler secdede kollarını nasıl tutar?", options: ["Dirsekler yanlardan uzak, kollar yerden kalkık", "Kollar yere yayılır", "Kollar vücuda bitişik", "Eller başın üstünde"], correct: 0 },
+        { q: "Vitir namazında kunut duaları ne zaman okunur?", options: ["3. rekâtta Fâtiha ve sûreden sonra tekbir alınıp rükûdan önce", "İlk oturuşta", "Selamdan sonra", "2. rekâtta rükûdan sonra"], correct: 0 }
+    );
+    quizPool.push(
+        { q: "Namazın kaç farzı vardır ve nasıl ayrılır?", options: ["12: 6'sı namazın içinde, 6'sı dışında", "5: hepsi namazın içinde", "7: 3'ü içinde, 4'ü dışında", "32"], correct: 0 },
+        { q: "Cuma namazı toplam kaç rekâttır (ilk sünnet, farz, son sünnet)?", options: ["4 + 2 + 4 = 10 rekât", "2 + 2 + 2 = 6 rekât", "4 + 4 + 2 = 10 rekât", "2 rekât"], correct: 0 },
+        { q: "Bayram namazında Sübhâneke'den sonra birinci rekâtta kaç ilave (zâit) tekbir alınır?", options: ["3", "5", "7", "Hiç alınmaz"], correct: 0 },
+        { q: "Bayram namazı kaç rekâttır?", options: ["2", "3", "4", "6"], correct: 0 },
+        { q: "Teravih namazı kaç rekâttır ve ne zaman kılınır?", options: ["20 rekât, yatsıdan sonra", "8 rekât, yatsıdan önce", "10 rekât, sabahtan sonra", "4 rekât, öğleden sonra"], correct: 0 },
+        { q: "Seferî (yolcu) hangi namazların farzını kısaltır?", options: ["Öğle, ikindi ve yatsı (4 → 2 rekât)", "Sabah ve akşam", "Yalnız akşam", "Vitir"], correct: 0 },
+        { q: "Hanefî mezhebinde abdestin kaç farzı vardır?", options: ["4", "3", "6", "10"], correct: 0 },
+        { q: "Kamet getirmek kimler için sünnettir?", options: ["Erkekler için (farz namazlardan önce)", "Kadınlar için", "Yalnız imam için", "Yalnız cuma için"], correct: 0 },
+        { q: "Sehiv (yanılma) secdesi namazın neresinde yapılır?", options: ["Son oturuşta Ettehiyyâtü'den sonra sağa selam verilip iki secde yapılır", "Namazın başında", "İlk rekâtta", "Selam verilmeden hiçbir şey yapılmaz"], correct: 0 },
+        { q: "Bayram namazında 4. tekbirde eller nasıl olur?", options: ["Eller kaldırılmadan rükûya gidilir", "Eller bağlanır", "Eller kulak hizasına kaldırılır", "Secdeye gidilir"], correct: 0 },
+        { q: "Namaz sonrası tesbihatta Sübhânallâh, Elhamdülillâh ve Allâhü Ekber kaçar defa söylenir?", options: ["33", "10", "100", "3"], correct: 0 }
+    );
+    // Kaynakla doğrulanamayan sorular devre dışı (sırası: orijinal havuzdaki indeks)
+    const QUIZ_DEVRE_DISI = new Set([10,11,14,15,23,26,29]);
+    const quizAktif = quizPool.filter((_, i) => !QUIZ_DEVRE_DISI.has(i));
+
     // --- TEMA YÖNETİMİ ---
     function updateThemeButton() {
         const btn = document.getElementById('theme-btn');
@@ -431,6 +590,11 @@
         document.getElementById('tab-steps').style.display = tabId === 'steps' ? 'flex' : 'none';
         document.getElementById('tab-diffs').style.display = tabId === 'diffs' ? 'flex' : 'none';
         document.getElementById('tab-quiz').style.display = tabId === 'quiz' ? 'flex' : 'none';
+        document.getElementById('tab-teacher').style.display = tabId === 'teacher' ? 'flex' : 'none';
+        document.getElementById('tab-oku').style.display = tabId === 'oku' ? 'flex' : 'none';
+        document.getElementById('tab-diger').style.display = tabId === 'diger' ? 'flex' : 'none';
+        if (tabId !== 'teacher') stopTeacher();
+        if (tabId === 'teacher') { tTarget = null; tShow(); }
 
         if(tabId === 'quiz') {
             loadRandomQuiz();
@@ -438,8 +602,8 @@
     }
 
     function loadRandomQuiz() {
-        const randomIndex = Math.floor(Math.random() * quizPool.length);
-        const item = quizPool[randomIndex];
+        const randomIndex = Math.floor(Math.random() * quizAktif.length);
+        const item = quizAktif[randomIndex];
         
         let html = `<div class="quiz-question">❓ ${item.q}</div><div class="quiz-options">`;
         item.options.forEach((opt, idx) => {
@@ -464,6 +628,177 @@
             btn.style.borderColor = '#ef4444';
             btn.style.background = 'rgba(239, 68, 68, 0.1)';
         }
+    }
+
+    // --- CANLI ÖĞRETMEN ---
+    const SP = (H,N,P,K,F,E,W,t2) => ({H,N,P,K,F,E,W,t2:t2||0});
+    const ST = [[154,40],[152,58],[150,108],[150,158],[150,208]];
+    const POSE = {
+        m: {
+            kiyam: SP(...ST,[166,90],[176,106]), tekbir: SP(...ST,[170,62],[160,40]),
+            ruku: SP([207,106],[190,108],[140,108],[146,158],[150,208],[170,136],[148,158]),
+            kavme: SP(...ST,[154,88],[156,114]),
+            secde: SP([205,196],[180,182],[136,155],[160,200],[112,204],[196,165],[212,207]),
+            celse: SP([134,117],[132,135],[130,185],[172,198],[112,206],[152,160],[168,190],1)
+        },
+        f: {
+            kiyam: SP(...ST,[168,86],[172,68]), tekbir: SP(...ST,[168,84],[168,58]),
+            ruku: SP([203,86],[188,92],[142,108],[156,156],[150,208],[176,128],[156,154]),
+            kavme: SP(...ST,[154,88],[156,114]),
+            secde: SP([205,197],[182,188],[140,164],[160,202],[114,205],[192,200],[212,207]),
+            celse: SP([134,117],[132,135],[126,192],[168,200],[204,206],[150,162],[166,190])
+        }
+    };
+    const ADIM = [
+        { p:'kiyam', b:'1. Niyet', say:'Niyet edilir: “Niyet ettim Allah rızası için … namazını kılmaya.”', n:'Kıbleye dönülür; ayakta iken secde edilecek yere bakılır.' },
+        { p:'tekbir', b:'2. İftitah tekbiri', say:'“Allâhü Ekber”', m:'Erkek: Avuç içleri kıbleye, parmaklar normal açıklıkta; başparmaklar kulak yumuşağı hizasına gelecek şekilde eller kaldırılır.', f:'Kadın: Avuç içleri kıbleye, parmaklar normal açıklıkta; parmak uçları omuz hizasına gelecek şekilde eller kaldırılır.' },
+        { p:'kiyam', b:'3. Kıyam ve kıraat (1. rekât)', say:'Sırasıyla: Sübhâneke, Eûzü-Besmele, Fâtiha, bir sûre.', n:'Tekbirden sonra eller bağlanır.', m:'Erkek: Eller göbek altında bağlanır; sağ el sol elin üstündedir, sağ elin baş ve serçe parmağı sol bileği kavrar.', f:'Kadın: Eller göğüs üstünde bağlanır; sağ el sol elin üstündedir, bilek kavranmaz.' },
+        { p:'ruku', b:'4. Rükû', say:'“Allâhü Ekber” diyerek rükûa varılır; üç defa “Sübhâne Rabbiye’l-azîm” denir.', m:'Erkek: Sırt düz, baş sırtla aynı hizada; eller dizleri kavrar, parmaklar açık, dizler gergin.', f:'Kadın: Sırt biraz meyilli, erkeklerden daha az eğilinir; eller parmaklar açılmadan dizler üzerine konur, dizler biraz bükük.' },
+        { p:'kavme', b:'5. Rükûdan doğrulma (kavme)', say:'“Semiallâhü limen hamideh” diyerek doğrulunur; ayakta “Rabbenâ leke’l-hamd” denir.', n:'Eller yanlara salınır; tam doğrulup kısa süre dik durulur. Cemaatle kılınırken “Semiallâhü limen hamideh”i imam söyler, cemaat “Rabbenâ leke’l-hamd” der.' },
+        { p:'secde', b:'6. Birinci secde', say:'“Allâhü Ekber” diyerek secdeye varılır; üç defa “Sübhâne Rabbiye’l-a’lâ” denir.', n:'Secdeye inerken önce dizler, sonra eller, sonra alın ve burun yere konur; baş iki elin arasındadır.', m:'Erkek: Dirsekler yanlardan uzak, kollar yerden kalkık; ayaklar parmaklar üzerinde dik, parmak uçları kıbleye bakar.', f:'Kadın: Kollar yanlara bitişik tutulur; karın uyluklara yaklaştırılır.' },
+        { p:'celse', b:'7. İki secde arası oturuş', say:'“Allâhü Ekber” diyerek oturulur; “Sübhânallâh” diyecek kadar kısa durulur.', n:'Eller uyluklar üzerine konur, parmaklar dizler hizasında; kucağa bakılır.', m:'Erkek: Sol ayak yatırılıp üzerine oturulur, sağ ayak dik tutulur (parmakları kıbleye).', f:'Kadın: Sol ayak sağ yana yatık olacak şekilde oturulur (ayaklar sağ tarafa çıkarılır).' },
+        { p:'secde', b:'8. İkinci secde', say:'“Allâhü Ekber” diyerek ikinci secdeye varılır; üç defa “Sübhâne Rabbiye’l-a’lâ” denir.' },
+        { p:'kiyam', b:'9. İkinci rekâta kalkış', say:'“Allâhü Ekber” diyerek ayağa kalkılır, eller bağlanır.', n:'Kalkarken önce baş, sonra eller, sonra eller dizlere konarak dizler yerden kaldırılır. İftitah tekbirinden buraya kadar olan kısım bir rekâttır. 2. rekâtta Sübhâneke okunmaz; Besmele, Fâtiha ve sûre okunur, rükû ve secdeler aynı şekilde yapılır.' },
+        { p:'celse', b:'10. Son oturuş', say:'Sırasıyla: Ettehiyyâtü, Allâhümme Salli, Allâhümme Bârik, Rabbenâ âtinâ… ve Rabbenâğfirlî… duaları okunur.', n:'Oturuş biçimi 7. adımdaki gibidir (erkek/kadın farkı aynıdır).' },
+        { p:'celse', b:'11. Selam (sağa)', say:'Başı sağa çevirerek “Esselâmü aleyküm ve rahmetullâh”.' },
+        { p:'celse', b:'12. Selam (sola)', say:'Başı sola çevirerek “Esselâmü aleyküm ve rahmetullâh”. Namaz tamamlanır.' }
+    ];
+    let tG = 'm', tI = 0, tTimer = null, tRaf = null, yaw = -0.6, yawT = -0.6, tAuto = false, dragX = null;
+    let tFrom = null, tTarget = null, tT0 = 0;
+    const $ = id => document.getElementById(id);
+    const KEYS = ['H','N','P','lh','lk','lf','lt','rh','rk','rf','rt','ls','le','lw','rs','re','rw'];
+    const LAT = {
+        kiyam:{hip:8,knee:8,foot:7,sh:14,el:15,hd:3}, tekbir:{hip:8,knee:8,foot:7,sh:14,el:17,hd:14},
+        ruku:{hip:8,knee:8,foot:7,sh:14,el:16,hd:8}, kavme:{hip:8,knee:8,foot:7,sh:14,el:15,hd:15},
+        secde:{hip:9,knee:9,foot:7,sh:14,el:26,hd:9}, celse:{hip:9,knee:10,foot:7,sh:14,el:16,hd:11}
+    };
+    function build3D(g, key) {
+        const p = POSE[g][key], c = a => [a[0] - 150, 210 - a[1]], f = g === 'f';
+        const H = c(p.H), N = c(p.N), P = c(p.P), K = c(p.K), F = c(p.F), E = c(p.E), W = c(p.W);
+        const L = Object.assign({}, LAT[key]); if (key === 'secde' && f) L.el = 13;
+        const o = { H:[H[0],H[1],0], N:[N[0],N[1],0], P:[P[0],P[1],0] };
+        [['l',-1],['r',1]].forEach(([s, sg]) => {
+            o[s+'h'] = [P[0],P[1],sg*L.hip]; o[s+'k'] = [K[0],K[1],sg*L.knee];
+            o[s+'f'] = [F[0],F[1],sg*L.foot]; o[s+'t'] = [F[0]+13,F[1]-1,sg*L.foot];
+            o[s+'s'] = [N[0],N[1]-4,sg*L.sh]; o[s+'e'] = [E[0],E[1],sg*L.el]; o[s+'w'] = [W[0],W[1],sg*L.hd];
+        });
+        if (key === 'celse') {
+            if (!f) { o.lf=[-38,4,-6]; o.lt=[-30,3,-6]; o.rf=[-36,14,8]; o.rt=[-31,3,8]; }
+            else { o.lf=[-12,5,22]; o.lt=[-4,5,24]; o.rf=[-22,5,16]; o.rt=[-14,5,18]; }
+        }
+        return o;
+    }
+    const clr = hex => [1,3,5].map(i => parseInt(hex.substr(i,2),16));
+    const shade = (hex, a) => 'rgb(' + clr(hex).map(v => Math.max(0, Math.min(255, Math.round(v + a)))).join(',') + ')';
+    const v3 = { add:(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]], sub:(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]], mul:(a,k)=>[a[0]*k,a[1]*k,a[2]*k],
+        dot:(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2], nrm:a=>{const l=Math.hypot(a[0],a[1],a[2])||1;return [a[0]/l,a[1]/l,a[2]/l];} };
+    function render(now) {
+        tRaf = requestAnimationFrame(render);
+        const cv = $('t3d'); if (!cv || cv.offsetParent === null) return;
+        const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+        if (cv.width !== Math.round(w*dpr) || cv.height !== Math.round(h*dpr)) { cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr); }
+        const ctx = cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
+        if (tAuto && dragX === null) yawT += 0.006;
+        if (dragX === null) yaw += (yawT - yaw) * 0.14; else yaw = yawT;
+        // poz geçişi
+        let k = tTarget ? Math.min(1, (now - tT0) / 1100) : 1; k = k < .5 ? 4*k*k*k : 1 - Math.pow(-2*k+2, 3)/2;
+        const J = {}; KEYS.forEach(n => { const a = tFrom[n], b = tTarget[n]; J[n] = [a[0]+(b[0]-a[0])*k, a[1]+(b[1]-a[1])*k, a[2]+(b[2]-a[2])*k]; });
+        const f = tG === 'f';
+        const C = f ? { skin:'#e9bf9d', cloth:'#8e3fa3', under:'#7a3490', hair:'#3a2a22' } : { skin:'#e6b48c', cloth:'#e9eef5', under:'#34415b', hair:'#2b1f19' };
+        const cs = Math.cos(yaw), sn = Math.sin(yaw), pc = Math.cos(.2), ps = Math.sin(.2), S = h/262, D = 540;
+        const pr = p => { const x = p[0]*cs + p[2]*sn, z = -p[0]*sn + p[2]*cs, yy = (p[1]-88)*pc - z*ps, zz = (p[1]-88)*ps + z*pc, kk = D/(D-zz);
+            return [w/2 + x*S*kk, h*0.55 - yy*S*kk, S*kk, zz]; };
+        // seccade
+        const rug = [[-108,0,-46],[108,0,-46],[108,0,46],[-108,0,46]].map(pr);
+        const poly = (pts, fill, stroke) => { ctx.beginPath(); pts.forEach((q,i) => i ? ctx.lineTo(q[0],q[1]) : ctx.moveTo(q[0],q[1])); ctx.closePath(); if (fill) { ctx.fillStyle = fill; ctx.fill(); } if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1.6; ctx.stroke(); } };
+        const g1 = ctx.createLinearGradient(rug[0][0],0,rug[1][0],0); g1.addColorStop(0,'#6d1a37'); g1.addColorStop(.5,'#a13258'); g1.addColorStop(1,'#6d1a37');
+        poly(rug, g1); poly([[-100,0,-39],[100,0,-39],[100,0,39],[-100,0,39]].map(pr), null, 'rgba(240,217,168,.85)');
+        poly([[-88,0,-30],[88,0,-30],[88,0,30],[-88,0,30]].map(pr), null, 'rgba(240,217,168,.35)');
+        const sp = pr([(J.P[0]+J.H[0])/2, 0, 0]); ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.beginPath(); ctx.ellipse(sp[0], sp[1], 62*sp[2], 15*sp[2], 0, 0, 7); ctx.fill();
+        // primitifler
+        const prims = [];
+        const cap = (a, b, ra, rb, col, bias) => { const A = pr(a), B = pr(b); prims.push({ t:0, A, B, ra:ra*A[2], rb:rb*B[2], col, d:(A[3]+B[3])/2 + (bias||0) }); };
+        const sph = (c, r, col, bias) => { const A = pr(c); prims.push({ t:1, A, r:r*A[2], col, d:A[3] + (bias||0) }); };
+        const mid = (a, b) => v3.mul(v3.add(a,b), .5);
+        // bacaklar
+        const legR = f ? [9.5, 8, 6.8] : [8, 6.3, 5];
+        const legC = f ? C.cloth : C.under;
+        ['l','r'].forEach(s => {
+            cap(J[s+'h'], J[s+'k'], legR[0], legR[1], legC); cap(J[s+'k'], J[s+'f'], legR[1], legR[2], legC);
+            cap(J[s+'f'], J[s+'t'], 4, 3.4, f ? C.under : C.skin);
+            cap(J[s+'s'], J[s+'e'], 4.8, 4.2, C.cloth); cap(J[s+'e'], J[s+'w'], 4.2, 3.6, C.cloth); sph(J[s+'w'], 3.8, C.skin, 1);
+        });
+        // gövde
+        const hipM = mid(J.lh, J.rh), shM = mid(J.ls, J.rs);
+        cap(J.lh, J.rh, f ? 10 : 8.5, f ? 10 : 8.5, f ? C.cloth : C.cloth); cap(shM, hipM, 10.5, 10, C.cloth); cap(J.ls, J.rs, 5.5, 5.5, C.cloth);
+        cap(J.N, shM, 4.6, 5, C.skin, -1);
+        // baş
+        const r = 12, u = v3.nrm(v3.sub(J.H, J.N)), uh = v3.nrm(v3.add(v3.mul([0,1,0],.4), v3.mul(u,.6)));
+        const fw = v3.nrm(v3.sub([1,0,0], v3.mul(uh, v3.dot(uh,[1,0,0])))), sd = [fw[1]*uh[2]-fw[2]*uh[1], fw[2]*uh[0]-fw[0]*uh[2], fw[0]*uh[1]-fw[1]*uh[0]];
+        const facing = v3.dot(fw, [-sn, 0, cs]) > 0, fb = facing ? 1 : -1;
+        const at = (o, a, b2, c2) => v3.add(o, v3.add(v3.mul(fw,a), v3.add(v3.mul(uh,b2), v3.mul(sd,c2))));
+        if (f) {
+            cap(J.H, J.N, 8.5, 9, C.cloth, -.5); cap(J.ls, J.rs, 7.5, 7.5, C.cloth, 1.2);
+            sph(at(J.H, -r*.3, r*.05, 0), r*1.26, C.cloth, facing ? 0 : 4);
+            sph(at(J.H, r*.34, -r*.04, 0), r*.84, C.skin, facing ? 3 : -3);
+            [-1,1].forEach(q => sph(at(J.H, r*1.0, r*.14, q*r*.34), 1.5, '#2a1d18', facing ? 8 : -80));
+            sph(at(J.H, r*1.16, -r*.1, 0), 2.2, '#c99a78', facing ? 8 : -80);
+        } else {
+            sph(J.H, r, C.skin, 0);
+            sph(at(J.H, -r*.12, r*.5, 0), r*.92, '#f4f1ea', 2.5);
+            sph(at(J.H, r*.5, -r*.62, 0), r*.64, C.hair, facing ? 3 : -3);
+            [-1,1].forEach(q => sph(at(J.H, r*.92, r*.2, q*r*.36), 1.5, '#2a1d18', facing ? 8 : -80));
+            sph(at(J.H, r*1.04, -r*.08, 0), 2.3, '#cf9c78', facing ? 8 : -80);
+        }
+        prims.sort((a, b) => a.d - b.d);
+        prims.forEach(p => {
+            if (p.t === 1) {
+                const g2 = ctx.createRadialGradient(p.A[0]-p.r*.35, p.A[1]-p.r*.4, p.r*.1, p.A[0], p.A[1], p.r);
+                g2.addColorStop(0, shade(p.col, 32)); g2.addColorStop(.55, p.col); g2.addColorStop(1, shade(p.col, -45));
+                ctx.fillStyle = g2; ctx.beginPath(); ctx.arc(p.A[0], p.A[1], p.r, 0, 7); ctx.fill(); return;
+            }
+            const dx = p.B[0]-p.A[0], dy = p.B[1]-p.A[1], l = Math.hypot(dx,dy) || 1; let nx = -dy/l, ny = dx/l; if (nx + ny > 0) { nx = -nx; ny = -ny; }
+            const rm = Math.max(p.ra, p.rb), cx = (p.A[0]+p.B[0])/2, cy = (p.A[1]+p.B[1])/2;
+            const g3 = ctx.createLinearGradient(cx + nx*rm, cy + ny*rm, cx - nx*rm, cy - ny*rm);
+            g3.addColorStop(0, shade(p.col, 34)); g3.addColorStop(.4, p.col); g3.addColorStop(1, shade(p.col, -48));
+            ctx.fillStyle = g3; ctx.beginPath();
+            ctx.moveTo(p.A[0]+nx*p.ra, p.A[1]+ny*p.ra); ctx.lineTo(p.B[0]+nx*p.rb, p.B[1]+ny*p.rb);
+            ctx.lineTo(p.B[0]-nx*p.rb, p.B[1]-ny*p.rb); ctx.lineTo(p.A[0]-nx*p.ra, p.A[1]-ny*p.ra); ctx.closePath(); ctx.fill();
+            ctx.beginPath(); ctx.arc(p.A[0], p.A[1], p.ra, 0, 7); ctx.fill();
+            ctx.beginPath(); ctx.arc(p.B[0], p.B[1], p.rb, 0, 7); ctx.fill();
+        });
+    }
+    function tShow() {
+        const a = ADIM[tI];
+        $('t-title').textContent = a.b; $('t-say').textContent = a.say;
+        $('t-note').textContent = a.n || '';
+        $('t-gnote').textContent = (tG === 'm' ? a.m : a.f) || '';
+        $('t-dots').innerHTML = ADIM.map((_, i) => '<i class="' + (i === tI ? 'on' : '') + '"></i>').join('');
+        const cur = tTarget ? (() => { const k0 = Math.min(1, (performance.now() - tT0) / 1100), o = {}; KEYS.forEach(n => { o[n] = tFrom[n].map((v, i) => v + (tTarget[n][i] - v) * (k0 < .5 ? 4*k0*k0*k0 : 1 - Math.pow(-2*k0+2, 3)/2)); }); return o; })() : null;
+        const tgt = build3D(tG, a.p);
+        tFrom = cur || tgt; tTarget = tgt; tT0 = performance.now();
+    }
+    function setGender(g) {
+        tG = g; tTarget = null;
+        $('g-m').classList.toggle('active', g === 'm'); $('g-f').classList.toggle('active', g === 'f');
+        tShow();
+    }
+    function setView(y) { yawT = y; tAuto = false; $('v-auto').classList.remove('active'); }
+    function toggleAuto() { tAuto = !tAuto; $('v-auto').classList.toggle('active', tAuto); }
+    (function initDrag() {
+        const cv = $('t3d');
+        cv.addEventListener('pointerdown', e => { dragX = e.clientX; cv.setPointerCapture(e.pointerId); cv.style.cursor = 'grabbing'; });
+        cv.addEventListener('pointermove', e => { if (dragX !== null) { yawT += (e.clientX - dragX) * 0.012; dragX = e.clientX; tAuto = false; } });
+        const up = () => { dragX = null; cv.style.cursor = 'grab'; };
+        cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+        tFrom = tTarget = build3D('m', 'kiyam'); tT0 = performance.now(); tRaf = requestAnimationFrame(render);
+    })();
+    function tStep(d) { tI = (tI + d + ADIM.length) % ADIM.length; tShow(); }
+    function stopTeacher() { clearInterval(tTimer); tTimer = null; const b = $('t-play'); if (b) b.textContent = '▶ Oynat'; }
+    function tTogglePlay() {
+        if (tTimer) { stopTeacher(); return; }
+        $('t-play').textContent = '⏸ Duraklat';
+        tTimer = setInterval(() => tStep(1), 6500);
     }
 
     // Başlangıç Kurulumu
