@@ -106,9 +106,8 @@
         /* Üst çubuk: ← ve ☰ birlikte solda; başlık kalan alanda ortalı */
         .nav-group { display: flex; align-items: center; gap: 8px; }
         .nav-group .circle-btn { flex: none; }
-        .navbar .app-title { flex: 1; min-width: 0; padding: 0 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .navbar .app-title { flex: 1; min-width: 0; padding: 0 4px; font-size: clamp(0.95rem, 4.4vw, 1.1rem); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .nav-right { justify-content: flex-end; }
-        @media (min-width: 400px) { .nav-group { min-width: 92px; } } /* iki yan eşit: başlık tam ortada */
 
         .tabs-container { display: flex; gap: 6px; background: var(--card-bg); padding: 6px; border: 1px solid var(--border-color); border-radius: 16px; overflow-x: auto; box-shadow: var(--shadow); transition: background-color 0.3s ease, border-color 0.3s ease; }
         .tab-btn { flex: 1; padding: 10px 8px; background: none; border: none; color: var(--text-muted); font-weight: 600; font-size: 0.8rem; border-radius: 12px; cursor: pointer; transition: 0.2s; text-align: center; white-space: nowrap; }
