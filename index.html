@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+    <script src="https://ayetinvakti.github.io/finish.js?v=3"></script>
     <script src="https://ayetinvakti.github.io/menu.js" defer></script>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -169,13 +170,13 @@
 <body>
 
 <div class="container">
-    <header class="navbar">
+    <header class="navbar fin-card">
         <div class="nav-group">
-            <a href="https://ayetinvakti.github.io/" class="circle-btn" title="Geri Dön" aria-label="Geri Dön">←</a>
-            <button class="circle-btn" data-drawer-toggle aria-label="Menü" aria-controls="avmDrawer" title="Menü">☰</button>
+            <a href="https://ayetinvakti.github.io/" class="circle-btn fin-btn" title="Geri Dön" aria-label="Geri Dön">←</a>
+            <button class="circle-btn fin-btn" data-drawer-toggle aria-label="Menü" aria-controls="avmDrawer" title="Menü">☰</button>
         </div>
         <div class="nav-group nav-right">
-            <button class="circle-btn" onclick="toggleTheme()" id="theme-btn" title="Tema Değiştir" aria-label="Tema Değiştir">☀️</button>
+            <button class="circle-btn fin-btn" onclick="toggleTheme()" id="theme-btn" title="Tema Değiştir" aria-label="Tema Değiştir">☀️</button>
         </div>
     </header>
 
@@ -183,7 +184,7 @@
         <h1 class="app-title" data-i18n="app_title">Namaz Öğretmeni</h1>
     </div>
 
-    <div class="tabs-container">
+    <div class="tabs-container fin-card">
         <button class="tab-btn active" onclick="switchTab('steps', this)" data-i18n="tab_steps">📖 Adım Adım Namaz</button>
         <button class="tab-btn" onclick="switchTab('diffs', this)" data-i18n="tab_diffs">⚖️ Kadın/Erkek Farkı</button>
         <button class="tab-btn" onclick="switchTab('quiz', this)" data-i18n="tab_quiz">🎯 Dini Sınav</button>
@@ -193,16 +194,16 @@
     </div>
 
     <!-- 1. SEKME: DETAYLI NAMAZ REHBERİ -->
-    <div id="tab-steps" class="content-card">
+    <div id="tab-steps" class="content-card fin-card">
         <div class="card-title" data-i18n="card_steps_title">📖 Detaylı Namaz Kılınış Rehberi</div>
         
         <div class="namaz-grid">
-            <button class="namaz-select-btn active" onclick="selectNamaz('sabah', this)">Sabah Namazı <span>2 Sünnet, 2 Farz</span></button>
-            <button class="namaz-select-btn" onclick="selectNamaz('ogle', this)">Öğle Namazı <span>4 İlk, 4 Farz, 2 Son</span></button>
-            <button class="namaz-select-btn" onclick="selectNamaz('ikindi', this)">İkindi Namazı <span>4 Sünnet, 4 Farz</span></button>
-            <button class="namaz-select-btn" onclick="selectNamaz('aksam', this)">Akşam Namazı <span>3 Farz, 2 Sünnet</span></button>
-            <button class="namaz-select-btn" onclick="selectNamaz('yatsi', this)">Yatsı Namazı <span>4 Sünnet, 4 Farz, 2 Son</span></button>
-            <button class="namaz-select-btn" onclick="selectNamaz('vitir', this)">Vitir Namazı <span>3 Rekat Vacip</span></button>
+            <button class="namaz-select-btn active fin-btn" onclick="selectNamaz('sabah', this)">Sabah Namazı <span>2 Sünnet, 2 Farz</span></button>
+            <button class="namaz-select-btn fin-btn" onclick="selectNamaz('ogle', this)">Öğle Namazı <span>4 İlk, 4 Farz, 2 Son</span></button>
+            <button class="namaz-select-btn fin-btn" onclick="selectNamaz('ikindi', this)">İkindi Namazı <span>4 Sünnet, 4 Farz</span></button>
+            <button class="namaz-select-btn fin-btn" onclick="selectNamaz('aksam', this)">Akşam Namazı <span>3 Farz, 2 Sünnet</span></button>
+            <button class="namaz-select-btn fin-btn" onclick="selectNamaz('yatsi', this)">Yatsı Namazı <span>4 Sünnet, 4 Farz, 2 Son</span></button>
+            <button class="namaz-select-btn fin-btn" onclick="selectNamaz('vitir', this)">Vitir Namazı <span>3 Rekat Vacip</span></button>
         </div>
 
         <div id="namaz-details-container" style="margin-top: 10px;">
@@ -211,7 +212,7 @@
     </div>
 
     <!-- 2. SEKME: ERKEK / KADIN FARKLARI -->
-    <div id="tab-diffs" class="content-card" style="display: none;">
+    <div id="tab-diffs" class="content-card fin-card" style="display: none;">
         <div class="card-title" data-i18n="card_diffs_title">⚖️ Namazda Erkek ve Kadın Arasındaki Fıkhi Farklar</div>
         <div class="diff-list">
             <div class="diff-row">
@@ -234,31 +235,31 @@
     </div>
 
     <!-- 3. SEKME: DİNİ SINAV -->
-    <div id="tab-quiz" class="content-card" style="display: none;">
+    <div id="tab-quiz" class="content-card fin-card" style="display: none;">
         <div class="card-title" data-i18n="card_quiz_title">🎯 Dini Sınav</div>
-        <div class="quiz-box" id="dynamic-quiz-box">
+        <div class="quiz-box fin-card" id="dynamic-quiz-box">
             <!-- Rastgele soru buraya gelecek -->
         </div>
-        <button class="next-quiz-btn" onclick="loadRandomQuiz()" data-i18n="btn_next_quiz">🔄 Başka Soru Getir</button>
+        <button class="next-quiz-btn fin-btn" onclick="loadRandomQuiz()" data-i18n="btn_next_quiz">🔄 Başka Soru Getir</button>
     </div>
-    <div id="tab-oku" class="content-card" style="display: none;"></div>
-    <div id="tab-diger" class="content-card" style="display: none;"></div>
+    <div id="tab-oku" class="content-card fin-card" style="display: none;"></div>
+    <div id="tab-diger" class="content-card fin-card" style="display: none;"></div>
     <!-- 4. SEKME: CANLI ÖĞRETMEN -->
-    <div id="tab-teacher" class="content-card" style="display: none;">
+    <div id="tab-teacher" class="content-card fin-card" style="display: none;">
         <div class="card-title">🎬 Canlı Namaz Öğretmeni (2 rekâtlık örnek)</div>
         <div class="gender-row">
-            <button class="g-btn active" id="g-m" onclick="setGender('m')">👨 Erkek</button>
-            <button class="g-btn" id="g-f" onclick="setGender('f')">🧕 Kadın</button>
+            <button class="g-btn active fin-btn" id="g-m" onclick="setGender('m')">👨 Erkek</button>
+            <button class="g-btn fin-btn" id="g-f" onclick="setGender('f')">🧕 Kadın</button>
         </div>
         <div class="stage" style="padding:0;overflow:hidden;">
             <canvas id="t3d" style="width:100%;height:340px;display:block;touch-action:none;cursor:grab;" aria-label="3B namaz figürü"></canvas>
         </div>
         <div class="gender-row">
-            <button class="g-btn" onclick="setView(0)">Yan</button>
-            <button class="g-btn active" id="v-34" onclick="setView(-0.6)">3/4</button>
-            <button class="g-btn" onclick="setView(-1.5708)">Ön</button>
-            <button class="g-btn" onclick="setView(1.5708)">Arka</button>
-            <button class="g-btn" id="v-auto" onclick="toggleAuto()">⟳</button>
+            <button class="g-btn fin-btn" onclick="setView(0)">Yan</button>
+            <button class="g-btn active fin-btn" id="v-34" onclick="setView(-0.6)">3/4</button>
+            <button class="g-btn fin-btn" onclick="setView(-1.5708)">Ön</button>
+            <button class="g-btn fin-btn" onclick="setView(1.5708)">Arka</button>
+            <button class="g-btn fin-btn" id="v-auto" onclick="toggleAuto()">⟳</button>
         </div>
         <p class="translation-text" style="margin:0;text-align:center;">Figürü parmakla sürükleyerek her açıdan döndürebilirsin.</p>
         <div class="step-item" style="margin:0">
@@ -621,7 +622,7 @@
         let html = `<div class="quiz-question">❓ ${item.q}</div><div class="quiz-options">`;
         item.options.forEach((opt, idx) => {
             const isCorr = (idx === item.correct);
-            html += `<button class="quiz-opt-btn" onclick="checkDynamicQuiz(this, ${isCorr})">${opt}</button>`;
+            html += `<button class="quiz-opt-btn fin-btn" onclick="checkDynamicQuiz(this, ${isCorr})">${opt}</button>`;
         });
         html += `</div><div class="quiz-result" id="dyn-result"></div>`;
         
