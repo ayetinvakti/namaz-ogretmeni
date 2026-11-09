@@ -152,19 +152,6 @@
         .footer { margin: 20px 0; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
         .footer span { color: var(--accent-color); font-weight: 600; }
 
-        .gender-row { display: flex; gap: 8px; }
-        .g-btn { flex: 1; padding: 10px; background: var(--btn-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 12px; font-weight: 600; cursor: pointer; }
-        .g-btn.active { border-color: var(--accent-color); background: var(--active-btn-bg); color: var(--accent-color); }
-        .stage { background: var(--btn-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 6px; }
-        .stage svg { width: 100%; height: auto; display: block; }
-        .t-say { font-weight: 700; color: var(--accent-color); line-height: 1.5; font-size: 0.95rem; }
-        .t-ctrl { display: flex; gap: 8px; }
-        .t-ctrl button { flex: 1; padding: 11px 6px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--btn-bg); color: var(--text-color); font-weight: 600; cursor: pointer; }
-        .t-ctrl button.main { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
-        .t-dots { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; }
-        .t-dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--border-color); }
-        .t-dots i.on { background: var(--accent-color); }
-        .fig-m { --c: #2563eb; } .fig-f { --c: #a21caf; }
     </style>
 </head>
 <body>
@@ -188,7 +175,6 @@
         <button class="tab-btn active" onclick="switchTab('steps', this)" data-i18n="tab_steps">📖 Adım Adım Namaz</button>
         <button class="tab-btn" onclick="switchTab('diffs', this)" data-i18n="tab_diffs">⚖️ Kadın/Erkek Farkı</button>
         <button class="tab-btn" onclick="switchTab('quiz', this)" data-i18n="tab_quiz">🎯 Dini Sınav</button>
-        <button class="tab-btn" onclick="switchTab('teacher', this)">🎬 Canlı Öğretmen</button>
         <button class="tab-btn" onclick="switchTab('oku', this)">📚 Okunacaklar</button>
         <button class="tab-btn" onclick="switchTab('diger', this)">🕌 Diğer Namazlar</button>
     </div>
@@ -244,38 +230,6 @@
     </div>
     <div id="tab-oku" class="content-card fin-card" style="display: none;"></div>
     <div id="tab-diger" class="content-card fin-card" style="display: none;"></div>
-    <!-- 4. SEKME: CANLI ÖĞRETMEN -->
-    <div id="tab-teacher" class="content-card fin-card" style="display: none;">
-        <div class="card-title">🎬 Canlı Namaz Öğretmeni (2 rekâtlık örnek)</div>
-        <div class="gender-row">
-            <button class="g-btn active fin-btn" id="g-m" onclick="setGender('m')">👨 Erkek</button>
-            <button class="g-btn fin-btn" id="g-f" onclick="setGender('f')">🧕 Kadın</button>
-        </div>
-        <div class="stage" style="padding:0;overflow:hidden;">
-            <canvas id="t3d" style="width:100%;height:340px;display:block;touch-action:none;cursor:grab;" aria-label="3B namaz figürü"></canvas>
-        </div>
-        <div class="gender-row">
-            <button class="g-btn fin-btn" onclick="setView(0)">Yan</button>
-            <button class="g-btn active fin-btn" id="v-34" onclick="setView(-0.6)">3/4</button>
-            <button class="g-btn fin-btn" onclick="setView(-1.5708)">Ön</button>
-            <button class="g-btn fin-btn" onclick="setView(1.5708)">Arka</button>
-            <button class="g-btn fin-btn" id="v-auto" onclick="toggleAuto()">⟳</button>
-        </div>
-        <p class="translation-text" style="margin:0;text-align:center;">Figürü parmakla sürükleyerek her açıdan döndürebilirsin.</p>
-        <div class="step-item" style="margin:0">
-            <div class="step-header" id="t-title"></div>
-            <div class="t-say" id="t-say"></div>
-            <p class="translation-text" id="t-note"></p>
-            <p class="translation-text" id="t-gnote" style="font-style:normal;color:var(--text-color)"></p>
-        </div>
-        <div class="t-dots" id="t-dots"></div>
-        <div class="t-ctrl">
-            <button onclick="tStep(-1)">⏮ Geri</button>
-            <button class="main" id="t-play" onclick="tTogglePlay()">▶ Oynat</button>
-            <button onclick="tStep(1)">İleri ⏭</button>
-        </div>
-        <p class="translation-text">Çizim şematiktir; ayrıntılar yazıdadır. Anlatım Diyanet İşleri Başkanlığı'nın namaz kılınışı anlatımına ve Hanefî ilmihaline dayanır. Sübhâneke, Fâtiha, sûre ve dua metinleri "Okunacaklar" sekmesindedir.</p>
-    </div>
 </div>
 
 <div class="footer">© Ayetin Vakti • <span data-i18n="footer_text">Huzur ve İbadet Rehberliğiniz</span></div>
@@ -604,11 +558,8 @@
         document.getElementById('tab-steps').style.display = tabId === 'steps' ? 'flex' : 'none';
         document.getElementById('tab-diffs').style.display = tabId === 'diffs' ? 'flex' : 'none';
         document.getElementById('tab-quiz').style.display = tabId === 'quiz' ? 'flex' : 'none';
-        document.getElementById('tab-teacher').style.display = tabId === 'teacher' ? 'flex' : 'none';
         document.getElementById('tab-oku').style.display = tabId === 'oku' ? 'flex' : 'none';
         document.getElementById('tab-diger').style.display = tabId === 'diger' ? 'flex' : 'none';
-        if (tabId !== 'teacher') stopTeacher();
-        if (tabId === 'teacher') { tTarget = null; tShow(); }
 
         if(tabId === 'quiz') {
             loadRandomQuiz();
@@ -642,177 +593,6 @@
             btn.style.borderColor = '#ef4444';
             btn.style.background = 'rgba(239, 68, 68, 0.1)';
         }
-    }
-
-    // --- CANLI ÖĞRETMEN ---
-    const SP = (H,N,P,K,F,E,W,t2) => ({H,N,P,K,F,E,W,t2:t2||0});
-    const ST = [[154,40],[152,58],[150,108],[150,158],[150,208]];
-    const POSE = {
-        m: {
-            kiyam: SP(...ST,[166,90],[176,106]), tekbir: SP(...ST,[170,62],[160,40]),
-            ruku: SP([207,106],[190,108],[140,108],[146,158],[150,208],[170,136],[148,158]),
-            kavme: SP(...ST,[154,88],[156,114]),
-            secde: SP([205,196],[180,182],[136,155],[160,200],[112,204],[196,165],[212,207]),
-            celse: SP([134,117],[132,135],[130,185],[172,198],[112,206],[152,160],[168,190],1)
-        },
-        f: {
-            kiyam: SP(...ST,[168,86],[172,68]), tekbir: SP(...ST,[168,84],[168,58]),
-            ruku: SP([203,86],[188,92],[142,108],[156,156],[150,208],[176,128],[156,154]),
-            kavme: SP(...ST,[154,88],[156,114]),
-            secde: SP([205,197],[182,188],[140,164],[160,202],[114,205],[192,200],[212,207]),
-            celse: SP([134,117],[132,135],[126,192],[168,200],[204,206],[150,162],[166,190])
-        }
-    };
-    const ADIM = [
-        { p:'kiyam', b:'1. Niyet', say:'Niyet edilir: “Niyet ettim Allah rızası için … namazını kılmaya.”', n:'Kıbleye dönülür; ayakta iken secde edilecek yere bakılır.' },
-        { p:'tekbir', b:'2. İftitah tekbiri', say:'“Allâhü Ekber”', m:'Erkek: Avuç içleri kıbleye, parmaklar normal açıklıkta; başparmaklar kulak yumuşağı hizasına gelecek şekilde eller kaldırılır.', f:'Kadın: Avuç içleri kıbleye, parmaklar normal açıklıkta; parmak uçları omuz hizasına gelecek şekilde eller kaldırılır.' },
-        { p:'kiyam', b:'3. Kıyam ve kıraat (1. rekât)', say:'Sırasıyla: Sübhâneke, Eûzü-Besmele, Fâtiha, bir sûre.', n:'Tekbirden sonra eller bağlanır.', m:'Erkek: Eller göbek altında bağlanır; sağ el sol elin üstündedir, sağ elin baş ve serçe parmağı sol bileği kavrar.', f:'Kadın: Eller göğüs üstünde bağlanır; sağ el sol elin üstündedir, bilek kavranmaz.' },
-        { p:'ruku', b:'4. Rükû', say:'“Allâhü Ekber” diyerek rükûa varılır; üç defa “Sübhâne Rabbiye’l-azîm” denir.', m:'Erkek: Sırt düz, baş sırtla aynı hizada; eller dizleri kavrar, parmaklar açık, dizler gergin.', f:'Kadın: Sırt biraz meyilli, erkeklerden daha az eğilinir; eller parmaklar açılmadan dizler üzerine konur, dizler biraz bükük.' },
-        { p:'kavme', b:'5. Rükûdan doğrulma (kavme)', say:'“Semiallâhü limen hamideh” diyerek doğrulunur; ayakta “Rabbenâ leke’l-hamd” denir.', n:'Eller yanlara salınır; tam doğrulup kısa süre dik durulur. Cemaatle kılınırken “Semiallâhü limen hamideh”i imam söyler, cemaat “Rabbenâ leke’l-hamd” der.' },
-        { p:'secde', b:'6. Birinci secde', say:'“Allâhü Ekber” diyerek secdeye varılır; üç defa “Sübhâne Rabbiye’l-a’lâ” denir.', n:'Secdeye inerken önce dizler, sonra eller, sonra alın ve burun yere konur; baş iki elin arasındadır.', m:'Erkek: Dirsekler yanlardan uzak, kollar yerden kalkık; ayaklar parmaklar üzerinde dik, parmak uçları kıbleye bakar.', f:'Kadın: Kollar yanlara bitişik tutulur; karın uyluklara yaklaştırılır.' },
-        { p:'celse', b:'7. İki secde arası oturuş', say:'“Allâhü Ekber” diyerek oturulur; “Sübhânallâh” diyecek kadar kısa durulur.', n:'Eller uyluklar üzerine konur, parmaklar dizler hizasında; kucağa bakılır.', m:'Erkek: Sol ayak yatırılıp üzerine oturulur, sağ ayak dik tutulur (parmakları kıbleye).', f:'Kadın: Sol ayak sağ yana yatık olacak şekilde oturulur (ayaklar sağ tarafa çıkarılır).' },
-        { p:'secde', b:'8. İkinci secde', say:'“Allâhü Ekber” diyerek ikinci secdeye varılır; üç defa “Sübhâne Rabbiye’l-a’lâ” denir.' },
-        { p:'kiyam', b:'9. İkinci rekâta kalkış', say:'“Allâhü Ekber” diyerek ayağa kalkılır, eller bağlanır.', n:'Kalkarken önce baş, sonra eller, sonra eller dizlere konarak dizler yerden kaldırılır. İftitah tekbirinden buraya kadar olan kısım bir rekâttır. 2. rekâtta Sübhâneke okunmaz; Besmele, Fâtiha ve sûre okunur, rükû ve secdeler aynı şekilde yapılır.' },
-        { p:'celse', b:'10. Son oturuş', say:'Sırasıyla: Ettehiyyâtü, Allâhümme Salli, Allâhümme Bârik, Rabbenâ âtinâ… ve Rabbenâğfirlî… duaları okunur.', n:'Oturuş biçimi 7. adımdaki gibidir (erkek/kadın farkı aynıdır).' },
-        { p:'celse', b:'11. Selam (sağa)', say:'Başı sağa çevirerek “Esselâmü aleyküm ve rahmetullâh”.' },
-        { p:'celse', b:'12. Selam (sola)', say:'Başı sola çevirerek “Esselâmü aleyküm ve rahmetullâh”. Namaz tamamlanır.' }
-    ];
-    let tG = 'm', tI = 0, tTimer = null, tRaf = null, yaw = -0.6, yawT = -0.6, tAuto = false, dragX = null;
-    let tFrom = null, tTarget = null, tT0 = 0;
-    const $ = id => document.getElementById(id);
-    const KEYS = ['H','N','P','lh','lk','lf','lt','rh','rk','rf','rt','ls','le','lw','rs','re','rw'];
-    const LAT = {
-        kiyam:{hip:8,knee:8,foot:7,sh:14,el:15,hd:3}, tekbir:{hip:8,knee:8,foot:7,sh:14,el:17,hd:14},
-        ruku:{hip:8,knee:8,foot:7,sh:14,el:16,hd:8}, kavme:{hip:8,knee:8,foot:7,sh:14,el:15,hd:15},
-        secde:{hip:9,knee:9,foot:7,sh:14,el:26,hd:9}, celse:{hip:9,knee:10,foot:7,sh:14,el:16,hd:11}
-    };
-    function build3D(g, key) {
-        const p = POSE[g][key], c = a => [a[0] - 150, 210 - a[1]], f = g === 'f';
-        const H = c(p.H), N = c(p.N), P = c(p.P), K = c(p.K), F = c(p.F), E = c(p.E), W = c(p.W);
-        const L = Object.assign({}, LAT[key]); if (key === 'secde' && f) L.el = 13;
-        const o = { H:[H[0],H[1],0], N:[N[0],N[1],0], P:[P[0],P[1],0] };
-        [['l',-1],['r',1]].forEach(([s, sg]) => {
-            o[s+'h'] = [P[0],P[1],sg*L.hip]; o[s+'k'] = [K[0],K[1],sg*L.knee];
-            o[s+'f'] = [F[0],F[1],sg*L.foot]; o[s+'t'] = [F[0]+13,F[1]-1,sg*L.foot];
-            o[s+'s'] = [N[0],N[1]-4,sg*L.sh]; o[s+'e'] = [E[0],E[1],sg*L.el]; o[s+'w'] = [W[0],W[1],sg*L.hd];
-        });
-        if (key === 'celse') {
-            if (!f) { o.lf=[-38,4,-6]; o.lt=[-30,3,-6]; o.rf=[-36,14,8]; o.rt=[-31,3,8]; }
-            else { o.lf=[-12,5,22]; o.lt=[-4,5,24]; o.rf=[-22,5,16]; o.rt=[-14,5,18]; }
-        }
-        return o;
-    }
-    const clr = hex => [1,3,5].map(i => parseInt(hex.substr(i,2),16));
-    const shade = (hex, a) => 'rgb(' + clr(hex).map(v => Math.max(0, Math.min(255, Math.round(v + a)))).join(',') + ')';
-    const v3 = { add:(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]], sub:(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]], mul:(a,k)=>[a[0]*k,a[1]*k,a[2]*k],
-        dot:(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2], nrm:a=>{const l=Math.hypot(a[0],a[1],a[2])||1;return [a[0]/l,a[1]/l,a[2]/l];} };
-    function render(now) {
-        tRaf = requestAnimationFrame(render);
-        const cv = $('t3d'); if (!cv || cv.offsetParent === null) return;
-        const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
-        if (cv.width !== Math.round(w*dpr) || cv.height !== Math.round(h*dpr)) { cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr); }
-        const ctx = cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
-        if (tAuto && dragX === null) yawT += 0.006;
-        if (dragX === null) yaw += (yawT - yaw) * 0.14; else yaw = yawT;
-        // poz geçişi
-        let k = tTarget ? Math.min(1, (now - tT0) / 1100) : 1; k = k < .5 ? 4*k*k*k : 1 - Math.pow(-2*k+2, 3)/2;
-        const J = {}; KEYS.forEach(n => { const a = tFrom[n], b = tTarget[n]; J[n] = [a[0]+(b[0]-a[0])*k, a[1]+(b[1]-a[1])*k, a[2]+(b[2]-a[2])*k]; });
-        const f = tG === 'f';
-        const C = f ? { skin:'#e9bf9d', cloth:'#8e3fa3', under:'#7a3490', hair:'#3a2a22' } : { skin:'#e6b48c', cloth:'#e9eef5', under:'#34415b', hair:'#2b1f19' };
-        const cs = Math.cos(yaw), sn = Math.sin(yaw), pc = Math.cos(.2), ps = Math.sin(.2), S = h/262, D = 540;
-        const pr = p => { const x = p[0]*cs + p[2]*sn, z = -p[0]*sn + p[2]*cs, yy = (p[1]-88)*pc - z*ps, zz = (p[1]-88)*ps + z*pc, kk = D/(D-zz);
-            return [w/2 + x*S*kk, h*0.55 - yy*S*kk, S*kk, zz]; };
-        // seccade
-        const rug = [[-108,0,-46],[108,0,-46],[108,0,46],[-108,0,46]].map(pr);
-        const poly = (pts, fill, stroke) => { ctx.beginPath(); pts.forEach((q,i) => i ? ctx.lineTo(q[0],q[1]) : ctx.moveTo(q[0],q[1])); ctx.closePath(); if (fill) { ctx.fillStyle = fill; ctx.fill(); } if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1.6; ctx.stroke(); } };
-        const g1 = ctx.createLinearGradient(rug[0][0],0,rug[1][0],0); g1.addColorStop(0,'#6d1a37'); g1.addColorStop(.5,'#a13258'); g1.addColorStop(1,'#6d1a37');
-        poly(rug, g1); poly([[-100,0,-39],[100,0,-39],[100,0,39],[-100,0,39]].map(pr), null, 'rgba(240,217,168,.85)');
-        poly([[-88,0,-30],[88,0,-30],[88,0,30],[-88,0,30]].map(pr), null, 'rgba(240,217,168,.35)');
-        const sp = pr([(J.P[0]+J.H[0])/2, 0, 0]); ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.beginPath(); ctx.ellipse(sp[0], sp[1], 62*sp[2], 15*sp[2], 0, 0, 7); ctx.fill();
-        // primitifler
-        const prims = [];
-        const cap = (a, b, ra, rb, col, bias) => { const A = pr(a), B = pr(b); prims.push({ t:0, A, B, ra:ra*A[2], rb:rb*B[2], col, d:(A[3]+B[3])/2 + (bias||0) }); };
-        const sph = (c, r, col, bias) => { const A = pr(c); prims.push({ t:1, A, r:r*A[2], col, d:A[3] + (bias||0) }); };
-        const mid = (a, b) => v3.mul(v3.add(a,b), .5);
-        // bacaklar
-        const legR = f ? [9.5, 8, 6.8] : [8, 6.3, 5];
-        const legC = f ? C.cloth : C.under;
-        ['l','r'].forEach(s => {
-            cap(J[s+'h'], J[s+'k'], legR[0], legR[1], legC); cap(J[s+'k'], J[s+'f'], legR[1], legR[2], legC);
-            cap(J[s+'f'], J[s+'t'], 4, 3.4, f ? C.under : C.skin);
-            cap(J[s+'s'], J[s+'e'], 4.8, 4.2, C.cloth); cap(J[s+'e'], J[s+'w'], 4.2, 3.6, C.cloth); sph(J[s+'w'], 3.8, C.skin, 1);
-        });
-        // gövde
-        const hipM = mid(J.lh, J.rh), shM = mid(J.ls, J.rs);
-        cap(J.lh, J.rh, f ? 10 : 8.5, f ? 10 : 8.5, f ? C.cloth : C.cloth); cap(shM, hipM, 10.5, 10, C.cloth); cap(J.ls, J.rs, 5.5, 5.5, C.cloth);
-        cap(J.N, shM, 4.6, 5, C.skin, -1);
-        // baş
-        const r = 12, u = v3.nrm(v3.sub(J.H, J.N)), uh = v3.nrm(v3.add(v3.mul([0,1,0],.4), v3.mul(u,.6)));
-        const fw = v3.nrm(v3.sub([1,0,0], v3.mul(uh, v3.dot(uh,[1,0,0])))), sd = [fw[1]*uh[2]-fw[2]*uh[1], fw[2]*uh[0]-fw[0]*uh[2], fw[0]*uh[1]-fw[1]*uh[0]];
-        const facing = v3.dot(fw, [-sn, 0, cs]) > 0, fb = facing ? 1 : -1;
-        const at = (o, a, b2, c2) => v3.add(o, v3.add(v3.mul(fw,a), v3.add(v3.mul(uh,b2), v3.mul(sd,c2))));
-        if (f) {
-            cap(J.H, J.N, 8.5, 9, C.cloth, -.5); cap(J.ls, J.rs, 7.5, 7.5, C.cloth, 1.2);
-            sph(at(J.H, -r*.3, r*.05, 0), r*1.26, C.cloth, facing ? 0 : 4);
-            sph(at(J.H, r*.34, -r*.04, 0), r*.84, C.skin, facing ? 3 : -3);
-            [-1,1].forEach(q => sph(at(J.H, r*1.0, r*.14, q*r*.34), 1.5, '#2a1d18', facing ? 8 : -80));
-            sph(at(J.H, r*1.16, -r*.1, 0), 2.2, '#c99a78', facing ? 8 : -80);
-        } else {
-            sph(J.H, r, C.skin, 0);
-            sph(at(J.H, -r*.12, r*.5, 0), r*.92, '#f4f1ea', 2.5);
-            sph(at(J.H, r*.5, -r*.62, 0), r*.64, C.hair, facing ? 3 : -3);
-            [-1,1].forEach(q => sph(at(J.H, r*.92, r*.2, q*r*.36), 1.5, '#2a1d18', facing ? 8 : -80));
-            sph(at(J.H, r*1.04, -r*.08, 0), 2.3, '#cf9c78', facing ? 8 : -80);
-        }
-        prims.sort((a, b) => a.d - b.d);
-        prims.forEach(p => {
-            if (p.t === 1) {
-                const g2 = ctx.createRadialGradient(p.A[0]-p.r*.35, p.A[1]-p.r*.4, p.r*.1, p.A[0], p.A[1], p.r);
-                g2.addColorStop(0, shade(p.col, 32)); g2.addColorStop(.55, p.col); g2.addColorStop(1, shade(p.col, -45));
-                ctx.fillStyle = g2; ctx.beginPath(); ctx.arc(p.A[0], p.A[1], p.r, 0, 7); ctx.fill(); return;
-            }
-            const dx = p.B[0]-p.A[0], dy = p.B[1]-p.A[1], l = Math.hypot(dx,dy) || 1; let nx = -dy/l, ny = dx/l; if (nx + ny > 0) { nx = -nx; ny = -ny; }
-            const rm = Math.max(p.ra, p.rb), cx = (p.A[0]+p.B[0])/2, cy = (p.A[1]+p.B[1])/2;
-            const g3 = ctx.createLinearGradient(cx + nx*rm, cy + ny*rm, cx - nx*rm, cy - ny*rm);
-            g3.addColorStop(0, shade(p.col, 34)); g3.addColorStop(.4, p.col); g3.addColorStop(1, shade(p.col, -48));
-            ctx.fillStyle = g3; ctx.beginPath();
-            ctx.moveTo(p.A[0]+nx*p.ra, p.A[1]+ny*p.ra); ctx.lineTo(p.B[0]+nx*p.rb, p.B[1]+ny*p.rb);
-            ctx.lineTo(p.B[0]-nx*p.rb, p.B[1]-ny*p.rb); ctx.lineTo(p.A[0]-nx*p.ra, p.A[1]-ny*p.ra); ctx.closePath(); ctx.fill();
-            ctx.beginPath(); ctx.arc(p.A[0], p.A[1], p.ra, 0, 7); ctx.fill();
-            ctx.beginPath(); ctx.arc(p.B[0], p.B[1], p.rb, 0, 7); ctx.fill();
-        });
-    }
-    function tShow() {
-        const a = ADIM[tI];
-        $('t-title').textContent = a.b; $('t-say').textContent = a.say;
-        $('t-note').textContent = a.n || '';
-        $('t-gnote').textContent = (tG === 'm' ? a.m : a.f) || '';
-        $('t-dots').innerHTML = ADIM.map((_, i) => '<i class="' + (i === tI ? 'on' : '') + '"></i>').join('');
-        const cur = tTarget ? (() => { const k0 = Math.min(1, (performance.now() - tT0) / 1100), o = {}; KEYS.forEach(n => { o[n] = tFrom[n].map((v, i) => v + (tTarget[n][i] - v) * (k0 < .5 ? 4*k0*k0*k0 : 1 - Math.pow(-2*k0+2, 3)/2)); }); return o; })() : null;
-        const tgt = build3D(tG, a.p);
-        tFrom = cur || tgt; tTarget = tgt; tT0 = performance.now();
-    }
-    function setGender(g) {
-        tG = g; tTarget = null;
-        $('g-m').classList.toggle('active', g === 'm'); $('g-f').classList.toggle('active', g === 'f');
-        tShow();
-    }
-    function setView(y) { yawT = y; tAuto = false; $('v-auto').classList.remove('active'); }
-    function toggleAuto() { tAuto = !tAuto; $('v-auto').classList.toggle('active', tAuto); }
-    (function initDrag() {
-        const cv = $('t3d');
-        cv.addEventListener('pointerdown', e => { dragX = e.clientX; cv.setPointerCapture(e.pointerId); cv.style.cursor = 'grabbing'; });
-        cv.addEventListener('pointermove', e => { if (dragX !== null) { yawT += (e.clientX - dragX) * 0.012; dragX = e.clientX; tAuto = false; } });
-        const up = () => { dragX = null; cv.style.cursor = 'grab'; };
-        cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
-        tFrom = tTarget = build3D('m', 'kiyam'); tT0 = performance.now(); tRaf = requestAnimationFrame(render);
-    })();
-    function tStep(d) { tI = (tI + d + ADIM.length) % ADIM.length; tShow(); }
-    function stopTeacher() { clearInterval(tTimer); tTimer = null; const b = $('t-play'); if (b) b.textContent = '▶ Oynat'; }
-    function tTogglePlay() {
-        if (tTimer) { stopTeacher(); return; }
-        $('t-play').textContent = '⏸ Duraklat';
-        tTimer = setInterval(() => tStep(1), 6500);
     }
 
     // Başlangıç Kurulumu
