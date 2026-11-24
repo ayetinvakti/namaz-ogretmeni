@@ -166,6 +166,11 @@
         .diff-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
 
         .footer { margin: 20px 0; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
+        .tsb-box { display: flex; flex-direction: column; align-items: center; gap: 10px; background: var(--card-bg); border: 1px dashed var(--accent-color); border-radius: 16px; padding: 16px; }
+        .tsb-btn { width: 150px; height: 150px; border-radius: 50%; border: 3px solid var(--accent-color); background: var(--active-btn-bg); color: var(--accent-color); font-size: 2.2rem; font-weight: 700; cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        .tsb-btn:active { transform: scale(0.96); }
+        .tsb-name { font-weight: 700; color: var(--accent-color); }
+        .tsb-total { font-size: 0.85rem; color: var(--text-muted); text-align: center; }
         .footer span { color: var(--accent-color); font-weight: 600; }
 
     </style>
@@ -192,6 +197,7 @@
         <button class="tab-btn" onclick="switchTab('diffs', this)" data-i18n="tab_diffs">⚖️ Kadın/Erkek Farkı</button>
         <button class="tab-btn" onclick="switchTab('quiz', this)" data-i18n="tab_quiz">🎯 Dini Sınav</button>
         <button class="tab-btn" onclick="switchTab('oku', this)">📚 Okunacaklar</button>
+        <button class="tab-btn" onclick="switchTab('tesbih', this)">📿 Tesbihat</button>
         <button class="tab-btn" onclick="switchTab('diger', this)">🕌 Diğer Namazlar</button>
     </div>
 
@@ -245,6 +251,7 @@
         <button class="next-quiz-btn fin-btn" onclick="loadRandomQuiz()" data-i18n="btn_next_quiz">🔄 Başka Soru Getir</button>
     </div>
     <div id="tab-oku" class="content-card fin-card" style="display: none;"></div>
+    <div id="tab-tesbih" class="content-card fin-card" style="display: none;"></div>
     <div id="tab-diger" class="content-card fin-card" style="display: none;"></div>
 </div>
 
@@ -371,6 +378,87 @@
             5) “Lâ ilâhe illellâhü vahdehû lâ şerike leh, lehü'l-mülkü ve lehü'l-hamdü ve hüve alâ külli şey'in kadîr.”<br>
             6) Dua yapılır.</p>${duaBlok(`33'lük tesbihat`, `سُبْحَانَ اللَّهِ الْحَمْدُ لِلَّهِ اللَّهُ أَكْبَرُ`, `Sübhânallâh. Elhamdülillâh. Allâhü Ekber.`, `Allah her türlü eksiklikten uzaktır. Hamd Allah'adır. Allah en büyüktür.`, true)}${duaBlok(`Tehlil`, `لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ`, `Lâ ilâhe illellâhü vahdehû lâ şerîke leh, lehü'l-mülkü ve lehü'l-hamdü ve hüve alâ külli şey'in kadîr.`, `Allah'tan başka ilâh yoktur; O tektir, ortağı yoktur. Mülk O'nundur, hamd O'na aittir ve O her şeye kadirdir.`, true)}${kursiHtml}</div>`;
     document.getElementById('tab-oku').innerHTML = okuHtml;
+
+    // --- TESBİHAT SEKMESİ (Diyanet kaynaklı; her adımın altında dayandığı kaynak yazılıdır) ---
+    const kaynak = (t) => `<p class="translation-text">📚 Kaynak: ${t}</p>`;
+    document.getElementById('tab-tesbih').innerHTML = `
+        <div class="card-title">📿 Namaz Sonrası Tesbihat</div>
+        <p class="translation-text">Farz namazın selâmından sonra yapılır. Sıra ve metinler Diyanet İşleri Başkanlığı kaynaklarına göre hazırlanmıştır; her adımın altında dayandığı kaynak yazılıdır. Namazdan sonra tesbihat yapmak sahih hadislerle tavsiye edilmiştir.</p>
+        <div class="step-item"><div class="step-header">1️⃣ İstiğfar (3 kere)</div>
+            ${duaBlok(`İstiğfar`, `أَسْتَغْفِرُ اللهَ العَظِيمَ الَّذِي لَا إلهَ إلّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إلَيْهِ`, `Esteğfirullâhe'l-azîmellezî lâ ilâhe illâ hüve'l-hayyü'l-kayyûmü ve etûbü ileyhi.`, `Ulu Allah'tan bağışlanmamı dilerim ki O'ndan başka ilâh yoktur. O, diridir ve kayyumdur. O'na tövbe ederim.`, true)}
+            ${kaynak(`Hâkim, Dua, I, 511 (Diyanet)`)}</div>
+        <div class="step-item"><div class="step-header">2️⃣ Selâm duası ve salavat</div>
+            ${duaBlok(`Selâm duası`, `اَللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإكْرَامِ`, `Allahümme ente's-selâmü ve minke's-selâmü tebârekte yâ ze'l-celâli ve'l-ikrâm.`, `Allah'ım! Sen selâmsın. Selamet de sendendir. Ey celâl ve ikrâm sâhibi! Sen münezzehsin, sen yücesin.`, true)}
+            <p class="translation-text">Bu duadan sonra Peygamberimize salât ve selâm getirilir: “Allâhümme salli alâ Muhammed.”</p>
+            ${kaynak(`Müslim, Mesâcid, 135; Tirmizî, Salât, 224; Ebû Dâvud, Salât, 360 (Diyanet)`)}</div>
+        <div class="step-item"><div class="step-header">3️⃣ Ek zikir (İlmihâlde yer alır)</div>
+            <div class="pronunciation-text">📖 Sübhânellâhi ve'l-hamdü lillâhi ve lâ ilâhe illellâhü ve'llâhü ekber ve lâ havle ve lâ kuvvete illâ billâhi'l-aliyyi'l-azîm.</div>
+            <p class="translation-text">Meal: “Şanı yüce Allah'ı tesbih ve tenzih ederim. O bütün noksanlıklardan uzaktır. Hamd Allah'a mahsustur. Allah'tan başka hiçbir ilah yoktur. Allah en büyüktür. Emirlerine uymak, yasaklardan sakınmak için gereken güç ve kuvvet ancak Allah'tandır.”</p>
+            ${kaynak(`İslam İlmihali (Diyanet)`)}</div>
+        <div class="step-item"><div class="step-header">4️⃣ Eûzü-Besmele ve Âyetü'l-Kürsî</div>
+            <p class="translation-text">Eûzü-Besmele çekilip Bakara Sûresi'nin 255. âyeti okunur.</p>${kursiHtml}
+            ${kaynak(`Bakara Sûresi, 255. âyet; Diyanet meali`)}</div>
+        <div class="step-item"><div class="step-header">5️⃣ 33'lük tesbihat</div>
+            <p class="translation-text">Otuz üçer defa: Sübhânellah (Allah'ı noksan sıfatlardan tenzih ederim), Elhamdülillâh (her türlü övgü Allah'a mahsustur), Allâhü ekber (Allah en büyüktür).</p>
+            <div class="arabic-text" style="text-align:center;">سُبْحَانَ اللهِ &nbsp;•&nbsp; الْحَمْدُ للّهِ &nbsp;•&nbsp; اللَّهُ أَكْبَرُ</div>
+            <div class="tsb-box">
+                <div id="tsb-step" class="tsb-total"></div>
+                <div id="tsb-ar" class="arabic-text" style="text-align:center;"></div>
+                <div id="tsb-ad" class="tsb-name"></div>
+                <button id="tsb-btn" class="tsb-btn" onclick="tsbTap()">0</button>
+                <div id="tsb-total" class="tsb-total"></div>
+                <button class="next-quiz-btn fin-btn" onclick="tsbReset()">↺ Sıfırla</button>
+            </div>
+            <p class="translation-text">Namaz sonrasında otuz üçer defa söylenir, tevhid cümlesiyle yüze tamamlanır. Müslim'deki bir rivayette ise Allâhü ekber otuz dört defa geçer; Diyanet bunu da aktarır.</p>
+            ${kaynak(`Müslim, Mesâcid, 142, 144, 146 (Diyanet)`)}</div>
+        <div class="step-item"><div class="step-header">6️⃣ Tevhid cümlesi</div>
+            ${duaBlok(`Tevhid`, `لَا إلَهَ إلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ`, `Lâ ilâhe illâllâhü vahdehû lâ şerîke leh. Lehü'l-mülkü ve lehü'l-hamdü ve hüve 'alâ külli şey'in kadîr.`, `Allah'tan başka ilâh yoktur, sadece O vardır. O'nun ortağı yoktur. Mülk O'nundur, her türlü övgü O'na mahsustur, O her şeye gücü yetendir.`, true)}
+            <p class="translation-text">Hadiste, her namazdan sonra otuz üçer tesbih ve bu tevhid cümlesiyle yüze tamamlayanın günahlarının deniz köpüğü kadar çok olsa bile affedileceği bildirilmiştir.</p>
+            ${kaynak(`Müslim, Mesâcid, 146 (Diyanet)`)}</div>
+        <div class="step-item"><div class="step-header">7️⃣ Dua</div>
+            <p class="translation-text">Namaz bittikten sonra kişi gönlünden geçtiği şekilde dilek ve temennilerini Allah'a iletebilir. Bunun için belirli bir kalıp şart değildir; duada gönül, samimiyet ve ihlâs önemlidir.</p>
+            ${kaynak(`Diyanet İşleri Başkanlığı, “Namaz sonrası yapılacak dualar”`)}</div>
+        <p class="translation-text">Kaynaklar: Diyanet İşleri Başkanlığı Din İşleri Yüksek Kurulu fetvası (“Namazlardan sonra tesbîhât nasıl yapılır?”), Diyanet Haber “Namaz sonrası yapılacak dualar”, İslam İlmihali.</p>`;
+
+    // 33'lük tesbihat sayacı
+    const TSB = [
+        { ar: 'سُبْحَانَ اللهِ', ad: 'Sübhânellah', n: 33 },
+        { ar: 'الْحَمْدُ للّهِ', ad: 'Elhamdülillâh', n: 33 },
+        { ar: 'اللَّهُ أَكْبَرُ', ad: 'Allâhü ekber', n: 33 }
+    ];
+    let tsbPhase = 0, tsbCount = 0, tsbDone = false;
+    function tsbVibrate(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
+    function tsbRender() {
+        const st = TSB[tsbPhase];
+        document.getElementById('tsb-step').textContent = tsbDone ? '✅ Tamamlandı' : (tsbPhase + 1) + ' / 3';
+        document.getElementById('tsb-ar').textContent = st.ar;
+        document.getElementById('tsb-ad').textContent = st.ad;
+        document.getElementById('tsb-btn').textContent = tsbCount + ' / ' + st.n;
+        document.getElementById('tsb-total').textContent = tsbDone
+            ? '99 tamamlandı. Şimdi tevhid cümlesini okuyun.'
+            : 'Toplam: ' + (tsbPhase * 33 + tsbCount) + ' / 99';
+    }
+    function tsbTap() {
+        if (tsbDone) return;
+        tsbCount++;
+        tsbVibrate(10);
+        if (tsbCount >= TSB[tsbPhase].n) {
+            if (tsbPhase === TSB.length - 1) {
+                tsbDone = true;
+                tsbVibrate([60, 40, 60]);
+            } else {
+                tsbPhase++;
+                tsbCount = 0;
+                tsbVibrate(40);
+            }
+        }
+        tsbRender();
+    }
+    function tsbReset() {
+        tsbPhase = 0; tsbCount = 0; tsbDone = false;
+        tsbRender();
+    }
+    tsbRender();
 
     document.getElementById('tab-diger').innerHTML = `
         <div class="card-title">🕌 Diğer Namazlar ve Durumlar</div>
@@ -575,6 +663,7 @@
         document.getElementById('tab-diffs').style.display = tabId === 'diffs' ? 'flex' : 'none';
         document.getElementById('tab-quiz').style.display = tabId === 'quiz' ? 'flex' : 'none';
         document.getElementById('tab-oku').style.display = tabId === 'oku' ? 'flex' : 'none';
+        document.getElementById('tab-tesbih').style.display = tabId === 'tesbih' ? 'flex' : 'none';
         document.getElementById('tab-diger').style.display = tabId === 'diger' ? 'flex' : 'none';
 
         if(tabId === 'quiz') {
